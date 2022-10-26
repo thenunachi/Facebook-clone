@@ -4,11 +4,11 @@ from wtforms.validators import DataRequired,NumberRange
 
 
 class PostForm(FlaskForm):
-    ownerId = IntegerField("OwnerId")
+    owner_Id = IntegerField("OwnerId")
     longText = TextAreaField('Write a post',validators =[DataRequired()])
     submit = SubmitField('Add a post')
 
 class EditPostForm(FlaskForm):
-    ownerId = IntegerField("OwnerId")
+    owner_Id = IntegerField("OwnerId")
     longText = TextAreaField('Write a post',validators =[DataRequired()])
     submit = SubmitField('Update a post')
