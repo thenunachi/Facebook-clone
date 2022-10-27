@@ -1,9 +1,9 @@
 /************************************************ACTION TYPES********************************************************************************** */
-const GET_ALL_POSTS = 'Posts/GET_ALL_POSTS'
-const GET_POST_BY_ID = 'Posts/GET_POST_BY_ID'
-const ADD_POST = 'Posts/ADD_POST'
-const EDIT_POST = 'Posts/EDIT_POST'
-const DELETE_POST = 'Posts/DELETE_POST'
+const GET_ALL_POSTS = 'Posts/getAllPosts'
+const GET_POST_BY_ID = 'Posts/getPostsById'
+const ADD_POST = 'Posts/addOnePost'
+const EDIT_POST = 'Posts/editPost'
+const DELETE_POST = 'Posts/removePost'
 
 
 /************************************************ACTION********************************************************************************** */
