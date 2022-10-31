@@ -3,7 +3,7 @@ const GET_USER_COMMENTS = "Comments/getUserComment"
 export const GET_POST_COMMENTS = "Comments/getPostComment"
 export const CREATE_ONE = "Comments/createComment";
 export const REMOVE_ONE = 'Comments/removeComment';
-export const EDIT_COMMENT = "spots/editComment";//updating a comment
+export const EDIT_COMMENT = "Comments/editComment";//updating a comment
 
 
 /**********************************************ACTION************************************************************************************ */
@@ -52,7 +52,7 @@ export const loadUserComments = ()=>async dispatch =>{
 export const loadPostCommentsThunk =(postId) =>async dispatch=>{
     const response = await fetch(`/api/posts/${postId}/comments`);
     if(response.ok){
-        const data = await response.json();
+        const data = await response.json();//promise coming from fetch and hold data from backend which is a list with dict in it
         dispatch(getPostComment(data.Comments))
     }
     return response;
@@ -60,12 +60,14 @@ export const loadPostCommentsThunk =(postId) =>async dispatch=>{
 //create a comment
 
 export const createCommentThunk = (data)=>async dispatch =>{
-const {postId} = data
-const response = await fetch(`/api/posts/${postId}/comments`,{
+// const {postId} = data
+console.log(data.id,"DATA inside create thunk")
+const response = await fetch(`/api/posts/${data.id}/comments`,{
     method:'POST',
     headers:{'Content-Type': 'application/json'},
     body: JSON.stringify(data)
 });
+console.log(response,"response")
 if(response.ok){
     const newComment = await response.json();
     dispatch(createComment(newComment))
@@ -89,14 +91,18 @@ export const deleteCommentThunk = (commentId)=>async dispatch=>{
 
 //update a comment
 export const updateCommentThunk = (data)=>async dispatch =>{
-    const {commentId} = data
-    const response = await fetch(`/api/comments/${commentId}`,{
+    console.log(data,"data of updatethunk")
+    const {id} = data //3
+    console.log("id inside update thunk",id)
+    const response = await fetch(`/api/comments/${id}`,{
         method:'PUT',
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     });
+    console.log(response,"response")
     if(response.ok){
         const updateComment = await response.json();
+        console.log(updateComment,"UPDATECOMMENT")
         dispatch(editComment(updateComment))
         return updateComment
     }
@@ -108,11 +114,12 @@ export const updateCommentThunk = (data)=>async dispatch =>{
 /**********************************************REDUCER************************************************************************************ */
 
 const commentReducer =(state={},action) =>{
+    console.log("ACTION",action)
 switch (action.type){
     case GET_USER_COMMENTS:{
         const allCommnets ={}
-        action.comment.forEach((comment)=>{
-        allCommnets[comment.id] = comment
+        action.comments.forEach((comment)=>{
+        allCommnets[comment.id] = comment //comment.id is the key and value is the whole comment obj
         })
         const  newState ={...state,allCommnets}
         return newState
@@ -124,7 +131,7 @@ switch (action.type){
     }
     case CREATE_ONE:{
         const newState={};
-        newState[action.payload.id] = action.payload
+        newState[action.comment.id] = action.comment
         const newPostForm ={...state,...newState}
         return newPostForm
     }
@@ -132,11 +139,26 @@ switch (action.type){
             const newState = { ...state };
             delete newState[action.commentId];
             return newState;
+            
     case EDIT_COMMENT:{
              const newState={...state}
-            newState[action.payload.id] = action.payload;
+             
+            newState[action.comment.id] = action.comment;//issue here
+         
              return newState;
              }
+            // if (!state[action.comment.id]) {
+            //     const newState = { ...state,[action.comment.id]: action.comment
+            //     }
+            //     console.log("NEWSTATE INSIDE REDUCER OF EDIT",newState)
+            //     return newState;
+            // }
+            // return {
+            //     ...state,
+            //     [action.comment.id]: {...state[action.comment.id],...action.comment
+            //     }
+            // };
+        // }
     default: {
                 return state
             }

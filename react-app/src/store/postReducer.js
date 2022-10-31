@@ -58,11 +58,11 @@ export const getAllPostsThunk =() => async dispatch =>{
 }
 //GET POSTS BY OWNERID
 
-export const getPostsByIdThunk =(ownerId) =>async dispatch =>{
+export const getPostsByUserIdThunk =(ownerId) =>async dispatch =>{
 const response = await fetch(`/api/posts/${ownerId}`);
 if(response.ok){ 
     const data = await response.json();
-    dispatch(getPostsById(data.onePost))
+    dispatch(getPostsById(data.posts))
     return { ... data};
    }
 }
@@ -70,11 +70,13 @@ if(response.ok){
 //CREATE A POST
 
 export const createPostThunk = (data) => async dispatch =>{
+    console.log("DATA**********",data)
     const response = await fetch(`/api/posts/`,{
         method : 'POST',
         headers : { "Content-Type": "application/json" },
         body : JSON.stringify(data)
     })
+    console.log(response,"CREATED POST THUNK RESPONSE")
     if(response.ok){
         const postResponse = await response.json();
         dispatch(addOnePost(postResponse.post))
@@ -99,10 +101,12 @@ export const updatePostThunk = (payload) => async dispatch =>{
 
 //DELETE A POST 
 export const removePostThunk = (id)=> async dispatch =>{
+    console.log("ID OF DELETE POST ^^^^^^^^^^^^",id)
     const response = await fetch(`/api/posts/${id}`,{
         method: DELETE_POST,
         headers:{ "Content-Type": "application/json"},
     })
+    console.log(response,"RESPONSE OF DELETE")
     if(response.ok){
         dispatch(removePost(id))
     }
@@ -113,27 +117,29 @@ export const removePostThunk = (id)=> async dispatch =>{
 /**********************************************REDUCER************************************************************************************ */
 
   const postReducer = (state={},action)=>{
+    let allPosts={}
     switch(action.type){
         case GET_ALL_POSTS:{
-            const allPosts={}
+            // const allPosts={}
             action.payload.forEach(post =>{
                 allPosts[post.id] = post //assigning post to post's id
             })
-            const newState ={ ...state,allPosts} //initiall state will be empty{} spreading it out first then allPosts
-            console.log("NEWSTATE from GETALLPOSTS**************",newState)
-            return newState
+            // const newState ={ ...state,allPosts} //initiall state will be empty{} spreading it out first then allPosts
+            // console.log("NEWSTATE from GETALLPOSTS**************",newState)
+            return {...allPosts}
         }
         /******************************************************************************* */
         case GET_POST_BY_ID:{
-            const newState ={};
-            newState[action.payload.ownerId] = action.payload
-            console.log("NEWSTATE from GETAPOSTS**************",newState)
-            return newState
+            // const newState ={};
+            // newState[action.payload] = action.payload
+            // console.log("NEWSTATE from GETAPOSTS**************",newState)
+            return action.payload
         }
         /******************************************************************************* */
         case ADD_POST:{
             const newState={};
             newState[action.payload.id] = action.payload
+            console.log(newState,"State of createPost")
             const newPostForm ={...state,...newState}
             return newPostForm
         }
