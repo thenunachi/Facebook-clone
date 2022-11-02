@@ -11,26 +11,33 @@ post_routes = Blueprint('posts',__name__)
 @post_routes.route('/')
 def get_all_posts():
      all_posts = Post.query.all()
-     print("******************************POST", all_posts)
-     return {'posts':[p.to_dict_relationship()]for p in all_posts}
+     # print("******************************POST", all_posts)
+     return {'posts':[p.to_dict_relationship() for p in all_posts]}
 
 
 
 # Get post by ownerId
 @post_routes.route('/<int:ownerId>')
 def get_posts_by_ownerId(ownerId):
-     one_post = Post.query.get(ownerId)
-     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& one_post",one_post)
-     return {'onePost' : one_post.to_dict_relationship()}
+     posts = Post.query.filter(ownerId == Post.owner_Id)
+     # print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& one_post",posts)
+     # return {"Reviews": [review.to_dict_reviews() for review in products_reviews]}
+     # print({'posts' : [post.to_dict_post()for post in posts]},"**********************DATA from backend")#{'posts': [{'id': 1, 'owner_Id': 1, 'longText': 'Today was a pleasent day in Texas.Feeling happy'}, {'id': 3, 'owner_Id': 1, 'longText': 'I like icecream from costco.They have huge variety of icecreams'}]}
+     return {'posts' : [post.to_dict_post()for post in posts]}
 
 #Create a post
 @post_routes.route('/',methods=["POST"])
 def create_post():
      form = PostForm() #calling form
+     user = current_user.to_dict()
      form['csrf_token'].data = request.cookies['csrf_token']
      if form.validate_on_submit():
-          data = Post() #assigning model
-          form.populate_obj(data)
+          data = Post(
+               owner_Id = user['id'],
+               longText =form.data['longText']
+
+          ) #assigning model
+         # form.populate_obj(data)
           db.session.add(data)
           db.session.commit()
           return {"post": data.to_dict_relationship()}
@@ -40,13 +47,15 @@ def create_post():
 @post_routes.route('/<int:postId>',methods=["PUT"])
 def update_post(postId):
      form = EditPostForm()
+     post = Post.query.get(postId)
      form['csrf_token'].data = request.cookies['csrf_token']
      if form.validate_on_submit():
-          data = Post.query.get(postId)
-          form.populate_obj(data)
-          db.session.add(data)
+         # data = Post.query.get(postId)
+          #form.populate_obj(data)
+          post.longText = form.data['longText']
+          # db.session.add(data)
           db.session.commit()
-          return{"editedPost":data.to_dict_relationship()}
+          return{"editedPost":post.to_dict_relationship()}
      return form.errors
 
 #Delete a post
@@ -63,6 +72,7 @@ def delete_post(postId):
 @post_routes.route('/<int:postId>/comments')
 def get_all_comments(postId):
     all_comments = Comment.query.filter(Comment.post_Id == postId)
+    print(all_comments,"all_comments^^^^^^^^^^^^^^^^^^^^^^^^^^")
     return {"Comments": [c.to_dict_comments() for c in all_comments]}
 
 

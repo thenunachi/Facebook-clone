@@ -67,21 +67,31 @@ function CommentForm  ()  {
   /***************************************render func******************************************** */
   return (
     <form className="create-review-text" onSubmit={handleSubmit}>
-      <ul className="errorsReview">
+      <div className="errorsReview">
         {
           validations.map((error, index) => (
             <li key={index}>{error}</li>
           ))
         }
-      </ul>
-      <input id="reviewInput"
+      </div>
+      <div>
+      <textarea
+                    className='review-textbox'
+                    rows="5"
+                    cols="51"
+                    placeholder="Write a comment"
+        required
+        value={commentText}
+        onChange={updateComments}>
+                </textarea>
+      {/* <input id="reviewInput"
         type="text"
         placeholder="Write a comment"
         required
         value={commentText}
         onChange={updateComments}
-      />
-
+      /> */}
+</div>
      
       <button className="editButton" type="submit">Submit comment</button>
       {/* <button className="cancelEdit" type="button" onClick={onCancel}>Cancel</button> */}

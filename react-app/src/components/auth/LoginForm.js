@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../store/session';
+import './loginform.css'
+import SignUpFormModal from './Signupmodal'
+
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
@@ -31,15 +34,24 @@ const LoginForm = () => {
   }
 
   return (
+    <div>
+      <div className='leftdiv'>
+      <div>logo goes here</div>
+      
+      <div className='desc'>Fakebook helps you build rapport with fellow human beings.</div>
+
+
+      </div>
+      <div className='rigth'>
     <form onSubmit={onLogin}>
-      <div>
+      <div className='errors'>
         {errors.map((error, ind) => (
           <div key={ind}>{error}</div>
         ))}
       </div>
-      <div>
+      <div className='email'>
         <label htmlFor='email'>Email</label>
-        <input
+        <input className='emailtab'
           name='email'
           type='text'
           placeholder='Email'
@@ -47,18 +59,22 @@ const LoginForm = () => {
           onChange={updateEmail}
         />
       </div>
-      <div>
+      <div className='password'>
         <label htmlFor='password'>Password</label>
-        <input
+        <input className='passwordtab'
           name='password'
           type='password'
           placeholder='Password'
           value={password}
           onChange={updatePassword}
         />
-        <button type='submit'>Login</button>
+        <button className="login" type='submit'>Login</button>
+        <button className="login" type='submit'>Demo user</button>
+        <button className="signin" type='submit'><SignUpFormModal/></button>
       </div>
     </form>
+    </div>
+    </div>
   );
 };
 

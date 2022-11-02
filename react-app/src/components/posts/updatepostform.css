@@ -1,0 +1,43 @@
+/* .newPost{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+} */
+.longText{
+    height: 86px;
+    width: 265px;
+    margin-top: 26px;
+    margin-left: 6px;
+    border-radius: 9px;
+
+}
+.addPostButton{
+    width: 224px;
+    /* margin-left: 6px; */
+    height: 37px;
+    /* margin: 8px; */
+    border-radius: 16px;
+    background-color: #2374E1;
+    color: white;
+    margin-top: 13px;
+    margin-left: 35px;
+}
+.cancelButton{
+    cursor: pointer;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    padding: 2px 4px;
+    border: none;
+}
+.errorHandling{
+    color: red;
+    margin-top: 10px;
+    margin-left: 6px;
+}
+.post-textbox{
+    width: 271px;
+    margin-left: 4px;
+    border-radius: 10px;
+    margin-top: 51px;
+}

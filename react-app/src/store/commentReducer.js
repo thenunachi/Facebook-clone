@@ -4,7 +4,7 @@ export const GET_POST_COMMENTS = "Comments/getPostComment"
 export const CREATE_ONE = "Comments/createComment";
 export const REMOVE_ONE = 'Comments/removeComment';
 export const EDIT_COMMENT = "Comments/editComment";//updating a comment
-
+export const GET_ALL_COMMENTS_PER_POST = "Comments/GET_ALL_COMMENTS_PER_POST"
 
 /**********************************************ACTION************************************************************************************ */
 
@@ -35,6 +35,11 @@ const editComment = (comment) => ({
     comment
 });
 
+const getAllCommentforPost = (comment)=>({
+    type:GET_ALL_COMMENTS_PER_POST,
+    comment
+})
+
 
 
 /*********************************************************THUNK************************************************************************* */
@@ -54,8 +59,20 @@ export const loadPostCommentsThunk =(postId) =>async dispatch=>{
     if(response.ok){
         const data = await response.json();//promise coming from fetch and hold data from backend which is a list with dict in it
         dispatch(getPostComment(data.Comments))
+        return {...data};
     }
-    return response;
+  
+}
+
+//getallcommentsperpost
+export const getAllCommentsThunk =(postId) =>async dispatch=>{
+    const response = await fetch(`/api/posts/${postId}/comments`);
+    if(response.ok){
+        const data = await response.json();//promise coming from fetch and hold data from backend which is a list with dict in it
+        dispatch(getAllCommentforPost(data.Comments))
+        return {...data};
+    }
+  
 }
 //create a comment
 
@@ -126,8 +143,19 @@ switch (action.type){
     }
     case GET_POST_COMMENTS:{
         const newState ={};
+     console.log("comments shape",action.comments)
         action.comments.forEach((comment)=>(newState[comment.id]=comment))
+        console.log(newState,"newstate of comments")
         return newState;
+ 
+    }
+
+    case GET_ALL_COMMENTS_PER_POST:{
+        const newState ={};
+        
+           action.comment.forEach((comment)=>(newState[comment.id]=comment))
+          
+           return {...state,...newState};
     }
     case CREATE_ONE:{
         const newState={};

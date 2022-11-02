@@ -3,64 +3,78 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import {createPostThunk,getAllPostsThunk} from '../../store/postReducer'
+import { createPostThunk, getAllPostsThunk } from '../../store/postReducer'
+import './createpostform.css'
 
-
-function CreatePostForm(){
+function CreatePostForm({ setShowModal }) {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const [longText ,setLongText]=useState("");
-    const [validationError,setValidationError]=useState([])
-    const updateLongText =(e)=> setLongText(e.target.value);
+    const [longText, setLongText] = useState("");
+    const [validationError, setValidationError] = useState([])
+    const updateLongText = (e) => setLongText(e.target.value);
 
 
     const ownerObj = useSelector(state => state.session.user)
     console.log(ownerObj)
     //useEffect
-    useEffect(()=>{
-        const errors=[]
-        if(!longText.length) errors.push("LongText is required")
+    useEffect(() => {
+        const errors = []
+        if (!longText.length) errors.push("LongText is required")
         setValidationError(errors)
-    },[longText])
+    }, [longText])
     //handleSubmit
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload={
-            owner_id: ownerObj.id,longText
+        const payload = {
+            owner_id: ownerObj.id, longText
         }
-        console.log(payload,"PAYLOAD")
+        console.log(payload, "PAYLOAD")
         let createdPost = await dispatch(createPostThunk(payload))
-        console.log("CREATEDPOST ************",createdPost)
-    if(createdPost){
-        history.push(`/`)
-    }
-    
+        console.log("CREATEDPOST ************", createdPost)
+        if (createdPost) {
+            history.push(`/`)
+        }
+        // if(longText.length >0){
+        //     setShowModal(false)
+        // }
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
         history.push('/')
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
-       
-      };
 
-    return(
-        <div className="mainDiv"> 
-        <form className="newPost" onSubmit={handleSubmit}>
-<input className="longText"
-type ="text"
-placeholder="What's on your mind?"
-required
-value={longText}
-onChange={updateLongText}
-/>
-{!longText.length && <div className="errorHandling">Text is required</div>}
-<button type="submit">Post</button>
-<button type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i>Cancel</button>
-        </form>
-        
-        
+    };
+
+    return (
+        <div className="mainDiv">
+             <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
+            <form className="newPost" onSubmit={handleSubmit}>
+            {!longText.length && <div className="errorHandling">Text is required</div>}
+                {/* <input className="longText"
+                    type="text"
+                    placeholder="What's on your mind?"
+                    required
+                    value={longText}
+                    onChange={updateLongText}
+                /> */}
+                <div>
+      <textarea
+                    className='post-textbox'
+                    rows="5"
+                    cols="51"
+                    placeholder="What's on your mind?"
+                    required
+                    value={longText}
+                    onChange={updateLongText}>
+                </textarea>
+                </div>
+                <button className="addPostButton" type="submit">Post</button>
+                {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
+            </form>
+
+
         </div>
     )
 

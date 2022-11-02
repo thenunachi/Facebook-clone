@@ -29,13 +29,13 @@ def get_all_comments():
 @comment_routes.route('/<int:commentId>',methods=["PUT"])
 def update_comment(commentId):
     form = EditCommentForm()
+    comment = Comment.query.get(commentId)
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        data = Comment.query.get(commentId)
-        form.populate_obj(data)
-        db.session.add(data)
+        comment.commentText = form.data['commentText']
+        
         db.session.commit()
-        return {"EditedComment": data.to_dict_comments()}
+        return {"EditedComment": comment.to_dict_comments()}
     return form.errors
 
 #Delete a comment

@@ -2,42 +2,59 @@ import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import "./homepage.css"
-import {getAllPostsThunk} from '../../store/postReducer'
+import { getAllPostsThunk } from '../../store/postReducer'
 
-import {loadPostCommentsThunk,loadUserComments} from '../../store/commentReducer'
-function AllPosts(){
+import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk } from '../../store/commentReducer'
+function AllPosts() {
     const dispatch = useDispatch()
     const history = useHistory();
-    const postObj = useSelector(state => state.postState)
-   // const postArr = Object.values(postObj.allPosts)
- //   console.log("POSTARR",postArr)
-    console.log("postObj",postObj)
+
+
+
+    const postArr = useSelector(state => Object.values(state.postState))
+const commentArr = useSelector(state=> Object.values(state.commentState))
+console.log(commentArr,"CommentArr")
+    //const postArr = Object.values(postObj.allPosts)
+    //console.log("POSTARR", postArr)
+    // console.log("postObj",postObj)
     const user = useSelector(state => state.session.user)
-    console.log("postObj",postObj.allPosts)
-    useEffect(()=>{
-        dispatch(getAllPostsThunk())
-        // dispatch(loadUserComments())
-    },[dispatch])
+    //console.log("postObj",postObj.allPosts)
+    useEffect(async() => {
+       const {posts} = await dispatch(getAllPostsThunk())
+       console.log(posts,"")
+       posts.forEach((e)=> dispatch(getAllCommentsThunk(e.id)))
 
-return(
-    <div>
-        <div className="postdiv">
-            
-{
-// postArr.forEach((post,idx)=>{
-//    console.log("post.longText")//nu varanum but breaking
-//     console.log("**********POST IN MAP***********",post)
-   // console.log("index",idx)
-    // console.log("&&&&&&&&&&&&&&&&&&&",post.id.longText)
-    // console.log("&&&&",post[0].longText)
- 
-//
-{/* }) */}
-}
-</div>
+    }, [dispatch])
 
-    </div>
-)
+    return (
+        <div>
+            <div className="postdiv">
+                {
+                    postArr.map((post, idx) => {
+                        // console.log(post, "INside the forEach post method")
+                        // console.log(post.longText, "Longtext")
+                        return (
+                            <div className="singlepost">
+                                <div className="perPost">{post.longText}</div>
+                            {/* {dispatch(loadPostCommentsThunk(post.id))} */}
+                            <div className="singleComment"> {commentArr.map((comment)=>{
+                               console.log(comment,"comment insided nested func")
+                               return(<div className="perComment">{comment.commentText}</div>)
+                                    
+                                
+                            })
+                                }</div>
+                            </div>
+                            
+                        )
+
+
+                    })}
+
+            </div>
+
+        </div>
+    )
 
 
 

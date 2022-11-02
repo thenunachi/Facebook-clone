@@ -53,8 +53,9 @@ export const getAllPostsThunk =() => async dispatch =>{
     if(response.ok){
         const data = await response.json()
         dispatch(getAllPosts(data.posts))
+        return {...data}
     }
-    return response
+    
 }
 //GET POSTS BY OWNERID
 
@@ -104,10 +105,11 @@ export const removePostThunk = (id)=> async dispatch =>{
     console.log("ID OF DELETE POST ^^^^^^^^^^^^",id)
     const response = await fetch(`/api/posts/${id}`,{
         method: DELETE_POST,
-        headers:{ "Content-Type": "application/json"},
+       // headers:{ "Content-Type": "application/json"},
     })
     console.log(response,"RESPONSE OF DELETE")
     if(response.ok){
+        const {id} = await response.json();
         dispatch(removePost(id))
     }
 }
