@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../store/session";
-import './DemoUser.css'
+import './demouser.css'
 
 const DemoUser = ({ setShowLoginModal }) => {
     const dispatch = useDispatch();

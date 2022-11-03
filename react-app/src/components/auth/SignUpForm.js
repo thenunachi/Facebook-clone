@@ -16,7 +16,7 @@ const SignUpForm = ({ setShowSignUpModal }) => {
   const dispatch = useDispatch();
 
   if (user) {
-    //setShowSignUpModal(false)
+    setShowSignUpModal(false)
     return <Redirect to='/' />;
   }
 

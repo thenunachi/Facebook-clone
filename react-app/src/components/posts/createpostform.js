@@ -52,20 +52,14 @@ function CreatePostForm({ setShowModal }) {
              <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
             <form className="newPost" onSubmit={handleSubmit}>
             {!longText.length && <div className="errorHandling">Text is required</div>}
-                {/* <input className="longText"
-                    type="text"
-                    placeholder="What's on your mind?"
-                    required
-                    value={longText}
-                    onChange={updateLongText}
-                /> */}
+              
                 <div>
       <textarea
                     className='post-textbox'
                     rows="5"
                     cols="51"
                     placeholder="What's on your mind?"
-                    required
+                     required
                     value={longText}
                     onChange={updateLongText}>
                 </textarea>

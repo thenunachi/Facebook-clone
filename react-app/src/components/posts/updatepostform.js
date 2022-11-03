@@ -3,41 +3,41 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
-import { updatePostThunk } from '../../store/postReducer'
+import { updatePostThunk,getPostsByUserIdThunk } from '../../store/postReducer'
 import './updatepostform.css'
 
-function UpdatePostForm() {
+function UpdatePostForm({ setShowModal,post }) {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const [longText, setLongText] = useState("");
+    const{userId}= useParams()
+
+    const ownerObj = useSelector(state => state.session.user)
+    const postObj = useSelector(state => Object.values(state.postState))
+    console.log(postObj,"postObj")
+    const [longText, setLongText] = useState(post.longText);
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
 
-
-    const ownerObj = useSelector(state => state.session.user)
-    const postObj = useSelector(state => state.postState)
-    let { postId } = useParams();
-    // console.log(postObj,"POSTOBJ")
-    // console.log(ownerObj)
-    //useEffect
     useEffect(() => {
         const errors = []
         if (!longText.length) errors.push("LongText is required")
         setValidationError(errors)
     }, [longText])
-    //handleSubmit
+   
 
 
-    const handleSubmit = async (e) => {
+    const handleSubmit =  async(e) => {
         console.log("IN HANDLESUBMIT FUNC")
-        e.preventDefault();
+         e.preventDefault();
+       
         alert("after handlesubmit")
         const payload = {
-            id: postId, longText
+            id: post.id, longText
         }
         console.log(payload, "PAYLOAD of update post")
         let updatedPost = await dispatch(updatePostThunk(payload))
+        dispatch(getPostsByUserIdThunk(userId))
         // console.log("CREATEDPOST ************",createdPost)
         // if(updatedPost){
         //     history.push(`/`)
@@ -46,6 +46,7 @@ function UpdatePostForm() {
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
+      
         history.push('/')
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
@@ -71,7 +72,7 @@ function UpdatePostForm() {
                 </div>
 
                 <input className="addPostButton" type="submit"/>
-
+                {/* <button className="addPostButton" type="submit">Update Spot</button> */}
             </form>
 
 

@@ -104,7 +104,7 @@ export const updatePostThunk = (payload) => async dispatch =>{
 export const removePostThunk = (id)=> async dispatch =>{
     console.log("ID OF DELETE POST ^^^^^^^^^^^^",id)
     const response = await fetch(`/api/posts/${id}`,{
-        method: DELETE_POST,
+        method: "DELETE",
        // headers:{ "Content-Type": "application/json"},
     })
     console.log(response,"RESPONSE OF DELETE")

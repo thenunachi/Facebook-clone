@@ -6,6 +6,7 @@
     /* margin: 10px 0; */
     margin: -10px 0;
     width: 583px;
+    margin-bottom: 33px;
 }
 .right{
     float: right;
@@ -35,7 +36,7 @@
     word-wrap: break-word;
     margin-left: 55px;
 }
-.createEachcomment{
+/* .createEachcomment{
     border: 2px solid #dedede;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -44,7 +45,7 @@
     width: 586px;
     display: flex;
     flex-direction: row;
-}
+} */
 .left{
     float: left;
     width: 23%;

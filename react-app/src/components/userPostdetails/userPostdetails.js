@@ -9,7 +9,8 @@ import { getAllPostsThunk, getPostsByUserIdThunk, removePostThunk, updatePostThu
 import './userPostdetail.css'
 import AddPostModal from "./createPostModal";
 import UpdatePostModal from "./updatePostModal";
-
+import AddCommentModal from "./createcommentmodal";
+import UpdatecommentModal from './updateCommentModal'
 export const UserSpotDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export const UserSpotDetail = () => {
     //console.log("$$$$$$$$$$$$$$$$$$$", state.postState)
     return Object.values(state.postState)
   });
-  //console.log("$$$$$$$$$$$$$$$$$$$", allPosts)
+
 
   // console.log(postIdKeys,"POSTIDKEYS")
   let allComments = useSelector(state => Object.values(state.commentState))
@@ -46,50 +47,40 @@ export const UserSpotDetail = () => {
       </div>
       <div className="right">
         <div className="addPost">
-          {/* <i class="fa-solid fa-user"></i> */}
-          <div className="innerDiv">
+               <div className="innerDiv">
 
             {<AddPostModal />}
           </div>
         </div>
         <div className="allposts">{
           allPosts.map((element) => {
-
-            console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
+            console.log(element.id, "FIND OUT ELEMENT ID OF POST")
+            // console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
             return (
-              <div className="eachPost">{element.longText
-
-              }
+              <div className="eachPost">{element.longText}
 
                 {
                   <button className="deletePostButton" onClick={async (event) => {
                     event.preventDefault()
-                    console.log(event, "Event &&&&&&&")
-                    console.log(element.id, "ID of element &&&&ID&&&&&")
+                
                     await dispatch(removePostThunk(element.id))
-                    //await dispatch(dispatch(loadPostCommentsThunk(postId)))
+                    await dispatch((getPostsByUserIdThunk(userId)))
                   }}>
                     Delete Post
 
                   </button>}
 
                 {
-                  <button className="editPostButton" onClick={async (event) => {
-                     event.preventDefault()
-                    await dispatch(updatePostThunk(element))
-                  }}>{<UpdatePostModal />}
-                  
-                  </button>
+                  <UpdatePostModal post={element} />
+
                 }
-                {
-                  <button className="createPostButton" onClick={async (event) => {
-                    event.preventDefault()
-                    await dispatch(createPostThunk(element))
-                  }}>Create Post</button>
-                }
+                
                 <div className="commentsDiv">{
                   allComments.map((element) => {
-                    console.log(element, "dfdsagfdgfdafdsfdsafdsfasdfdsfdasf")
+                    console.log(element, "Element id")
+                    console.log(element.id, "FIND OUT ID OF COMMENTS")
+                    console.log(element.post_Id, "Is post id logging")
+                    // console.log(element, "dfdsagfdgfdafdsfdsafdsfasdfdsfdasf")
                     return (
                       <div className="eachcomment">
                         <div className="trashbuttons">
@@ -97,7 +88,8 @@ export const UserSpotDetail = () => {
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
-                              //await dispatch(dispatch(loadPostCommentsThunk(postId)))
+                              await dispatch((loadPostCommentsThunk(element.post_Id)))
+                              //  return history.push(`/posts`)
                             }}>
                               <i class="fa-solid fa-trash"></i>
 
@@ -105,111 +97,39 @@ export const UserSpotDetail = () => {
                           </span>}
 
                           <div className="editEachcomment">
-                            {<span>
-                              <button className="editCommentButton" onClick={async (event) => {
-                                // event.preventDefault()
-                                await dispatch(updateCommentThunk(element))
-                              }}><i class="fa-solid fa-pen-to-square"></i>
-
-                                {/* 
-                                */}
-                              </button>
-                            </span>
+                            {
+                              <span>
+                               
+                                <UpdatecommentModal comment={element} />
+                              </span>
                             }
 
                           </div>
                         </div>
                         <div>{element.commentText}</div>
 
-
-
                       </div>
-
 
                     )
                   })
                 }
 
-                  <span className="editComment">{
-                    allComments.map((element) => {
-                      console.log(element, "INSIDE EDITCOMMENT ELEMENT")
-
-                      // return (
-
-                      //   <div className="editEachcomment">
-                      //     {
-                      //       <button className="editCommentButton" onClick={async (event) => {
-                      //         // event.preventDefault()
-                      //         await dispatch(updateCommentThunk(element))
-                      //       }}><i class="fa-solid fa-pen-to-square"></i>
-
-                      //         {/* 
-                      //                     */}
-                      //       </button>
-                      //     }
-
-                      //   </div>
-                      // )
-                    })
-                  }
-
-
-                  </span>
-                  {/* <span className="createComment">{
-                    allComments.map((element) => {
-                      return (
-                        <div className="createEachcomment"> Write a comment...
-                          {
-                            <button className="createCommentButton" onClick={async (event) => {
-                              event.preventDefault()
-                              await dispatch(createCommentThunk(element))
-                            }}>
-
-
-
-
-
-                              <i class="fa-regular fa-send-backward"></i>
-                            </button>
-                          }
-
-                        </div>
-                      )
-                    })
-                  }
-                  </span> */}
+              
                 </div>
                 <div className="createComment">{
-                  // allComments.map((element) => {
-                  // return (
-                  <div className="createEachcomment"> Write a comment...
+                 
+                  <div className="createEachcomment">
                     {
-                      <button className="createCommentButton" onClick={async (event) => {
-                        event.preventDefault()
-                        await dispatch(createCommentThunk(element))
-                      }}>
-
-
-
-
-
-                        {/* <i class="fa fa-envelope" aria-hidden="true"></i> */}
-                        <i class="fa-solid fa-paper-plane"></i>
-                      </button>
+                      <div>
+                        <AddCommentModal postId={element.id} />
+                      </div>
                     }
 
                   </div>
-                  // )
-                  // })
+                  
                 }
-
-
-
                 </div>
-
               </div>
-
-
             )
 
           })
@@ -228,3 +148,4 @@ export const UserSpotDetail = () => {
 
 
 }
+const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id //

@@ -18,17 +18,17 @@ function NavBar({ loaded }) {
                     <div className='logo-div'>
                         <img className="logo" src={logo} />
                     </div>
-                    
+
                 </NavLink>
             </div>
-        <div className='middle'>
-        <img className="home" src={home} />
-        {/* <div className='homeSymbol'> <i class="fa-solid fa-house"></i></div> */}
-        </div>
+            <div className='middle'>
+                <img className="home" src={home} />
+                {/* <div className='homeSymbol'> <i class="fa-solid fa-house"></i></div> */}
+            </div>
             <div className='nav-right'>
-            {!sessionUser && (
+                {!sessionUser && (
                     <div className='login-signup'>
-                       
+
                         <div onClick={() => setShowSignUpModal(true)} className='user-auth-div'>
                             <p className='user-auth-text'>Sign Up</p>
                         </div>

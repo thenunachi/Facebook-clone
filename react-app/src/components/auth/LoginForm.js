@@ -1,15 +1,19 @@
+
+
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../store/session';
 import './loginform.css'
 import SignUpFormModal from './Signupmodal'
-
+import DemoUser from './demouser';
+// import './'
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
 
@@ -36,45 +40,54 @@ const LoginForm = () => {
   return (
     <div>
       <div className='leftdiv'>
-      <div>logo goes here</div>
-      
-      <div className='desc'>Fakebook helps you build rapport with fellow human beings.</div>
+        <div>logo goes here</div>
+
+        <div className='desc'>Fakebook helps you build rapport with fellow human beings.</div>
 
 
       </div>
       <div className='rigth'>
-    <form onSubmit={onLogin}>
-      <div className='errors'>
-        {errors.map((error, ind) => (
-          <div key={ind}>{error}</div>
-        ))}
+        <form onSubmit={onLogin}>
+          <div className='errors'>
+            {errors.map((error, ind) => (
+              <div key={ind}>{error}</div>
+            ))}
+          </div>
+          <div className='email'>
+            <label htmlFor='email'>Email</label>
+            <input className='emailtab'
+              name='email'
+              type='text'
+              placeholder='Email'
+              value={email}
+              onChange={updateEmail}
+            />
+          </div>
+          <div className='password'>
+            <label htmlFor='password'>Password</label>
+            <input className='passwordtab'
+              name='password'
+              type='password'
+              placeholder='Password'
+              value={password}
+              onChange={updatePassword}
+            />
+            <button className="login" type='submit'>Login</button>
+            <DemoUser/>
+            <div className="signin">SignUp<SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} /></div>
+            {/* <button className="signin" type='submit'><SignUpFormModal /></button> */}
+          </div>
+        </form>
       </div>
-      <div className='email'>
-        <label htmlFor='email'>Email</label>
-        <input className='emailtab'
-          name='email'
-          type='text'
-          placeholder='Email'
-          value={email}
-          onChange={updateEmail}
-        />
-      </div>
-      <div className='password'>
-        <label htmlFor='password'>Password</label>
-        <input className='passwordtab'
-          name='password'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={updatePassword}
-        />
-        <button className="login" type='submit'>Login</button>
-        <button className="login" type='submit'>Demo user</button>
-        <button className="signin" type='submit'><SignUpFormModal/></button>
-      </div>
-    </form>
+      <footer>
+        <div id="repos">
+
+          <a href="https://github.com/thenunachi">Thenu's Github</a>
+
+        </div>
+      </footer>
     </div>
-    </div>
+    
   );
 };
 
