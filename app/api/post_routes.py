@@ -47,15 +47,15 @@ def create_post():
 @post_routes.route('/<int:postId>',methods=["PUT"])
 def update_post(postId):
      form = EditPostForm()
-     post = Post.query.get(postId)
+     # post = Post.query.get(postId)
      form['csrf_token'].data = request.cookies['csrf_token']
      if form.validate_on_submit():
-         # data = Post.query.get(postId)
+          data = Post.query.get(postId)
           #form.populate_obj(data)
-          post.longText = form.data['longText']
-          # db.session.add(data)
+          data.longText = form.data['longText']
+          db.session.add(data)
           db.session.commit()
-          return{"editedPost":post.to_dict_relationship()}
+          return{"editedPost":data.to_dict_relationship()}
      return form.errors
 
 #Delete a post
@@ -83,10 +83,11 @@ def get_all_comments(postId):
 @post_routes.route('/<int:postId>/comments',methods=["POST"])
 def create_comment(postId):
      form = CommentForm()
+     user = current_user.to_dict()
      print("%%%%%%%%%%%%%%%%%Form",form)
      form['csrf_token'].data = request.cookies['csrf_token']
      if form.validate_on_submit():
-          user = current_user.to_dict()
+       
           data = Comment(
              user_Id = user['id'],
              post_Id = postId,

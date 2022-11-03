@@ -59,7 +59,7 @@ export const UserSpotDetail = () => {
             return (
               <div className="eachPost">{element.longText}
 
-                {
+                {isUserPostOwner(element,user)&&
                   <button className="deletePostButton" onClick={async (event) => {
                     event.preventDefault()
                 
@@ -70,21 +70,18 @@ export const UserSpotDetail = () => {
 
                   </button>}
 
-                {
+                {isUserPostOwner(element,user)&&
                   <UpdatePostModal post={element} />
 
                 }
                 
                 <div className="commentsDiv">{
                   allComments.map((element) => {
-                    console.log(element, "Element id")
-                    console.log(element.id, "FIND OUT ID OF COMMENTS")
-                    console.log(element.post_Id, "Is post id logging")
-                    // console.log(element, "dfdsagfdgfdafdsfdsafdsfasdfdsfdasf")
+                   
                     return (
                       <div className="eachcomment">
                         <div className="trashbuttons">
-                          {<span className="common-button">
+                          {isUserCommentOwner(element,user) && <span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
@@ -97,7 +94,7 @@ export const UserSpotDetail = () => {
                           </span>}
 
                           <div className="editEachcomment">
-                            {
+                            {isUserCommentOwner(element,user)&&
                               <span>
                                
                                 <UpdatecommentModal comment={element} />
@@ -148,4 +145,5 @@ export const UserSpotDetail = () => {
 
 
 }
-const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id //
+const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
+const isUserCommentOwner = (comment,user) => comment && user && comment.user_Id == user.id
