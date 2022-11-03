@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory,Link } from "react-router-dom";
 import "./homepage.css"
 import { getAllPostsThunk } from '../../store/postReducer'
 
@@ -35,7 +35,14 @@ console.log(commentArr,"CommentArr")
                         // console.log(post.longText, "Longtext")
                         return (
                             <div className="singlepost">
-                                <div className="perPost">{post.longText}</div>
+                                 {/* <div className="perPost">{post.longText} */}
+                                <div className="perPost">
+                                {/* {post.longText} */}
+                                <Link to={`/users/${user.id}/posts`}>{post.longText}</Link>
+
+                                    {/* <Link key={post.longText} to={`/users/${user.id}/posts`}/> */}
+                               
+                                </div>
                             {/* {dispatch(loadPostCommentsThunk(post.id))} */}
                             <div className="singleComment"> {commentArr.map((comment)=>{
                                console.log(comment,"comment insided nested func")

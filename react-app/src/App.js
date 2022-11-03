@@ -52,27 +52,27 @@ function App() {
           <User />
         </ProtectedRoute>
         <ProtectedRoute path='/' exact={true} >
-          <h1>My Home Page</h1>
+          {/* <h1>My Home Page</h1> */}
           <AllPosts/>
         </ProtectedRoute>
         <ProtectedRoute path='/newpost' exact={true} >
-          <h1>Create a post Page</h1>
+          {/* <h1>Create a post Page</h1> */}
           <CreatePostForm/>
         </ProtectedRoute>
         <ProtectedRoute path='/posts/:postId' exact={true} >
-          <h1>Update a post Page</h1>
+          {/* <h1>Update a post Page</h1> */}
           <UpdatePostForm/>
         </ProtectedRoute>
         <ProtectedRoute path='/users/:userId/posts' exact={true} >
-          <h1>User POst Page</h1>
+          {/* <h1>User POst Page</h1> */}
           <UserSpotDetail/>
         </ProtectedRoute>
         <ProtectedRoute path='/comments/:commentId' exact={true} >
-          <h1>update comment Page</h1>
+          {/* <h1>update comment Page</h1> */}
           <UpdateCommentForm/>
         </ProtectedRoute>
         <ProtectedRoute path='/:postId/comments' exact={true} >
-          <h1>create comment Page</h1>
+          {/* <h1>create comment Page</h1> */}
           <CommentForm/>
         </ProtectedRoute>
       </Switch>

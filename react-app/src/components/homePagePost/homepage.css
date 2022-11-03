@@ -12,6 +12,7 @@
     /* height: 149px; */
     margin-left: 375px;
     margin-bottom: 12px;
+    margin-top: 24px;
 }
 .singleComment{
     word-wrap: break-word;
@@ -41,3 +42,6 @@
     /* height: 79px; */
     word-wrap: break-word;
 }
+Link{
+    text-decoration: white;
+ }

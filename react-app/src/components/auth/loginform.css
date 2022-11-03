@@ -76,3 +76,25 @@
 .errors{
     color:red
 }
+footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    color: white;
+    text-align: left;
+    height: 65px;
+    padding-left: 107px;
+    border-top: 1px solid rgb(221, 221, 221);
+    font-size: 16px;
+    align-items: center;
+}
+#repos{
+    justify-content: center;
+    padding-top: 27px;
+    color: black;
+}
+.link{
+    margin-right: 64px;
+}

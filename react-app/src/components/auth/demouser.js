@@ -9,10 +9,7 @@ const DemoUser = ({ setShowLoginModal }) => {
 
     const loginDemoUser = async (e) => {
         e.preventDefault();
-        // const demoCredentials = {
-        //     email: 'demo@aa.io',
-        //     password: 'password'
-        // }
+        
         const demoEmail = 'demo@aa.io';
         const demoPassword = 'password'
         let loggedInDemo = await dispatch(login(demoEmail, demoPassword))

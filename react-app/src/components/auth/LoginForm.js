@@ -40,7 +40,7 @@ const LoginForm = () => {
   return (
     <div>
       <div className='leftdiv'>
-        <div>logo goes here</div>
+        {/* <div>logo goes here</div> */}
 
         <div className='desc'>Fakebook helps you build rapport with fellow human beings.</div>
 
@@ -74,16 +74,16 @@ const LoginForm = () => {
             />
             <button className="login" type='submit'>Login</button>
             <DemoUser/>
-            <div className="signin">SignUp<SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} /></div>
-            {/* <button className="signin" type='submit'><SignUpFormModal /></button> */}
+            {/* <div className="signin">SignUp<SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} /></div> */}
+            <button className="signin" onClick={()=>setShowSignUpModal(true)}><SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} />SignUp</button>
           </div>
         </form>
       </div>
       <footer>
         <div id="repos">
 
-          <a href="https://github.com/thenunachi">Thenu's Github</a>
-
+         <span className='link'><a href="https://github.com/thenunachi">Github</a></span> 
+         <span><a href="https://www.linkedin.com/in/thenammai-nachiyappan-56bbaa1a2/">linkedin</a></span> 
         </div>
       </footer>
     </div>

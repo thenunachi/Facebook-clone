@@ -30,7 +30,7 @@ function NavBar({ loaded }) {
                     <div className='login-signup'>
 
                         <div onClick={() => setShowSignUpModal(true)} className='user-auth-div'>
-                            <p className='user-auth-text'>Sign Up</p>
+                            <p className='user-auth-text'></p>
                         </div>
                     </div>
                 )}
