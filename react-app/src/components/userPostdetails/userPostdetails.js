@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from "react-router-dom";
 
-import { deleteCommentThunk, loadPostCommentsThunk, updateCommentThunk, createCommentThunk } from '../../store/commentReducer'
+import { deleteCommentThunk,getAllCommentsThunk, loadPostCommentsThunk, updateCommentThunk, createCommentThunk } from '../../store/commentReducer'
 import { getAllPostsThunk, getPostsByUserIdThunk, removePostThunk, updatePostThunk, createPostThunk } from "../../store/postReducer";
 
+import chat from './chat.png'
+import posticon from './posticon.png'
 import './userPostdetail.css'
 import AddPostModal from "./createPostModal";
 import UpdatePostModal from "./updatePostModal";
@@ -25,18 +27,20 @@ export const UserSpotDetail = () => {
 
   // console.log(postIdKeys,"POSTIDKEYS")
   let allComments = useSelector(state => Object.values(state.commentState))
-  //console.log(allComments, "ALLCOMMENTS")//this works
+  console.log(allComments, "ALLCOMMENTS")//this works
+ 
   let user = useSelector(state => state.session.user)
   // let ids = postId(allPosts)
   useEffect(async () => {
     const { posts } = await dispatch(getPostsByUserIdThunk(userId))//destructured because it had post key inside it
     // console.log(posts)
-    posts.forEach((e) => dispatch(loadPostCommentsThunk(e.id)))
+    posts.forEach((e) => dispatch(getAllCommentsThunk(e.id)))
     // dispatch((allPosts.map((e)=>loadPostCommentsThunk(e.id))))
   }, dispatch)
 
   return (
     <div>
+      <h1 className="personal">Welcome to {user.username}'s personal page </h1>
       <div className="left">
 
         <div className="house">
@@ -53,35 +57,36 @@ export const UserSpotDetail = () => {
           </div>
         </div>
         <div className="allposts">{
-          allPosts.map((element) => {
-            console.log(element.id, "FIND OUT ELEMENT ID OF POST")
+          allPosts.map((post) => {
+            console.log(post.id, "FIND OUT ELEMENT ID OF POST")
             // console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
             return (
-              <div className="eachPost">{element.longText}
+              <div className="eachPost"> <span><img className="posticon" src={posticon} /></span>{post.longText}
 
-                {isUserPostOwner(element,user)&&
+                {isUserPostOwner(post,user)&&
                   <button className="deletePostButton" onClick={async (event) => {
                     event.preventDefault()
                 
-                    await dispatch(removePostThunk(element.id))
+                    await dispatch(removePostThunk(post.id))
                     await dispatch((getPostsByUserIdThunk(userId)))
                   }}>
                     Delete Post
 
                   </button>}
 
-                {isUserPostOwner(element,user)&&
-                  <UpdatePostModal post={element} />
+                {isUserPostOwner(post,user)&&
+                  <UpdatePostModal post={post} />
 
                 }
                 
                 <div className="commentsDiv">{
                   allComments.map((element) => {
-                   
-                    return (
+                    
+                   console.log(element)
+                    return ((element.post_Id == post.id)&&
                       <div className="eachcomment">
                         <div className="trashbuttons">
-                          {isUserCommentOwner(element,user) && <span className="common-button">
+                          {<span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
@@ -94,7 +99,7 @@ export const UserSpotDetail = () => {
                           </span>}
 
                           <div className="editEachcomment">
-                            {isUserCommentOwner(element,user)&&
+                            {
                               <span>
                                
                                 <UpdatecommentModal comment={element} />
@@ -103,7 +108,12 @@ export const UserSpotDetail = () => {
 
                           </div>
                         </div>
-                        <div>{element.commentText}</div>
+                        <div>
+                          <span><img className="chat" src={chat} /></span>
+                          <span>
+                            {/* <i class="fa-brands fa-rocketchat"></i> */}
+                            {element.commentText}</span>
+                          </div>
 
                       </div>
 
@@ -118,7 +128,7 @@ export const UserSpotDetail = () => {
                   <div className="createEachcomment">
                     {
                       <div>
-                        <AddCommentModal postId={element.id} />
+                        <AddCommentModal postId={post.id} />
                       </div>
                     }
 
@@ -147,3 +157,4 @@ export const UserSpotDetail = () => {
 }
 const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
 const isUserCommentOwner = (comment,user) => comment && user && comment.user_Id == user.id
+// const commentsPerPost = (comment,post)=> post  && comment.post_Id == post.id

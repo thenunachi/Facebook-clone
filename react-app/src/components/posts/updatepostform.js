@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-
+import { Redirect } from 'react-router-dom';
 import { updatePostThunk,getPostsByUserIdThunk } from '../../store/postReducer'
 import './updatepostform.css'
 
@@ -31,13 +31,15 @@ function UpdatePostForm({ setShowModal,post }) {
         console.log("IN HANDLESUBMIT FUNC")
          e.preventDefault();
        
-        alert("after handlesubmit")
+        // alert("after handlesubmit")
         const payload = {
             id: post.id, longText
         }
         console.log(payload, "PAYLOAD of update post")
         let updatedPost = await dispatch(updatePostThunk(payload))
         dispatch(getPostsByUserIdThunk(userId))
+         setShowModal(false)   
+         return <Redirect to={`/users/${userId}/posts`} />;         
         // console.log("CREATEDPOST ************",createdPost)
         // if(updatedPost){
         //     history.push(`/`)
@@ -46,8 +48,8 @@ function UpdatePostForm({ setShowModal,post }) {
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
-      
-        history.push('/')
+        
+        history.push(`/users/${userId}/posts`)
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
 
@@ -55,7 +57,8 @@ function UpdatePostForm({ setShowModal,post }) {
 
     return (
         <div className="mainDiv">
-            <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
+            {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
+            {/* <h1>Update the post</h1> */}
             <form className="newPost" onSubmit={(e)=>handleSubmit(e)}>
                 {!longText.length && <div className="errorHandling">Text is required</div>}
 
