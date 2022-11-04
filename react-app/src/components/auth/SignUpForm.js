@@ -25,6 +25,21 @@ const SignUpForm = ({ setShowSignUpModal }) => {
     if (!email.includes('@')) {
       return setErrors(['Please provide a valid email'])
     }
+    if(!(username.length > 5 && username.length < 20 ) ){
+      return setErrors(['Username to be between 6 to 21 characters'])
+
+    }
+    if(!(firstname.length > 5 && firstname.length < 15)){
+      return setErrors(['Firstname to be between 6 to 16 characters'])
+
+    }
+    if(!(lastname.length > 5 && lastname.length < 15)){
+      return setErrors(['Lastname to be between 6 to 16 characters'])
+
+    }
+    if(password.length <= 5){
+      return setErrors(['Password to be minimum 5 characters'])
+    }
     if (password === repeatPassword) {
       const data = await dispatch(signUp(username, email, password, firstname, lastname));
       if (data) {
@@ -32,7 +47,7 @@ const SignUpForm = ({ setShowSignUpModal }) => {
       }
       return;
     }
-    return setErrors(['Password fields must match'])
+    return setErrors(['Password fields must match','Lastname to be between 5 to 10 characters','Firstname to be between 5 to 10 characters','Username to be between 5 to 20 characters'])
   };
 
   const updateUsername = (e) => {

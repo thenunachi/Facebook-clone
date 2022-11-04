@@ -45,3 +45,12 @@
 Link{
     text-decoration: white;
  }
+ .innerDivPost{
+    margin-left: 375px;
+    margin-bottom: 12px;
+    margin-top: 24px;
+ }
+ .title{
+    margin-left: 421px;
+    color: #2374E1;
+ }

@@ -7,6 +7,7 @@
     margin: -10px 0;
     width: 583px;
     margin-bottom: 33px;
+    word-wrap: break-word;
 }
 .right{
     float: right;
@@ -32,7 +33,7 @@
     /* width: 586px; */
     /* display: flex; */
     flex-direction: row;
-    height: 79px;
+    /* height: 79px; */
     word-wrap: break-word;
     margin-left: 55px;
 }
@@ -91,4 +92,12 @@
     /* justify-content: flex-end; */
     margin-top: 3px;
     margin-right: 3px;
+}
+
+.chat{
+    width: 28px;
+}
+.personal{
+    margin-left: 421px;
+    color: #2374E1;   
 }

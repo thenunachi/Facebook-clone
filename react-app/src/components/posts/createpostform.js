@@ -2,7 +2,7 @@ import { use } from "chai";
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-
+import { Redirect, useParams } from 'react-router-dom';
 import { createPostThunk, getAllPostsThunk } from '../../store/postReducer'
 import './createpostform.css'
 
@@ -13,7 +13,7 @@ function CreatePostForm({ setShowModal }) {
     const [longText, setLongText] = useState("");
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
-
+    const{userId}= useParams()
 
     const ownerObj = useSelector(state => state.session.user)
     console.log(ownerObj)
@@ -33,7 +33,8 @@ function CreatePostForm({ setShowModal }) {
         let createdPost = await dispatch(createPostThunk(payload))
         console.log("CREATEDPOST ************", createdPost)
         if (createdPost) {
-            history.push(`/`)
+            setShowModal(false)   
+            return <Redirect to={`/users/${userId}/posts`} />;   
         }
         // if(longText.length >0){
         //     setShowModal(false)
@@ -41,7 +42,7 @@ function CreatePostForm({ setShowModal }) {
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
-        history.push('/')
+        // history.push('/')
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
 
@@ -49,7 +50,7 @@ function CreatePostForm({ setShowModal }) {
 
     return (
         <div className="mainDiv">
-             <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
+             {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             <form className="newPost" onSubmit={handleSubmit}>
             {!longText.length && <div className="errorHandling">Text is required</div>}
               

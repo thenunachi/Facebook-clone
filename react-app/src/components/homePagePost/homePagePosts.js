@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory,Link } from "react-router-dom";
 import "./homepage.css"
 import { getAllPostsThunk } from '../../store/postReducer'
-
+import chat from './chat.png'
+import posticon from './posticon.png'
 import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk } from '../../store/commentReducer'
+import AddPostModal from '../userPostdetails/createPostModal.js'
+import '../userPostdetails/createpostmodal.css'
 function AllPosts() {
     const dispatch = useDispatch()
     const history = useHistory();
@@ -28,6 +31,18 @@ console.log(commentArr,"CommentArr")
 
     return (
         <div>
+            <h1 className="title">Welcome to {user.username}'s Home Page</h1>
+            <div className="createpostDiv">
+            <div className="addPost">
+               <div className="innerDivPost">
+             
+            {<span>  
+                {/* <img className="posticon" src={posticon} /> */}
+            <AddPostModal />
+            </span>}
+          </div>
+          </div>
+          </div>
             <div className="postdiv">
                 {
                     postArr.map((post, idx) => {
@@ -38,7 +53,7 @@ console.log(commentArr,"CommentArr")
                                  {/* <div className="perPost">{post.longText} */}
                                 <div className="perPost">
                                 {/* {post.longText} */}
-                                <Link to={`/users/${user.id}/posts`}>{post.longText}</Link>
+                                <Link to={`/users/${user.id}/posts`}><span><img className="posticon" src={posticon} /></span>{post.longText}</Link>
 
                                     {/* <Link key={post.longText} to={`/users/${user.id}/posts`}/> */}
                                
@@ -46,7 +61,8 @@ console.log(commentArr,"CommentArr")
                             {/* {dispatch(loadPostCommentsThunk(post.id))} */}
                             <div className="singleComment"> {commentArr.map((comment)=>{
                                console.log(comment,"comment insided nested func")
-                               return(<div className="perComment">{comment.commentText}</div>)
+                               return((comment.post_Id == post.id) &&
+                               <div className="perComment"><span><img className="chat" src={chat} /></span>{comment.commentText}</div>)
                                     
                                 
                             })

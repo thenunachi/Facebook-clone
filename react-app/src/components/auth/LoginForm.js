@@ -7,7 +7,7 @@ import { login } from '../../store/session';
 import './loginform.css'
 import SignUpFormModal from './Signupmodal'
 import DemoUser from './demouser';
-// import './'
+
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
@@ -19,9 +19,15 @@ const LoginForm = () => {
 
   const onLogin = async (e) => {
     e.preventDefault();
+    if(email.length ===0){
+      return setErrors(["Email is required"])
+    }
+    if(password.length === 0){
+      return setErrors(["Password is required"])
+    }
     const data = await dispatch(login(email, password));
     if (data) {
-      setErrors(data);
+      setErrors(["Please provide valid credentials"]);
     }
   };
 
