@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams,Redirect } from "react-router-dom";
 import { createCommentThunk, loadUserComments, loadPostCommentsThunk } from "../../store/commentReducer";
 
 import './createCommentForm.css'
@@ -41,6 +41,7 @@ function CommentForm({setShowModal,postId}) {
   useEffect(() => {
     const errors = [];
     if (!commentText.length) errors.push("Review text is required");
+    if(commentText.length > 2000)errors.push("Maximum 2000 characters")
 
     setValidations(errors)
   }, [commentText]);
@@ -59,6 +60,11 @@ function CommentForm({setShowModal,postId}) {
     console.log(payload, "PAYLOAD ISIDE CREACRE")
     let newComment = await dispatch(createCommentThunk(payload))
     await dispatch(loadPostCommentsThunk(postId))
+
+    if(newComment){
+      setShowModal(false)   
+            return <Redirect to={`/users/${user.id}/posts`} />;
+    }
     //dispatch(loadPostCommentsThunk(post.id))
     // console.log("NEW REVIEW " , newReview)
     // if(newReview){
@@ -75,7 +81,7 @@ function CommentForm({setShowModal,postId}) {
   /***************************************render func******************************************** */
   return (
     <div>
-    <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
+    {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
     <form className="create-review-text" onSubmit={handleSubmit}>
       {/* <div className="errorsReview">
         {
@@ -85,6 +91,7 @@ function CommentForm({setShowModal,postId}) {
         }
       </div> */}
        {!commentText.length && <div className="errorHandling">Text is required</div>}
+       {commentText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
       <div>
         <textarea
           className='review-textbox'

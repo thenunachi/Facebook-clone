@@ -7,6 +7,7 @@ import chat from './chat.png'
 import posticon from './posticon.png'
 import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk } from '../../store/commentReducer'
 import AddPostModal from '../userPostdetails/createPostModal.js'
+import AddCommentModal from "../userPostdetails/createcommentmodal";
 import '../userPostdetails/createpostmodal.css'
 function AllPosts() {
     const dispatch = useDispatch()
@@ -46,14 +47,21 @@ console.log(commentArr,"CommentArr")
             <div className="postdiv">
                 {
                     postArr.map((post, idx) => {
-                        // console.log(post, "INside the forEach post method")
+                         console.log(post, "post details to know username")
                         // console.log(post.longText, "Longtext")
                         return (
                             <div className="singlepost">
                                  {/* <div className="perPost">{post.longText} */}
                                 <div className="perPost">
                                 {/* {post.longText} */}
-                                <Link to={`/users/${user.id}/posts`}><span><img className="posticon" src={posticon} /></span>{post.longText}</Link>
+                               
+                                {/* <Link to={`/users/${user.id}/posts`}> */}
+                                <div className="user">{post.owner.username}:</div>
+                                    <span className="posttext"><img className="posticon" src={posticon} /> 
+                                   
+                                    {post.longText}</span>
+                                   
+                                    {/* </Link> */}
 
                                     {/* <Link key={post.longText} to={`/users/${user.id}/posts`}/> */}
                                
@@ -62,11 +70,26 @@ console.log(commentArr,"CommentArr")
                             <div className="singleComment"> {commentArr.map((comment)=>{
                                console.log(comment,"comment insided nested func")
                                return((comment.post_Id == post.id) &&
-                               <div className="perComment"><span><img className="chat" src={chat} /></span>{comment.commentText}</div>)
+                               <div className="perComment">
+                                <div>{comment.users.username}:</div>
+                                <span><img className="chat" src={chat} />
+                                {comment.commentText}
+                                </span>
+                                
+                                </div>)
                                     
                                 
                             })
                                 }</div>
+
+<div className="comment">
+                    {
+                      <div>
+                        <AddCommentModal postId={post.id} />
+                      </div>
+                    }
+
+                  </div>
                             </div>
                             
                         )

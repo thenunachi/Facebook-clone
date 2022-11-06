@@ -12,7 +12,7 @@
 .right{
     float: right;
     height: 100%;
-    width: 63%;
+    width: 71%;
 }
 .eachcomment{
     /* border: 2px solid #dedede;
@@ -86,18 +86,63 @@
     border: none;
 }
 .trashbuttons{
-    display: flex;
+    /* display: flex;
     flex-direction: row-reverse;
     align-items: flex-end;
     /* justify-content: flex-end; */
+    /* margin-top: 3px;
+    margin-right: 3px; */ 
+   
+    flex-direction: row;
+    /* margin: 2px; */
+    /* justify-content: space-between; */
+    display: flex;
+    /* flex-direction: row-reverse; */
+    /* align-items: flex-end; */
+    /* justify-content: flex-end; */
     margin-top: 3px;
     margin-right: 3px;
+
 }
 
 .chat{
-    width: 28px;
+    
+        width: 19px;
+        margin-left: 8px;
+        margin-right: 4px;
 }
 .personal{
     margin-left: 421px;
     color: #2374E1;   
+}
+.deletePostButton{
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.deleteCommentButton{
+    cursor: pointer;
+    border: none;
+}
+.commentUser{
+    margin-right: 409px;
+    margin-left: 10px;
+}
+
+/* .tab{
+    flex-direction: row;
+    
+    justify-content: start;
+    display: flex;
+
+    align-items: center;
+   
+} */
+.separateDiv{
+    flex-direction: row;
+   
+    display: flex;
+  
+    margin-top: 3px;
+    margin-right: 3px;
 }

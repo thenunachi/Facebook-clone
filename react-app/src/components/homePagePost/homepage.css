@@ -54,3 +54,16 @@ Link{
     margin-left: 421px;
     color: #2374E1;
  }
+ .user{
+    margin-top: 4px;
+    margin-left: 6px;
+    margin-bottom: 5px;
+ }
+ .posticon{
+    margin-left: 4px;
+    margin-right: 5px;
+ }
+ .posttext{
+    /* display: flex; */
+    align-items: center;
+ }

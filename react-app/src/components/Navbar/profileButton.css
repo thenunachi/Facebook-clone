@@ -33,11 +33,13 @@
     top: 46px;
     right: 0px;
     z-index: 100;
+    
 }
 
 .profile-details-li {
     transition: all 0.3s ease-in 0s;
     width: 100%;
+    margin-bottom: 6px;
 }
 
 .profile-details-li:hover {
@@ -47,6 +49,9 @@
 
 
 .signout-div {
+    cursor: pointer;
+}
+.profile-page{
     cursor: pointer;
 }
 

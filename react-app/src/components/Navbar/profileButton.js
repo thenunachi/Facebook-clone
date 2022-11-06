@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { logout } from '../../store/session';
+
 import './profileButton.css'
 
 function ProfileButton({ sessionUser }) {
     const dispatch = useDispatch();
     const history = useHistory();
     const [showMenu, setShowMenu] = useState(false);
-
+    
+    const user =  useSelector(state => state.session.user)
 
     const openMenu = () => {
         if (showMenu) return;
@@ -31,6 +33,10 @@ function ProfileButton({ sessionUser }) {
         return history.push('/')
     };
 
+        const routeChange = () =>{ 
+        let path = `/users/${user.id}/posts`; 
+        history.push(path);
+      }
     return (
         <div className="navright-profile-div">
             <div className="profile-button-container">
@@ -45,6 +51,10 @@ function ProfileButton({ sessionUser }) {
                 <ul className="profile-details">
                     <li className="profile-details-li">
                         <div>{sessionUser.firstname}</div>
+                    </li>
+                    
+                    <li className="profile-details-li">
+                        <div className="profile-page" onClick={routeChange}>My Profile</div>
                     </li>
                     <li className="profile-details-li">
                         <div className="signout-div" onClick={loggingOut}>Sign out</div>
