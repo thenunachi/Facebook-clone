@@ -88,8 +88,8 @@ const LoginForm = () => {
       <footer>
         <div id="repos">
 
-         <span className='link'><a href="https://github.com/thenunachi">Github</a></span> 
-         <span><a href="https://www.linkedin.com/in/thenammai-nachiyappan-56bbaa1a2/">linkedin</a></span> 
+         <span className='link'><a href="https://github.com/thenunachi" target="_blank">Github</a></span> 
+         <span><a href="https://www.linkedin.com/in/thenammai-nachiyappan-56bbaa1a2/" target="_blank">linkedin</a></span> 
         </div>
       </footer>
     </div>

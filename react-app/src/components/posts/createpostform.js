@@ -21,6 +21,7 @@ function CreatePostForm({ setShowModal }) {
     useEffect(() => {
         const errors = []
         if (!longText.length) errors.push("LongText is required")
+        if(longText.length > 2000)errors.push("Maximum 2000 characters")
         setValidationError(errors)
     }, [longText])
     //handleSubmit
@@ -52,8 +53,9 @@ function CreatePostForm({ setShowModal }) {
         <div className="mainDiv">
              {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             <form className="newPost" onSubmit={handleSubmit}>
+                <h2 className="h2">Create a Post</h2>
             {!longText.length && <div className="errorHandling">Text is required</div>}
-              
+            {longText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
                 <div>
       <textarea
                     className='post-textbox'

@@ -40,15 +40,15 @@ export const UserSpotDetail = () => {
 
   return (
     <div>
-      <h1 className="personal">Welcome to {user.username}'s personal page </h1>
-      <div className="left">
+      <h1 className="personal">Welcome to {user.username}'s profile page </h1>
+      {/* <div className="left">
 
         <div className="house">
           <i class="fa-solid fa-house"></i> Lives in Seattle </div>
         <div className="location"> <i class="fa-solid fa-location-dot"></i>   From India</div>
         <div className="heart"><i class="fa-solid fa-heart"></i> Married</div>
         <div className="clock"> <i class="fa-solid fa-clock"></i> Joined on September 2015</div>
-      </div>
+      </div> */}
       <div className="right">
         <div className="addPost">
                <div className="innerDiv">
@@ -57,13 +57,14 @@ export const UserSpotDetail = () => {
           </div>
         </div>
         <div className="allposts">{
-          allPosts.map((post) => {
-            console.log(post.id, "FIND OUT ELEMENT ID OF POST")
+          allPosts.sort((a,b)=>b.id - a.id).map((post) => {
+            console.log(post, "post details")
             // console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
             return (
-              <div className="eachPost"> <span><img className="posticon" src={posticon} /></span>{post.longText}
-
-                {isUserPostOwner(post,user)&&
+              <div className="eachPost"> 
+              <span className="separateDiv">
+              {post.owner.username}:
+              {isUserPostOwner(post,user)&&
                   <button className="deletePostButton" onClick={async (event) => {
                     event.preventDefault()
                 
@@ -78,14 +79,23 @@ export const UserSpotDetail = () => {
                   <UpdatePostModal post={post} />
 
                 }
+              </span>
+              
+              <img className="posticon" src={posticon} /> {post.longText}
+               {/* <div>{post.owner.username}</div> */}
+                
                 
                 <div className="commentsDiv">{
-                  allComments.map((element) => {
+                  //  allComments.sort((a,b)=>b.id - a.id)
+                  allComments.sort((a,b)=>b.id - a.id).map((element) => {
                     
-                   console.log(element)
+                   console.log(element,"details of comments")
                     return ((element.post_Id == post.id)&&
                       <div className="eachcomment">
                         <div className="trashbuttons">
+                          <span className="commentUser">
+                        {element.users.username}:
+                        </span>
                           {<span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
@@ -108,7 +118,7 @@ export const UserSpotDetail = () => {
 
                           </div>
                         </div>
-                        <div>
+                        <div className="tab">
                           <span><img className="chat" src={chat} /></span>
                           <span>
                             {/* <i class="fa-brands fa-rocketchat"></i> */}

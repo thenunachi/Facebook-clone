@@ -29,6 +29,8 @@
     /* height: 79px; */
     word-wrap: break-word;
     margin-left: 75px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .perPost{
     border: 2px solid #dedede;
@@ -41,6 +43,9 @@
     flex-direction: row;
     /* height: 79px; */
     word-wrap: break-word;
+    margin-bottom: 2px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 Link{
     text-decoration: white;
@@ -53,4 +58,21 @@ Link{
  .title{
     margin-left: 421px;
     color: #2374E1;
+ }
+ .user{
+    margin-top: 4px;
+    margin-left: 6px;
+    margin-bottom: 5px;
+ }
+ .posticon{
+    margin-left: 4px;
+    margin-right: 5px;
+ }
+ .posttext{
+    display: flex;
+    align-items: center;
+ }
+ .commenttext{
+    display: flex;
+    align-items: center;
  }

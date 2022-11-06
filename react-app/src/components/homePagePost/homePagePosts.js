@@ -7,6 +7,7 @@ import chat from './chat.png'
 import posticon from './posticon.png'
 import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk } from '../../store/commentReducer'
 import AddPostModal from '../userPostdetails/createPostModal.js'
+import AddCommentModal from "../userPostdetails/createcommentmodal";
 import '../userPostdetails/createpostmodal.css'
 function AllPosts() {
     const dispatch = useDispatch()
@@ -17,11 +18,9 @@ function AllPosts() {
     const postArr = useSelector(state => Object.values(state.postState))
 const commentArr = useSelector(state=> Object.values(state.commentState))
 console.log(commentArr,"CommentArr")
-    //const postArr = Object.values(postObj.allPosts)
-    //console.log("POSTARR", postArr)
-    // console.log("postObj",postObj)
+  
     const user = useSelector(state => state.session.user)
-    //console.log("postObj",postObj.allPosts)
+    
     useEffect(async() => {
        const {posts} = await dispatch(getAllPostsThunk())
        console.log(posts,"")
@@ -45,28 +44,50 @@ console.log(commentArr,"CommentArr")
           </div>
             <div className="postdiv">
                 {
-                    postArr.map((post, idx) => {
-                        // console.log(post, "INside the forEach post method")
-                        // console.log(post.longText, "Longtext")
+                    postArr.sort((a,b)=>b.id - a.id).map((post, idx) => {
+                         console.log(post, "post details to know username")
+                    
                         return (
                             <div className="singlepost">
-                                 {/* <div className="perPost">{post.longText} */}
+                            {/* <img className="posticon" src={posticon} /> */}
                                 <div className="perPost">
-                                {/* {post.longText} */}
-                                <Link to={`/users/${user.id}/posts`}><span><img className="posticon" src={posticon} /></span>{post.longText}</Link>
-
-                                    {/* <Link key={post.longText} to={`/users/${user.id}/posts`}/> */}
+                        
+                                <div className="user">{post.owner.username}:</div>
+                                    <div className="posttext">
+                                        <span> 
+                                            <img className="posticon" src={posticon} />
+                                             </span>
+                                   
+                                        <span>{post.longText}</span></div>
+                                
                                
                                 </div>
-                            {/* {dispatch(loadPostCommentsThunk(post.id))} */}
-                            <div className="singleComment"> {commentArr.map((comment)=>{
-                               console.log(comment,"comment insided nested func")
+                         
+                            <div className="singleComment"> {
+                            commentArr.sort((a,b)=>b.id - a.id).map((comment)=>{
+                               //console.log(comment,"comment insided nested func")
                                return((comment.post_Id == post.id) &&
-                               <div className="perComment"><span><img className="chat" src={chat} /></span>{comment.commentText}</div>)
+                               <div className="perComment">
+                                <div>{comment.users.username}:</div>
+                                <div className="commenttext">
+                                <span><img className="chat" src={chat} />  </span>
+                                <span>{comment.commentText} </span>
+                              </div>
+                                
+                                </div>)
                                     
                                 
                             })
                                 }</div>
+
+<div className="comment">
+                    {
+                      <div>
+                        <AddCommentModal postId={post.id} />
+                      </div>
+                    }
+
+                  </div>
                             </div>
                             
                         )

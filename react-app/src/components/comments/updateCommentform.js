@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { loadUserComments, updateCommentThunk, loadPostCommentsThunk,getAllCommentsThunk  } from "../../store/commentReducer";
-
+import { Redirect } from 'react-router-dom';
 
 
 /*********************************************************************************** */
@@ -42,7 +42,7 @@ function UpdateCommentForm({setShowModal,comment}) {
   useEffect(() => {
     const errors = [];
     if (!commentText.length) errors.push("Review text is required");
-
+    if(commentText.length > 2000)errors.push("Maximum 2000 characters")
     setValidations(errors)
   }, [commentText]);
 
@@ -59,6 +59,8 @@ function UpdateCommentForm({setShowModal,comment}) {
     const payload = { id: comment.id, commentText };
     let newComment = await dispatch(updateCommentThunk(payload))
     dispatch(loadPostCommentsThunk(comment.post_Id))
+    setShowModal(false)   
+    return <Redirect to={`/users/${user.id}/posts`} />; 
     // console.log("NEW REVIEW " , newReview)
     // if(newReview){
     //     onCancel()
@@ -76,9 +78,11 @@ function UpdateCommentForm({setShowModal,comment}) {
   /***************************************render func******************************************** */
   return (
     <div>
-    <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
+    {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
     <form className="create-review-text" onSubmit={(e)=>handleSubmit(e)}>
+    <h2 className="h2">Update a Comment</h2>
     {!commentText.length && <div className="errorHandling">Text is required</div>}
+    {commentText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
       {/* <ul className="errorsReview">
         {
           validations.map((error, index) => (
