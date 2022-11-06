@@ -1,17 +1,27 @@
 .leftdiv{
-    float: left;
+    /* float: left;
     width: 36%;
     height: 159px;
     align-items: center;
     /* margin: 90px; */
-    justify-content: center;
+    /* justify-content: center;
     margin-left: 228px;
+    margin-top: 71px; */ 
+    float: left;
+    /* width: 36%; */
+    /* height: 159px; */
+    align-items: center;
+    /* margin: 90px; */
+    justify-content: center;
+    margin-left: 93px;
     margin-top: 71px;
 }
 .rigth{
     float: right;
-    height: 348px;
-    width: 28%;
+    /* height: 348px; */
+    
+    min-width: 32%;
+    /* width: 28%; */
     border: 2px solid #dedede;
     background-color: #f1f1f1;
     border-radius: 7px;
@@ -34,24 +44,24 @@
     margin: 24px;
 }
 .emailtab{
-    width: 257px;
-    margin-left: 29px;
+    /* width: 257px; */
+    margin-left: 36px;
     border-radius: 7px;
-    height: 30px;
+    /* height: 30px; */
 }
 .password{
     margin: 24px; 
 }
 .passwordtab{
-    width: 257px;
+    /* width: 257px; */
     margin-left: 6px;
     border-radius: 7px;
-    height: 30px;
+    /* height: 30px; */
 }
 .login{
-    width: 284px;
+    /* width: 204px; */
     /* margin-left: 6px; */
-    height: 37px;
+    /* height: 37px; */
     /* margin: 8px; */
     border-radius: 16px;
     background-color: #2374E1;
@@ -62,9 +72,9 @@
 }
 .signin{
     
-    width: 284px;
+    width: 204px;
     /* margin-left: 6px; */
-    height: 37px;
+    /* height: 37px; */
     /* margin: 8px; */
     border-radius: 16px;
     background-color: #42b72a;
