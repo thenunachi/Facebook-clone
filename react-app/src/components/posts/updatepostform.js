@@ -61,6 +61,7 @@ function UpdatePostForm({ setShowModal,post }) {
             {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             {/* <h1>Update the post</h1> */}
             <form className="newPost" onSubmit={(e)=>handleSubmit(e)}>
+            <h2 className="h2">Update a Post</h2>
                 {!longText.length && <div className="errorHandling">Text is required</div>}
                 {longText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
                 <div>

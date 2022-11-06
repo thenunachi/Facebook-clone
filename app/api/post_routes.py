@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect
 from app.forms.comment_form import CommentForm
-from sqlalchemy import desc 
+from sqlalchemy import desc ,asc
 from app.forms.post_form import EditPostForm, PostForm
 from ..models import Post,Comment,db
 from flask_login import current_user
@@ -19,7 +19,7 @@ def get_all_posts():
 # Get post by ownerId
 @post_routes.route('/<int:ownerId>')
 def get_posts_by_ownerId(ownerId):
-     posts = Post.query.filter(ownerId == Post.owner_Id)
+     posts = Post.query.filter(ownerId == Post.owner_Id).order_by(desc(Post.id))
      # print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& one_post",posts)
      # return {"Reviews": [review.to_dict_reviews() for review in products_reviews]}
      # print({'posts' : [post.to_dict_post()for post in posts]},"**********************DATA from backend")#{'posts': [{'id': 1, 'owner_Id': 1, 'longText': 'Today was a pleasent day in Texas.Feeling happy'}, {'id': 3, 'owner_Id': 1, 'longText': 'I like icecream from costco.They have huge variety of icecreams'}]}
@@ -71,6 +71,7 @@ def delete_post(postId):
 #Get all comments for posts
 @post_routes.route('/<int:postId>/comments')
 def get_all_comments(postId):
+     #query.order_by(SpreadsheetCells.y_index.desc()) 
     all_comments = Comment.query.filter(Comment.post_Id == postId).order_by(desc(Comment.id))
     print(all_comments,"all_comments^^^^^^^^^^^^^^^^^^^^^^^^^^")
     return {"Comments": [c.to_dict_rel() for c in all_comments]}

@@ -29,6 +29,8 @@
     /* height: 79px; */
     word-wrap: break-word;
     margin-left: 75px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .perPost{
     border: 2px solid #dedede;
@@ -41,6 +43,9 @@
     flex-direction: row;
     /* height: 79px; */
     word-wrap: break-word;
+    margin-bottom: 2px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 Link{
     text-decoration: white;
@@ -64,6 +69,10 @@ Link{
     margin-right: 5px;
  }
  .posttext{
-    /* display: flex; */
+    display: flex;
+    align-items: center;
+ }
+ .commenttext{
+    display: flex;
     align-items: center;
  }

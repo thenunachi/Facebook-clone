@@ -90,8 +90,9 @@ function CommentForm({setShowModal,postId}) {
           ))
         }
       </div> */}
-       {!commentText.length && <div className="errorHandling">Text is required</div>}
-       {commentText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
+      <h2 className="htag">Create a Comment</h2>
+       {!commentText.length && <div className="CerrorHandling">Text is required</div>}
+       {commentText.length > 2000  && <div className="CerrorHandling">Maximum 2000 characters</div>}
       <div>
         <textarea
           className='review-textbox'

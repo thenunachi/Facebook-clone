@@ -57,7 +57,7 @@ export const UserSpotDetail = () => {
           </div>
         </div>
         <div className="allposts">{
-          allPosts.map((post) => {
+          allPosts.sort((a,b)=>b.id - a.id).map((post) => {
             console.log(post, "post details")
             // console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
             return (
@@ -86,7 +86,8 @@ export const UserSpotDetail = () => {
                 
                 
                 <div className="commentsDiv">{
-                  allComments.map((element) => {
+                  //  allComments.sort((a,b)=>b.id - a.id)
+                  allComments.sort((a,b)=>b.id - a.id).map((element) => {
                     
                    console.log(element,"details of comments")
                     return ((element.post_Id == post.id)&&

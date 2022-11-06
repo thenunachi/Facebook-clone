@@ -80,6 +80,7 @@ function UpdateCommentForm({setShowModal,comment}) {
     <div>
     {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
     <form className="create-review-text" onSubmit={(e)=>handleSubmit(e)}>
+    <h2 className="h2">Update a Comment</h2>
     {!commentText.length && <div className="errorHandling">Text is required</div>}
     {commentText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
       {/* <ul className="errorsReview">
