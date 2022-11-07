@@ -49,9 +49,9 @@ function ProfileButton({ sessionUser }) {
             </div>
             {showMenu && sessionUser && (
                 <ul className="profile-details">
-                    <li className="profile-details-li">
+                    {/* <li className="profile-details-li">
                         <div>{sessionUser.firstname}</div>
-                    </li>
+                    </li> */}
                     
                     <li className="profile-details-li">
                         <div className="profile-page" onClick={routeChange}>My Profile</div>
