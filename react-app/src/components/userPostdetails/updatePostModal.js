@@ -9,7 +9,7 @@ function UpdatePostModal({post}) {
     const [showModal, setShowModal] = useState(false);
     return (
         <>
-            <button className="Update-Post" onClick={() => setShowModal(true)}>Edit Post</button>
+            <button className="Update-Post" onClick={() => setShowModal(true)}><i class="fa-solid fa-pen-to-square"></i></button>
             {
                 showModal && (
                     <Modal onClose={() => setShowModal(false)}>

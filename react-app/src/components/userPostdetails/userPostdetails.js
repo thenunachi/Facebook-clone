@@ -72,7 +72,7 @@ export const UserSpotDetail = () => {
                     await dispatch((getPostsByUserIdThunk(userId)))
                     return history.push(`/users/${userId}/posts`)
                   }}>
-                    Delete Post
+                    <i class="fa-solid fa-trash"></i>
 
                   </button>}
 

@@ -2,13 +2,14 @@ import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory,Link } from "react-router-dom";
 import "./homepage.css"
-import { getAllPostsThunk } from '../../store/postReducer'
+import { getAllPostsThunk,removePostThunk ,getPostsByUserIdThunk} from '../../store/postReducer'
 import chat from './chat.png'
 import posticon from './posticon.png'
 import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk,deleteCommentThunk } from '../../store/commentReducer'
 import AddPostModal from '../userPostdetails/createPostModal.js'
 import AddCommentModal from "../userPostdetails/createcommentmodal";
 import UpdatecommentModal from "../userPostdetails/updateCommentModal";
+import UpdatePostModal from "../userPostdetails/updatePostModal";
 import '../userPostdetails/createpostmodal.css'
 import '../userPostdetails/updatepostmodal.css'
 function AllPosts() {
@@ -54,7 +55,9 @@ console.log(commentArr,"CommentArr")
                             {/* <img className="posticon" src={posticon} /> */}
                                 <div className="perPost">
                         
-                                <div className="user">{post.owner.username}:</div>
+                                <span className="user">{post.owner.username}:
+                                {post.owner_Id == user.id && postdeleteUpdate(post,dispatch,history,post.owner_Id)}
+                                </span>
                                     <div className="posttext">
                                         <span> 
                                             <img className="posticon" src={posticon} />
@@ -135,5 +138,31 @@ const deleteUpdateComment =(comment,dispatch,history)=>{
   </span>
   </div>);
 };
+// const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
+const postdeleteUpdate =(post,dispatch,history,userId)=>{
+  return(
+<span className="divbuttons">
+  <span><button className="deletePostButton" onClick={async (event) => {
+    event.preventDefault()
+
+    await dispatch(removePostThunk(post.id))
+    // await dispatch((getPostsByUserIdThunk(userId)))
+    return history.push(`/`)
+  }}>
+    <i class="fa-solid fa-trash"></i>
+
+  </button>
+  </span>
+  <span>
+  {
+    <UpdatePostModal post={post} />
+  }
+  </span></span>
+  )
+  
+  }
+
+
+
 
 export default AllPosts
