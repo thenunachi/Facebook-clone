@@ -22,7 +22,7 @@ function NavBar({ loaded }) {
                 </NavLink>
             </div>
             <div className='middle'>
-                <img className="home" src={home} />
+                {/* <img className="home" src={home} /> */}
                 {/* <div className='homeSymbol'> <i class="fa-solid fa-house"></i></div> */}
             </div>
             <div className='nav-right'>
