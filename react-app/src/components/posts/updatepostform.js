@@ -38,7 +38,7 @@ function UpdatePostForm({ setShowModal,post }) {
         }
         console.log(payload, "PAYLOAD of update post")
         let updatedPost = await dispatch(updatePostThunk(payload))
-        dispatch(getPostsByUserIdThunk(post.owner_Id))
+        // dispatch(getPostsByUserIdThunk(post.owner_Id))
          setShowModal(false)   
         //  return <Redirect to={`/users/${userId}/posts`} />;         
         // console.log("CREATEDPOST ************",createdPost)

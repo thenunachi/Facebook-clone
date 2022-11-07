@@ -109,7 +109,6 @@ export const removePostThunk = (id)=> async dispatch =>{
     })
     console.log(response,"RESPONSE OF DELETE")
     if(response.ok){
-        const {id} = await response.json();
         dispatch(removePost(id))
     }
 }
@@ -135,7 +134,10 @@ export const removePostThunk = (id)=> async dispatch =>{
             // const newState ={};
             // newState[action.payload] = action.payload
             // console.log("NEWSTATE from GETAPOSTS**************",newState)
-            return action.payload
+            action.payload.forEach(post =>{
+                allPosts[post.id] = post //assigning post to post's id
+            })
+            return {...allPosts}
         }
         /******************************************************************************* */
         case ADD_POST:{
