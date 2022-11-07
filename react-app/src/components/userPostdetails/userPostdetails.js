@@ -102,7 +102,7 @@ export const UserSpotDetail = () => {
                           <span className="commentUser">
                         {element.users.username}:
                         </span>
-                          {<span className="common-button">
+                          {(element.user_Id == userId)&&<span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
@@ -115,7 +115,7 @@ export const UserSpotDetail = () => {
                           </span>}
 
                           <div className="editEachcomment">
-                            {
+                            {(element.user_Id == userId)&&
                               <span>
                                
                                 <UpdatecommentModal comment={element} />
