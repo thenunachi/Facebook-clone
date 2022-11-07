@@ -40,7 +40,7 @@ function UpdatePostForm({ setShowModal,post }) {
         let updatedPost = await dispatch(updatePostThunk(payload))
         dispatch(getPostsByUserIdThunk(post.owner_Id))
          setShowModal(false)   
-         return <Redirect to={`/users/${userId}/posts`} />;         
+        //  return <Redirect to={`/users/${userId}/posts`} />;         
         // console.log("CREATEDPOST ************",createdPost)
         // if(updatedPost){
         //     history.push(`/`)
@@ -50,7 +50,7 @@ function UpdatePostForm({ setShowModal,post }) {
     const handleCancelClick = (e) => {
         e.preventDefault();
         
-        history.push(`/users/${userId}/posts`)
+        // history.push(`/users/${userId}/posts`)
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
 
