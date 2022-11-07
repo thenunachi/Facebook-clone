@@ -71,7 +71,7 @@ console.log(commentArr,"CommentArr")
                                return((comment.post_Id == post.id) &&
                                <div className="perComment">
                                 <span className="showButton">{comment.users.username}:
-                                {(comment.user_Id ==user.id)&& deleteUpdateComment (comment,dispatch,history) }
+                                {(comment.user_Id == user.id)&& deleteUpdateComment (comment,dispatch,history) }
                                 </span>
  
                 
