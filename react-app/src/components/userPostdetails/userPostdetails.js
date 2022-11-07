@@ -70,6 +70,7 @@ export const UserSpotDetail = () => {
                 
                     await dispatch(removePostThunk(post.id))
                     await dispatch((getPostsByUserIdThunk(userId)))
+                    return history.push(`/users/${userId}/posts`)
                   }}>
                     Delete Post
 
@@ -80,8 +81,13 @@ export const UserSpotDetail = () => {
 
                 }
               </span>
+              <div className="postspan">
+                <span>
+              <img className="posticon" src={posticon} />
+              </span> 
+              <span>{post.longText}</span>
+                </div>
               
-              <img className="posticon" src={posticon} /> {post.longText}
                {/* <div>{post.owner.username}</div> */}
                 
                 
@@ -101,7 +107,7 @@ export const UserSpotDetail = () => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
                               await dispatch((loadPostCommentsThunk(element.post_Id)))
-                              //  return history.push(`/posts`)
+                               return history.push(`/users/${userId}/posts`)
                             }}>
                               <i class="fa-solid fa-trash"></i>
 

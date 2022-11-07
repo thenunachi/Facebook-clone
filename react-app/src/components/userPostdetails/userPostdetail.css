@@ -8,6 +8,8 @@
     width: 583px;
     margin-bottom: 33px;
     word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .right{
     float: right;
@@ -36,6 +38,8 @@
     /* height: 79px; */
     word-wrap: break-word;
     margin-left: 55px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 /* .createEachcomment{
     border: 2px solid #dedede;
@@ -106,7 +110,7 @@
 }
 
 .chat{
-    
+   
         width: 19px;
         margin-left: 8px;
         margin-right: 4px;
@@ -125,19 +129,15 @@
     border: none;
 }
 .commentUser{
-    margin-right: 409px;
+    /* margin-right: 409px; */
     margin-left: 10px;
 }
 
-/* .tab{
-    flex-direction: row;
-    
-    justify-content: start;
+.tab{
     display: flex;
-
     align-items: center;
    
-} */
+}
 .separateDiv{
     flex-direction: row;
    
@@ -146,3 +146,7 @@
     margin-top: 3px;
     margin-right: 3px;
 }
+.postspan{
+    display: flex;
+    align-items: center;
+ }

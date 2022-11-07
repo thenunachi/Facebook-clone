@@ -25,16 +25,16 @@ const SignUpForm = ({ setShowSignUpModal }) => {
     if (!email.includes('@')) {
       return setErrors(['Please provide a valid email'])
     }
-    if(!(username.length > 5 && username.length < 20 ) ){
-      return setErrors(['Username to be between 6 to 21 characters'])
+    if(!(username.length > 5 && username.length <= 20 ) ){
+      return setErrors(['Username to be between 6 to 20 characters'])
 
     }
-    if(!(firstname.length > 5 && firstname.length < 15)){
-      return setErrors(['Firstname to be between 6 to 16 characters'])
+    if(!(firstname.length > 5 && firstname.length <= 15)){
+      return setErrors(['Firstname to be between 6 to 15 characters'])
 
     }
-    if(!(lastname.length > 5 && lastname.length < 15)){
-      return setErrors(['Lastname to be between 6 to 16 characters'])
+    if(!(lastname.length > 5 && lastname.length <= 15)){
+      return setErrors(['Lastname to be between 6 to 15 characters'])
 
     }
     if(password.length <= 5){
