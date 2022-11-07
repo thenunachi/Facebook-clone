@@ -21,6 +21,7 @@
     color: white;
     margin-top: 13px;
     margin-left: 41px;
+    cursor: pointer;
 }
 .cancelButton{
     cursor: pointer;
@@ -29,6 +30,7 @@
     right: 1%;
     padding: 2px 4px;
     border: none;
+    cursor: pointer;
 }
 .errorHandling{
     color: red;
