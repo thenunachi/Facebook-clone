@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { login } from "../../store/session";
 import './demouser.css'
 
-const DemoUser = ({ setShowLoginModal }) => {
+const DemoUser = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -13,7 +13,7 @@ const DemoUser = ({ setShowLoginModal }) => {
         const demoEmail = 'demo@aa.io';
         const demoPassword = 'password'
         let loggedInDemo = await dispatch(login(demoEmail, demoPassword))
-        setShowLoginModal(false);
+        // setShowLoginModal(false);
         history.push('/')
     }
 
