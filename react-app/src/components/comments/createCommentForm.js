@@ -33,7 +33,7 @@ function CommentForm({setShowModal,postId}) {
   // console.log("PRODUCT",product)
   /***************************************useEffect******************************************** */
   useEffect(() => {
-    dispatch(loadUserComments())
+    // dispatch(loadUserComments())
     dispatch((loadPostCommentsThunk(postId)));
 
   }, [dispatch]);

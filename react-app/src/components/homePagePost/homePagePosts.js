@@ -5,10 +5,12 @@ import "./homepage.css"
 import { getAllPostsThunk } from '../../store/postReducer'
 import chat from './chat.png'
 import posticon from './posticon.png'
-import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk } from '../../store/commentReducer'
+import { loadPostCommentsThunk, loadUserComments,getAllCommentsThunk,deleteCommentThunk } from '../../store/commentReducer'
 import AddPostModal from '../userPostdetails/createPostModal.js'
 import AddCommentModal from "../userPostdetails/createcommentmodal";
+import UpdatecommentModal from "../userPostdetails/updateCommentModal";
 import '../userPostdetails/createpostmodal.css'
+import '../userPostdetails/updatepostmodal.css'
 function AllPosts() {
     const dispatch = useDispatch()
     const history = useHistory();
@@ -68,7 +70,11 @@ console.log(commentArr,"CommentArr")
                                //console.log(comment,"comment insided nested func")
                                return((comment.post_Id == post.id) &&
                                <div className="perComment">
-                                <div>{comment.users.username}:</div>
+                                <span className="showButton">{comment.users.username}:
+                                {(comment.user_Id ==user.id)&& deleteUpdateComment (comment,dispatch,history) }
+                                </span>
+ 
+                
                                 <div className="commenttext">
                                 <span><img className="chat" src={chat} />  </span>
                                 <span>{comment.commentText} </span>
@@ -103,4 +109,31 @@ console.log(commentArr,"CommentArr")
 
 
 }
+const deleteUpdateComment =(comment,dispatch,history)=>{
+    return(
+        <div>
+    <span className="common-button">
+    <button className="deleteCommentButton" onClick={async (event) => {
+      event.preventDefault()
+      await dispatch(deleteCommentThunk(comment.id))
+      await dispatch((loadPostCommentsThunk(comment.post_Id)))
+       return history.push(`/`)
+    }}>
+      <i class="fa-solid fa-trash"></i>
+
+    </button>
+  </span>
+
+  <span className="editEachcomment">
+    {
+      <span>
+       
+        <UpdatecommentModal comment={comment} />
+      </span>
+    }
+
+  </span>
+  </div>);
+};
+
 export default AllPosts

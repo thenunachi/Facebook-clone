@@ -76,3 +76,14 @@ Link{
     display: flex;
     align-items: center;
  }
+ .showButton{
+   flex-direction: row;
+   /* margin: 2px; */
+   /* justify-content: space-between; */
+   display: flex;
+   /* flex-direction: row-reverse; */
+   /* align-items: flex-end; */
+   /* justify-content: flex-end; */
+   margin-top: 3px;
+   margin-right: 3px;
+ }

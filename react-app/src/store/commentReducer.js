@@ -101,8 +101,8 @@ export const deleteCommentThunk = (commentId)=>async dispatch=>{
 
     });
     if (response.ok){
-        const {id} = await response.json();//destructuring only id from response
-        dispatch(removeComment(id));
+        //const {id} = await response.json();//destructuring only id from response
+        dispatch(removeComment(commentId));
     }
 }
 
@@ -146,7 +146,7 @@ switch (action.type){
      console.log("comments shape",action.comments)
         action.comments.forEach((comment)=>(newState[comment.id]=comment))
         console.log(newState,"newstate of comments")
-        return newState;
+        return {...state,...newState};
  
     }
 
@@ -165,7 +165,7 @@ switch (action.type){
     }
     case REMOVE_ONE:
             const newState = { ...state };
-            delete newState[action.commentId];
+            delete newState[action.id];
             return newState;
             
     case EDIT_COMMENT:{
