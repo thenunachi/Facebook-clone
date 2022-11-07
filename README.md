@@ -1,8 +1,10 @@
 # FakeBook
 
 ## Fakebook helps you build rapport with fellow human beings.Where you can express your thoughts through posts and commenting on other posts.
-![image](https://user-images.githubusercontent.com/64111530/200197666-d0a0e8fc-412e-4010-93b2-f2b2fc7be585.png)
-![image](https://user-images.githubusercontent.com/64111530/200247391-12279173-ca5a-4447-ae56-77240210abc2.png)
+![image](https://user-images.githubusercontent.com/64111530/200253879-e4da967d-ba61-4d25-a7ff-15498f889d98.png)
+
+![image](https://user-images.githubusercontent.com/64111530/200253806-0f6f50e0-9f00-4ae7-9a8f-f5ba23555b39.png)
+
 
 
 ### Live Link-https://fakebook-cl.herokuapp.com/login
