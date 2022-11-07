@@ -14,9 +14,15 @@
 
 ### Frontend
 * React
+* HTML
+* CSS
+* Javascript
 
 ### MVP Core features
 Posts,Comments
 
 ### Future Implementation Goals:
 Chat,likes,follows,theme
+
+User Stories
+https://github.com/thenunachi/Facebook-clone/wiki/User-stories
