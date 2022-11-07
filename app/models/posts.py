@@ -7,7 +7,7 @@ class Post(db.Model):
     owner_Id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     longText = db.Column(db.String(2000),nullable=False)
     owner = db.relationship('User',back_populates ='posts')
-    
+    comments = db.relationship('Comment', back_populates='posts', cascade='all, delete')
 
 
     def to_dict_post(self):
