@@ -15,8 +15,8 @@ import { UserSpotDetail } from './components/userPostdetails/userPostdetails';
 import UpdateCommentForm from './components/comments/updateCommentform';
 import CommentForm from './components/comments/createCommentForm';
 import NavBar from './components/Navbar/index'
-
-
+import EmojiPicker from 'emoji-picker-react';
+import EmojiReaction from './components/emoji';
 
 
 
@@ -75,6 +75,9 @@ function App() {
         <ProtectedRoute path='/:postId/comments' exact={true} >
           {/* <h1>create comment Page</h1> */}
           <CommentForm/>
+        </ProtectedRoute >
+        <ProtectedRoute path='/emoji'>
+        <EmojiReaction />
         </ProtectedRoute>
       </Switch>
     </BrowserRouter>
