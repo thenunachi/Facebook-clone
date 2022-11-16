@@ -2,7 +2,7 @@ from flask import Blueprint, request, redirect
 from app.forms.comment_form import CommentForm
 from sqlalchemy import desc ,asc
 from app.forms.post_form import EditPostForm, PostForm
-from ..models import Post,Comment,db
+from ..models import Post,Comment,db,Like
 from flask_login import current_user
 
 post_routes = Blueprint('posts',__name__)
@@ -11,6 +11,7 @@ post_routes = Blueprint('posts',__name__)
 @post_routes.route('/')
 def get_all_posts():
      all_posts = Post.query.all()
+     
      # print("******************************POST", all_posts)
      return {'posts':[p.to_dict_relationship() for p in all_posts]}
 
@@ -24,6 +25,8 @@ def get_posts_by_ownerId(ownerId):
      # return {"Reviews": [review.to_dict_reviews() for review in products_reviews]}
      # print({'posts' : [post.to_dict_post()for post in posts]},"**********************DATA from backend")#{'posts': [{'id': 1, 'owner_Id': 1, 'longText': 'Today was a pleasent day in Texas.Feeling happy'}, {'id': 3, 'owner_Id': 1, 'longText': 'I like icecream from costco.They have huge variety of icecreams'}]}
      return {'posts' : [post.to_dict_relationship()for post in posts]}
+
+
 
 #Create a post
 @post_routes.route('/',methods=["POST"])
@@ -73,11 +76,8 @@ def delete_post(postId):
 def get_all_comments(postId):
      #query.order_by(SpreadsheetCells.y_index.desc()) 
     all_comments = Comment.query.filter(Comment.post_Id == postId).order_by(desc(Comment.id))
-    print(all_comments,"all_comments^^^^^^^^^^^^^^^^^^^^^^^^^^")
+#     print(all_comments,"all_comments^^^^^^^^^^^^^^^^^^^^^^^^^^")
     return {"Comments": [c.to_dict_rel() for c in all_comments]}
-
-
-
 
 #Create a comment
 # /api/posts/:postId/comments
@@ -99,4 +99,25 @@ def create_comment(postId):
           return {"Comment": data.to_dict_comments()}
      return form.errors
 
-  
+@post_routes.route('/<int:postId>/likes')
+def get_all_likes_perPost(postId):
+     likes = Like.query.filter(Like.post_Id == postId)
+     print(likes,"likes ######")
+     print(likes.count(),"****************************************************")
+     return {"likes": [ l.to_dict() for l in likes]}
+     
+
+
+
+@post_routes.route('/<int:postId>/likes',methods=["POST"])
+def setLike(postId):
+    user = current_user.to_dict()
+    data = Like(
+        user_Id = user['id'],
+        post_Id = postId
+    )
+    db.session.add(data)
+    db.session.commit()
+    return {'likes': data.to_dict()}
+
+

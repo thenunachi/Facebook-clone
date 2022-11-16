@@ -64,7 +64,8 @@ const response = await fetch(`/api/posts/${ownerId}`);
 if(response.ok){ 
     const data = await response.json();
     dispatch(getPostsById(data.posts))
-    return { ... data};
+    
+     return { ... data};
    }
 }
 
@@ -102,12 +103,12 @@ export const updatePostThunk = (payload) => async dispatch =>{
 
 //DELETE A POST 
 export const removePostThunk = (id)=> async dispatch =>{
-    console.log("ID OF DELETE POST ^^^^^^^^^^^^",id)
+    // console.log("ID OF DELETE POST ^^^^^^^^^^^^",id)
     const response = await fetch(`/api/posts/${id}`,{
         method: "DELETE",
        // headers:{ "Content-Type": "application/json"},
     })
-    console.log(response,"RESPONSE OF DELETE")
+    // console.log(response,"RESPONSE OF DELETE")
     if(response.ok){
         dispatch(removePost(id))
     }
@@ -134,16 +135,22 @@ export const removePostThunk = (id)=> async dispatch =>{
             // const newState ={};
             // newState[action.payload] = action.payload
             // console.log("NEWSTATE from GETAPOSTS**************",newState)
+            // return newState
             action.payload.forEach(post =>{
                 allPosts[post.id] = post //assigning post to post's id
+                // console.log(allPosts,"Find the allposts type")//4:{id: 4, likes: 0, longText: 'I went on a ride in Testla', owner: {…}, owner_Id: 3}
+        
             })
-            return {...allPosts}
+             //console.log(action.payload,"post of owner^^^")
+            // return action.payload
+             return {...allPosts}
+
         }
         /******************************************************************************* */
         case ADD_POST:{
             const newState={};
             newState[action.payload.id] = action.payload
-            console.log(newState,"State of createPost")
+            // console.log(newState,"State of createPost")
             const newPostForm ={...state,...newState}
             return newPostForm
         }

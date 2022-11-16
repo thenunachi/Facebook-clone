@@ -11,6 +11,7 @@ function CreatePostForm({ setShowModal }) {
     const history = useHistory()
 
     const [longText, setLongText] = useState("");
+    // const [likes,setLikes]=useState()
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
     const{userId}= useParams()

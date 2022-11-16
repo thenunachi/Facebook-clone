@@ -78,13 +78,13 @@ export const getAllCommentsThunk =(postId) =>async dispatch=>{
 
 export const createCommentThunk = (data)=>async dispatch =>{
 // const {postId} = data
-console.log(data.id,"DATA inside create thunk")
+// console.log(data.id,"DATA inside create thunk")
 const response = await fetch(`/api/posts/${data.id}/comments`,{
     method:'POST',
     headers:{'Content-Type': 'application/json'},
     body: JSON.stringify(data)
 });
-console.log(response,"response")
+// console.log(response,"response")
 if(response.ok){
     const newComment = await response.json();
     dispatch(createComment(newComment))
@@ -110,7 +110,7 @@ export const deleteCommentThunk = (commentId)=>async dispatch=>{
 export const updateCommentThunk = (data)=>async dispatch =>{
     console.log(data,"data of updatethunk")
     const {id} = data //3
-    console.log("id inside update thunk",id)
+    // console.log("id inside update thunk",id)
     const response = await fetch(`/api/comments/${id}`,{
         method:'PUT',
         headers:{'Content-Type': 'application/json'},
@@ -119,7 +119,7 @@ export const updateCommentThunk = (data)=>async dispatch =>{
     console.log(response,"response")
     if(response.ok){
         const updateComment = await response.json();
-        console.log(updateComment,"UPDATECOMMENT")
+        // console.log(updateComment,"UPDATECOMMENT")
         dispatch(editComment(updateComment))
         return updateComment
     }
@@ -131,7 +131,7 @@ export const updateCommentThunk = (data)=>async dispatch =>{
 /**********************************************REDUCER************************************************************************************ */
 
 const commentReducer =(state={},action) =>{
-    console.log("ACTION",action)
+    // console.log("ACTION",action)
 switch (action.type){
     case GET_USER_COMMENTS:{
         const allCommnets ={}
@@ -143,9 +143,9 @@ switch (action.type){
     }
     case GET_POST_COMMENTS:{
         const newState ={};
-     console.log("comments shape",action.comments)
+    //  console.log("comments shape",action.comments)
         action.comments.forEach((comment)=>(newState[comment.id]=comment))
-        console.log(newState,"newstate of comments")
+        // console.log(newState,"newstate of comments")
         return {...state,...newState};
  
     }

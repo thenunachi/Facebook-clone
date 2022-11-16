@@ -14,7 +14,9 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
     posts = db.relationship('Post', back_populates='owner', cascade='all, delete')
     comments = db.relationship('Comment', back_populates='users', cascade='all, delete')
-
+    chats = db.relationship('Chat', back_populates ='users',cascade='all,delete')
+    likes = db.relationship('Like',back_populates ='user')
+    
     @property
     def password(self):
         return self.hashed_password
@@ -42,5 +44,6 @@ class User(db.Model, UserMixin):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'posts': [p.to_dict_post() for p in self.posts],
-            'comments':[c.to_dict_comments() for c in self.comments]
+            'comments':[c.to_dict_comments() for c in self.comments],
+            # "likes": self.to_dict_like()
         }

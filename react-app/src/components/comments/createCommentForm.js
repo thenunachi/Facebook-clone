@@ -22,14 +22,14 @@ function CommentForm({setShowModal,postId}) {
   //let { postId } = useParams();
   //console.log(postId, "POST ID FROM PARAMS")
   let allPost = useSelector(state => Object.values(state.postState));
-  console.log(allPost, "AL POST")
+  // console.log(allPost, "AL POST")
   // console.log("ALLPRODUCTS" ,allProducts)
   let allComments = useSelector(state => Object.values(state.commentState));
   let user = useSelector(state => state.session.user);
 
   const commentofUser = allComments.find(comment => user && comment.userId === user.id)
   const post = allComments.find(c => c.post_Id === +postId)
-  console.log(post, "CHECK POST.ID is same as params")//2
+  // console.log(post, "CHECK POST.ID is same as params")//2
   // console.log("PRODUCT",product)
   /***************************************useEffect******************************************** */
   useEffect(() => {
@@ -57,7 +57,7 @@ function CommentForm({setShowModal,postId}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { id: postId, commentText };
-    console.log(payload, "PAYLOAD ISIDE CREACRE")
+    // console.log(payload, "PAYLOAD ISIDE CREACRE")
     let newComment = await dispatch(createCommentThunk(payload))
     await dispatch(loadPostCommentsThunk(postId))
 
@@ -74,7 +74,7 @@ function CommentForm({setShowModal,postId}) {
   const handleCancelClick = (e) => {
     e.preventDefault();
     history.push('/')
-    console.log("CANCEL CLICK")
+    // console.log("CANCEL CLICK")
     // e.style.display = 'none'
 
 };

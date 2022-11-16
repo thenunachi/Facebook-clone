@@ -5,19 +5,23 @@ from app.models import db, Post
 def seed_posts():
     post1 = Post(
         owner_Id = 1,
-        longText = 'Today was a pleasent day in Texas.Feeling happy'
+        longText = 'Today was a pleasent day in Texas.Feeling happy',
+        
     )
     post2 = Post(
         owner_Id = 2,
-        longText = 'I hate this summer.It is so hot.'
+        longText = 'I hate this summer.It is so hot.',
+        
     )
     post3 = Post(
         owner_Id = 1,
-        longText = 'I like icecream from costco.They have huge variety of icecreams'
+        longText = 'I like icecream from costco.They have huge variety of icecreams',
+     
     )
     post4 = Post(
         owner_Id = 3,
-        longText = 'I went on a ride in Testla'
+        longText = 'I went on a ride in Testla',
+         
     )
 
     db.session.add(post1)

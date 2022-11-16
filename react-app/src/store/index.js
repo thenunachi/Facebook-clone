@@ -3,10 +3,16 @@ import thunk from 'redux-thunk';
 import session from './session'
 import postReducer from './postReducer'
 import commentReducer from './commentReducer'
+import chatReducer from './chatReducer';
+import likeReducer from './likeReducer';
+
+
 const rootReducer = combineReducers({
   session,
    postState : postReducer,
-   commentState : commentReducer
+   commentState : commentReducer,
+   chatState : chatReducer,
+   likeState : likeReducer
 });
 
 

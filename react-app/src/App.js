@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import LoginForm from './components/auth/LoginForm';
@@ -22,6 +22,7 @@ import NavBar from './components/Navbar/index'
 
 function App() {
   const [loaded, setLoaded] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
