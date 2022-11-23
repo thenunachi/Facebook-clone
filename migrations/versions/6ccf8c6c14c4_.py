@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e37577f7b58b
+Revision ID: 6ccf8c6c14c4
 Revises: 
-Create Date: 2022-11-15 17:17:49.188839
+Create Date: 2022-11-17 11:22:51.514672
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e37577f7b58b'
+revision = '6ccf8c6c14c4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,6 +32,7 @@ def upgrade():
     op.create_table('chats',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('sender_Id', sa.Integer(), nullable=False),
+    sa.Column('receiver_Id', sa.Integer(), nullable=False),
     sa.Column('message', sa.String(length=1000), nullable=False),
     sa.Column('created_at', sa.Date(), nullable=True),
     sa.Column('updated_at', sa.Date(), nullable=True),

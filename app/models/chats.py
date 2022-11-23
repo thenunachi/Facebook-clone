@@ -5,7 +5,7 @@ class Chat(db.Model):
     __tablename__ = 'chats'
     id = db.Column(db.Integer,nullable=False,primary_key=True)
     sender_Id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
-    # receiver_Id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
+    receiver_Id = db.Column(db.Integer,nullable=False)
     message = db.Column(db.String(1000),nullable=False)
     created_at = db.Column(db.Date, default = date.today())
     updated_at = db.Column(db.Date, default = date.today())
@@ -15,7 +15,7 @@ class Chat(db.Model):
         return{
             "id":self.id,
             "sender_Id":self.sender_Id,
-            # "receiver_Id":self.receiver_Id,
+            "receiver_Id":self.receiver_Id,
             "message": self.message,
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,

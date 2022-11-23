@@ -27,8 +27,8 @@ export const allMessages = ()=>async dispatch =>{
 }
 
 export const createNewMessage =(msgdata)=>async dispatch =>{
-    console.log(msgdata)
-    const response = await fetch(`/chat`,{
+    console.log(msgdata,"inside thunk of chat")
+    const response = await fetch(`/chat/${msgdata.receiver_Id}`,{
         method:'POST',
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify(msgdata)

@@ -13,6 +13,9 @@ import UpdatePostModal from "../userPostdetails/updatePostModal";
 import '../userPostdetails/createpostmodal.css'
 import '../userPostdetails/updatepostmodal.css'
 import { likesThunk, createThunk, removeThunk } from '../../store/likeReducer'
+import { getUserList } from '../../store/friendReducer'
+import ChatForm from "../chat/chatForm";
+import { allMessages, createNewMessage } from '../../store/chatReducer'
 
 function AllPosts() {
   const dispatch = useDispatch()
@@ -23,15 +26,16 @@ function AllPosts() {
   const postArr = useSelector(state => Object.values(state.postState))
   const commentArr = useSelector(state => Object.values(state.commentState))
   const likeArr = useSelector(state => (Object.values(state.likeState)))
-  console.log(likeArr, "LikeArr ()()()()")
-  // console.log(commentArr, "CommentArr")
+  // console.log(likeArr, "LikeArr ()()()()")
+  //  console.log(postArr, "postArr")
 
   const user = useSelector(state => state.session.user)
-  // const [like, setLike] = useState(false)
-  // const [count, setCount] = useState(0)
-  // const updateCount = (e) => setCount(count + 1)
-  // let count =0
+
+  const friendsList = useSelector(state => Object.values(state.friendState))
+  console.log(friendsList, "FriendList details")
   useEffect(async () => {
+
+    dispatch(getUserList())
     const { posts } = await dispatch(getAllPostsThunk())
     // console.log(posts, "")
     posts.forEach((e) => {
@@ -47,6 +51,20 @@ function AllPosts() {
     <div>
       <h1 className="title">Welcome to {user.username}'s Home Page</h1>
       <div className="createpostDiv">
+        <div>
+        {/* {<ChatForm />} */}
+          {friendsList.map((friend) => {
+            console.log("user information", friend.id)
+            return (
+              <div className="chatform" onClick={()=>{
+         return history.push({
+          pathname:`/chat/${friend.id}`,
+          // state:{receiver_Id : friend.id}
+         })
+              }}>{friend.username} {friend.id}</div>
+            )
+          })}
+        </div>
         <div className="addPost">
           <div className="innerDivPost">
 
@@ -115,6 +133,13 @@ function AllPosts() {
 
 
 }
+
+const showChat =(id)=>{
+  console.log("show chat form")
+return(
+  <ChatForm friendId={id}/>
+)
+}
 const deleteUpdateComment = (comment, dispatch, history) => {
   return (
     <div>
@@ -181,43 +206,44 @@ const postperuser = (post, dispatch, history, ownerPostId, user, likeArr) => {
 
       </div>
       <div>count:{likeArr.length}</div>
-      
-       {
-       !likeArr.includes(user.id)  &&
-       <button className="like" onClick={async (event) => {
-        console.log(post, "post of like button")
-        event.preventDefault()
-        const payload = { user_Id: user.Id, post_Id: post.id }
-        console.log(payload, "payload for likes thunk")
-        await dispatch(createThunk(payload))
-        await dispatch(likesThunk(post.id))
-        // console.log(dispatch(likesThunk(payload)), "get all likes of post")
 
-      }
-      } >
-        <i class="fa-solid fa-thumbs-up"></i>
-      </button>} 
-      
-      
+      {
+        !likeArr.includes(user.id) &&
+        <button className="like" onClick={async (event) => {
+          console.log(post, "post of like button")
+          event.preventDefault()
+          const payload = { user_Id: user.Id, post_Id: post.id }
+          console.log(payload, "payload for likes thunk")
+          await dispatch(createThunk(payload))
+          await dispatch(likesThunk(post.id))
+          // console.log(dispatch(likesThunk(payload)), "get all likes of post")
+
+        }
+        } >
+          <i class="fa-solid fa-thumbs-up"></i>
+        </button>}
+
+
       {
         likeArr.map((e) => {
-          console.log(e,"e")
-          console.log(e.id,"e^^^^^^^^")
+          console.log(e, "e")
+          console.log(e.id, "e^^^^^^^^")
           return (
             (e.post_Id == post.id) && <button onClick={async (event) => {
               event.preventDefault()
               await dispatch(removeThunk(e.id))
             }} ><i class="fa-solid fa-thumbs-down"></i></button>
-             
+
           )
 
-          }
+        }
         )
 
       }
     </div >
   )
 }
+
 
 
 

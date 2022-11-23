@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from flask_socketio import SocketIO,send,join_room
+from flask_socketio import SocketIO,send,join_room, leave_room,emit
 from app.forms.chat_form import ChatForm
 from flask_login import current_user
 
@@ -14,6 +14,7 @@ from .api.auth_routes import auth_routes
 from .api.post_routes import post_routes
 from .api.comment_routes import comment_routes
 from .api.like_routes import like_routes
+from .api.friend_routes import friend_routes
 
 from .seeds import seed_commands
 
@@ -32,6 +33,8 @@ login.login_view = 'auth.unauthorized'
 def load_user(id):
     return User.query.get(int(id))
 
+# def load_all_users():
+#     return User.query.all()
 
 # Tell flask about our seed commands
 app.cli.add_command(seed_commands)
@@ -42,6 +45,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(post_routes, url_prefix='/api/posts')
 app.register_blueprint(comment_routes,url_prefix='/api/comments')
 app.register_blueprint(like_routes,url_prefix='/api/likes')
+app.register_blueprint(friend_routes,url_prefix='/api/users/all')
 db.init_app(app)
 Migrate(app, db)
 
@@ -82,14 +86,15 @@ def react_root(path):
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
 
-@app.route('/chat',methods=["POST"])
-def chat():
+@app.route('/chat/<int:receiverId>',methods=["POST"])
+def chat(receiverId):
     form = ChatForm()
     user = current_user.to_dict()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         data = Chat(
             sender_Id = user['id'],
+            receiver_Id = receiverId,
             message = form.data['message']
         )
         db.session.add(data)
@@ -99,20 +104,29 @@ def chat():
         return {"chat": data.to_dict_chat()}
     return form.errors
 
-
+@app.route('/chat',methods=['GET'])
+def allmessages():
+    all_msg = Chat.query.all()
+    return {'chat': [c.to_dict_chat() for c in all_msg]}
 
 
 # When some client emit event using message name this funtion will call and send that message to every client listens on our server
-@socketio.on('sendmessage')
-def handle_message(msg,id):
-    print(id,"*******ID")
-    print(msg)
-    room = id
-    print(room,"ROOM &&&&&&&&")
-    send(msg, to=room)
-    return None #To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
-
-
+# @socketio.on('sendmessage')
+# def handle_message(msg,id):
+#     print(id,"*******ID")
+#     print(msg)
+#     room = id
+#     print(room,"ROOM &&&&&&&&")
+#     send(msg, to=room)
+#     return None #To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
+# @socketio.on('message')
+# def handle_message(data):
+#     print('received message: ' + data)
+    
+@socketio.on('message')
+def reply(message):
+    print("SOMETHING ELSE &&&&&&&&&&&&&&&&&&&&&",message)
+    emit('message',message,broadCast=True)
 # Run the App
 if __name__ == '__main__':
     socketio.run(app, debug=True) #debug=True enables to sort out the errors with ease.

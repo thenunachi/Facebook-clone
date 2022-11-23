@@ -17,6 +17,7 @@ import CommentForm from './components/comments/createCommentForm';
 import NavBar from './components/Navbar/index'
 import EmojiPicker from 'emoji-picker-react';
 import EmojiReaction from './components/emoji';
+import ChatForm from './components/chat/chatForm';
 
 
 
@@ -78,6 +79,9 @@ function App() {
         </ProtectedRoute >
         <ProtectedRoute path='/emoji'>
         <EmojiReaction />
+        </ProtectedRoute>
+        <ProtectedRoute path='/chat/:friendId'>
+        <ChatForm/>
         </ProtectedRoute>
       </Switch>
     </BrowserRouter>

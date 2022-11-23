@@ -5,14 +5,15 @@ import postReducer from './postReducer'
 import commentReducer from './commentReducer'
 import chatReducer from './chatReducer';
 import likeReducer from './likeReducer';
-
+import friendReducer from './friendReducer';
 
 const rootReducer = combineReducers({
   session,
    postState : postReducer,
    commentState : commentReducer,
    chatState : chatReducer,
-   likeState : likeReducer
+   likeState : likeReducer,
+   friendState : friendReducer
 });
 
 
