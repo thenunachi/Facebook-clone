@@ -28,6 +28,7 @@ socketio = SocketIO(app, cors_allowed_origins="*") #SocketIO is being applied to
 login = LoginManager(app)
 login.login_view = 'auth.unauthorized'
 
+users={}
 
 @login.user_loader
 def load_user(id):
@@ -92,10 +93,13 @@ def chat(receiverId):
     user = current_user.to_dict()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
+        print(form.data,"FORM DATA TO SEE WHAT IS GETTING PRINTED %%%%%%%%%%%%%%%")
+        # print(socketio.sid,"what is socket.sid ?????????????????????????????????")
         data = Chat(
             sender_Id = user['id'],
             receiver_Id = receiverId,
-            message = form.data['message']
+            message = form.data['message'],
+            # socketId = form.data['socketId']
         )
         db.session.add(data)
         db.session.commit()
@@ -111,22 +115,59 @@ def allmessages():
 
 
 # When some client emit event using message name this funtion will call and send that message to every client listens on our server
-# @socketio.on('sendmessage')
-# def handle_message(msg,id):
-#     print(id,"*******ID")
-#     print(msg)
-#     room = id
-#     print(room,"ROOM &&&&&&&&")
-#     send(msg, to=room)
-#     return None #To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
-# @socketio.on('message')
-# def handle_message(data):
-#     print('received message: ' + data)
+
+#To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
+
+ 
+@socketio.on('connect')
+def test_connect(auth):
+    print('Client connected **************************************')
+    print(request.sid,"request.sid is generated???????????????????????????????????")
+    emit('my response', {'data': 'Connected'})
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
+
+@socketio.on('username',namespace='/private')
+def get_users_sid(username):
+    users[username] = request.sid
+    print(users, 'users')
+
+@socketio.on('privatemsg',namespace='/private')
+def private_msg(payload):
+    print("***********")
+    print(users[payload['username']] ,"find the recipient getting value ????????????")
+    receiver_session_id = users[payload['username']] 
+    print(receiver_session_id,"receiver session id in backend ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    message = payload['message']
+    emit('new_private_msg',message,room=receiver_session_id)
     
+
 @socketio.on('message')
 def reply(message):
     print("SOMETHING ELSE &&&&&&&&&&&&&&&&&&&&&",message)
-    emit('message',message,broadCast=True)
+   
+    emit('message',message)
+
+# @socketio.on('join')
+# def on_join(data):
+#     print(data,"DATA inside join function ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+#     sender_Id = data['sender_Id']
+#     print(sender_Id,"senderId fron join room")
+#     room = data["room"]
+#     print(room,"room from join room")
+#     message = data["message"]
+#     join_room(room)
+#     # send(sender_Id +'has joined the room', to=room)
+
+# @socketio.on('leave')
+# def on_leave(data):
+#     username = data['username']
+#     room = data['room']
+#     leave_room(room)
+#     send(username + ' has left the room.', to=room)
+
 # Run the App
 if __name__ == '__main__':
     socketio.run(app, debug=True) #debug=True enables to sort out the errors with ease.

@@ -77,7 +77,7 @@ function App() {
           {/* <h1>create comment Page</h1> */}
           <CommentForm/>
         </ProtectedRoute >
-        <ProtectedRoute path='/emoji'>
+        <ProtectedRoute path='/chat/:friendId/emoji'>
         <EmojiReaction />
         </ProtectedRoute>
         <ProtectedRoute path='/chat/:friendId'>

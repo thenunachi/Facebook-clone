@@ -19,10 +19,10 @@ const LoginForm = () => {
 
   const onLogin = async (e) => {
     e.preventDefault();
-    if(email.length ===0){
+    if (email.length === 0) {
       return setErrors(["Email is required"])
     }
-    if(password.length === 0){
+    if (password.length === 0) {
       return setErrors(["Password is required"])
     }
     const data = await dispatch(login(email, password));
@@ -79,21 +79,24 @@ const LoginForm = () => {
               onChange={updatePassword}
             />
             <button className="login" type='submit'>Login</button>
-            <DemoUser/>
+            <DemoUser />
             {/* <div className="signin">SignUp<SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} /></div> */}
-            <button className="signin" onClick={()=>setShowSignUpModal(true)}><SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} />SignUp</button>
+            <button className="signin" onClick={() => setShowSignUpModal(true)}>
+              SignUp
+            </button>
+            <SignUpFormModal showSignUpModal={showSignUpModal} setShowSignUpModal={setShowSignUpModal} />
           </div>
         </form>
       </div>
       <footer>
         <div id="repos">
 
-         <span className='link'><a href="https://github.com/thenunachi" target="_blank">Github</a></span> 
-         <span><a href="https://www.linkedin.com/in/thenammai-nachiyappan-56bbaa1a2/" target="_blank">linkedin</a></span> 
+          <span className='link'><a href="https://github.com/thenunachi" target="_blank">Github</a></span>
+          <span><a href="https://www.linkedin.com/in/thenammai-nachiyappan-56bbaa1a2/" target="_blank">linkedin</a></span>
         </div>
       </footer>
     </div>
-    
+
   );
 };
 
