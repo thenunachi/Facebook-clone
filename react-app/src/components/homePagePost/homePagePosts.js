@@ -25,14 +25,15 @@ function AllPosts() {
 
   const postArr = useSelector(state => Object.values(state.postState))
   const commentArr = useSelector(state => Object.values(state.commentState))
-  const likeArr = useSelector(state => (Object.values(state.likeState)))
-  // console.log(likeArr, "LikeArr ()()()()")
+  const likesPerPost = useSelector(state => state.likeState)
   //  console.log(postArr, "postArr")
 
   const user = useSelector(state => state.session.user)
 
   const friendsList = useSelector(state => Object.values(state.friendState))
   console.log(friendsList, "FriendList details")
+
+  // console.log(like,"like")
   useEffect(async () => {
 
     dispatch(getUserList())
@@ -41,6 +42,7 @@ function AllPosts() {
     posts.forEach((e) => {
       dispatch(getAllCommentsThunk(e.id))
       dispatch(likesThunk(e.id))
+
     }
     )
 
@@ -51,80 +53,89 @@ function AllPosts() {
     <div>
       <h1 className="title">Welcome to {user.username}'s Home Page</h1>
       <div className="createpostDiv">
-        <div>
-        {/* {<ChatForm />} */}
+        <div className="rightlist">
+          <h2> FriendList</h2>
           {friendsList.map((friend) => {
             console.log("user information", friend.id)
             return (
-              <div className="chatform" onClick={()=>{
-         return history.push({
-          pathname:`/chat/${friend.id}`,
-          // state:{receiver_Id : friend.id}
-         })
-              }}>{friend.username} {friend.id}</div>
+              <div className="chatform" onClick={() => {
+                return history.push({
+                  pathname: `/chat/${friend.id}`,
+                  // state:{receiver_Id : friend.id}
+                })
+              }}>{friend.username}
+              </div>
             )
           })}
         </div>
-        <div className="addPost">
-          <div className="innerDivPost">
+        <div className="leftlist">
+          <div className="addPost">
+            <div className="innerDivPost">
 
-            {<span>
-              {/* <img className="posticon" src={posticon} /> */}
-              <AddPostModal />
-            </span>}
+              {<span>
+                {/* <img className="posticon" src={posticon} /> */}
+                <AddPostModal />
+              </span>}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="postdiv">
-        {
-          postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
-            console.log(post, "post details to know username")
-            // console.log(post.likes + count, 'post likes count')
-            return (
-              <div className="singlepost">
-                <div>
-                  {postperuser(post, dispatch, history, post.owner_Id, user, likeArr)}
+        <div className="postdiv">
+          {
+            postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
+              const likesForPost = likesPerPost[post.id] || [];
+              console.log(likesForPost, "likesforPost")
+              console.log(post, "post details to know username")
+              // console.log(post.likes + count, 'post likes count')
+              return (
+                <div className="singlepost">
+                  <div>
+                    {postperuser(post, dispatch, history, user, likesForPost.length)}
 
+                    {
+                      likeButton(likesForPost, user.id, post.id, dispatch)
+
+                    }
+                  </div>
+
+
+
+                  <div className="singleComment"> {
+                    commentArr.sort((a, b) => b.id - a.id).map((comment) => {
+                      //console.log(comment,"comment insided nested func")
+                      return ((comment.post_Id == post.id) &&
+                        <div className="perComment">
+                          <span className="showButton">{comment.users.username}:
+                            {(comment.user_Id == user.id) && deleteUpdateComment(comment, dispatch, history)}
+                          </span>
+
+
+                          <div className="commenttext">
+                            <span><img className="chat" src={chat} />  </span>
+                            <span>{comment.commentText} </span>
+                          </div>
+
+                        </div>)
+
+
+                    })
+                  }</div>
+
+                  <div className="comment">
+                    {
+                      <div>
+                        <AddCommentModal postId={post.id} />
+                      </div>
+                    }
+
+                  </div>
                 </div>
 
+              )
 
 
-                <div className="singleComment"> {
-                  commentArr.sort((a, b) => b.id - a.id).map((comment) => {
-                    //console.log(comment,"comment insided nested func")
-                    return ((comment.post_Id == post.id) &&
-                      <div className="perComment">
-                        <span className="showButton">{comment.users.username}:
-                          {(comment.user_Id == user.id) && deleteUpdateComment(comment, dispatch, history)}
-                        </span>
+            })}
 
-
-                        <div className="commenttext">
-                          <span><img className="chat" src={chat} />  </span>
-                          <span>{comment.commentText} </span>
-                        </div>
-
-                      </div>)
-
-
-                  })
-                }</div>
-
-                <div className="comment">
-                  {
-                    <div>
-                      <AddCommentModal postId={post.id} />
-                    </div>
-                  }
-
-                </div>
-              </div>
-
-            )
-
-
-          })}
-
+        </div>
       </div>
 
     </div>
@@ -134,11 +145,11 @@ function AllPosts() {
 
 }
 
-const showChat =(id)=>{
+const showChat = (id) => {
   console.log("show chat form")
-return(
-  <ChatForm friendId={id}/>
-)
+  return (
+    <ChatForm friendId={id} />
+  )
 }
 const deleteUpdateComment = (comment, dispatch, history) => {
   return (
@@ -190,7 +201,7 @@ const postdeleteUpdate = (post, dispatch, history, userId) => {
 
 }
 
-const postperuser = (post, dispatch, history, ownerPostId, user, likeArr) => {
+const postperuser = (post, dispatch, history, user, likesCount) => {
   return (
     <div className="perPost">
 
@@ -205,9 +216,9 @@ const postperuser = (post, dispatch, history, ownerPostId, user, likeArr) => {
         <span>{post.longText}  </span>
 
       </div>
-      <div>count:{likeArr.length}</div>
+      <div>count:{likesCount}</div>
 
-      {
+      {/* {
         !likeArr.includes(user.id) &&
         <button className="like" onClick={async (event) => {
           console.log(post, "post of like button")
@@ -221,10 +232,10 @@ const postperuser = (post, dispatch, history, ownerPostId, user, likeArr) => {
         }
         } >
           <i class="fa-solid fa-thumbs-up"></i>
-        </button>}
+        </button>} */}
 
 
-      {
+      {/* {
         likeArr.map((e) => {
           console.log(e, "e")
           console.log(e.id, "e^^^^^^^^")
@@ -239,12 +250,50 @@ const postperuser = (post, dispatch, history, ownerPostId, user, likeArr) => {
         }
         )
 
-      }
+      } */}
     </div >
   )
 }
 
+const likeButton = (likeArr, userId, postId, dispatch) => {
+  let idOfLike = likeArr.find(e=>e.user_Id == userId)
+  console.log(idOfLike,"idOfLike")
+  console.log(likeArr, "likeArr from like button func")
+  if (!idOfLike) {
+    // console.log(like,"likeArr from likes func")
+    return (
 
+
+      <button className="like" onClick={async (event) => {
+        // console.log(post, "post of like button")
+        event.preventDefault()
+        const payload = { user_Id: userId, post_Id: postId }
+        console.log(payload, "payload for likes thunk")
+        await dispatch(createThunk(payload))
+        await dispatch(likesThunk(postId))
+        // console.log(dispatch(likesThunk(payload)), "get all likes of post")
+
+      }
+      } >
+        <i class="fa-solid fa-thumbs-up"></i>
+      </button>
+
+    )
+  }
+  else {
+    return (
+      <div>
+      {idOfLike &&
+      <button onClick={async (event) => {
+        event.preventDefault()
+        await dispatch(removeThunk(idOfLike.id))
+        await dispatch(likesThunk(idOfLike.post_Id))
+      }} ><i class="fa-solid fa-thumbs-down"></i></button>
+    }
+</div>
+    )
+  }
+}
 
 
 export default AllPosts

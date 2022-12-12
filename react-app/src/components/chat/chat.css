@@ -1,0 +1,135 @@
+.leftside{
+   
+        float: left;
+        width: 24%;
+        border: 5px solid gainsboro;
+        border-radius: 5px;
+}
+.rightside{
+    float: right;
+    width: 74%;
+    margin-bottom: 50px;
+    border: 5px solid gainsboro;
+    border-radius: 5px;
+}
+/* .message{
+    background-color: #f1f1f1;
+    border-radius: 50px;
+    box-shadow: 0px 15px 5px 0px rgb(0 0 0 / 50%);
+    position: relative;
+    margin-bottom: 30px;
+    width: max-content;
+    display: flex;
+} */
+.leftmsg{
+    /* display: flex;
+    justify-content: flex-start;
+    white-space: pre;
+    background-color: #f1f1f1;
+    border-radius: 50px;
+    box-shadow: 0px 15px 5px 0px rgb(0 0 0 / 50%);
+    position: relative;
+    margin-bottom: 30px;
+    width: max-content; */
+    position: relative;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #A8DDFD;
+    /* width: 200px; */
+    /* height: 50px; */
+    text-align: left;
+    /* font: 400 0.9em 'Open Sans', sans-serif; */
+    border: 1px solid #97C6E3;
+    border-radius: 10px;
+    width: max-content;
+    /* word-break: break-word;
+    overflow-wrap: anywhere; */
+  
+}
+.rightmsg{
+  
+    position: relative;
+    margin-bottom: 10px;
+    margin-left: calc(100% - 240px);
+    /* margin-left: 278px; */
+    padding: 10px;
+    background-color: #f8e896;
+    /* width: 200px; 
+    height: 50px; */
+    text-align: left;
+  
+    border: 1px solid #dfd087;
+    border-radius: 10px;
+    width: max-content;
+}
+
+.leftmsg:after {
+    content: ''; 
+    /* The content CSS property replaces an element with a generated value. Objects inserted using the content property are anonymous replaced elements. */
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 15px solid #A8DDFD;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    top: 0;
+    left: -15px;
+}
+
+.leftmsg:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 17px solid #97C6E3;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    top: -1px;
+    left: -17px;
+}
+.rightmsg:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-bottom: 15px solid #f8e896;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    bottom: 0;
+    right: -15px;
+}
+
+.rightmsg:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-bottom: 17px solid #dfd087;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    bottom: -1px;
+    right: -17px;
+}
+
+.textbox{
+    /* width: 561px; */
+    border-radius: 7px;
+    height: 22px;
+    min-width: 95%;
+    margin-bottom: 12px;
+
+}
+.penbutton{
+    border: none;
+    background-color: white;
+}
+.messenger{
+    display: flex;
+justify-content: center;
+    border-bottom: 5px solid gainsboro;
+}
+h2{
+    display: flex;
+    justify-content: center;
+}

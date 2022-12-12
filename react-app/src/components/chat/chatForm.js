@@ -5,7 +5,8 @@ import { useParams, Redirect } from "react-router-dom";
 import io from "socket.io-client";
 import { createNewMessage, allMessages } from "../../store/chatReducer"
 import { getUserList } from '../../store/friendReducer'
-
+import EmojiReaction from '../emoji'
+import './chat.css'
 
 let endpoint = "http://localhost:5000";
 let socket; //connect with server using socket.io
@@ -20,15 +21,18 @@ function ChatForm() {
     const [messages, setMessages] = useState({});
     const [newmessage, setnewMessage] = useState("")//single message
     const [currentSocket, setCurrentSocket] = useState(null)
+    const [showEmoji, setShowEmoji] = useState(false);
+
+
     console.log(currentSocket, "currentsocket details")
+ 
     console.log(messages.length, "messages is array")
     console.log(messages, "messages obj")
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
-console.log(chatBtwTwo,"chatBtwTwo")
+    console.log(chatBtwTwo, "chatBtwTwo")
     const user = useSelector(state => state.session.user)
-    let userName = user.username
     let updatedValue = {}
 
     const friendsList = useSelector(state => Object.values(state.friendState))
@@ -36,23 +40,28 @@ console.log(chatBtwTwo,"chatBtwTwo")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
+//    console.log(io.sockets.clients(),"active")
 
 
-
-    useEffect(() => {
+    useEffect(async () => {
+        await dispatch(allMessages())
+        const userResponse = await dispatch(getUserList())
+        const chatPartner = userResponse.users.find(user => user.id == friendId).username
         let private_socket = io("http://localhost:5000/private");
-        setCurrentSocket(private_socket)
+ 
+        setCurrentSocket(private_socket);
+
         private_socket.emit('username', user.username)
         private_socket.on('new_private_msg', function (msg) {
             //setMessages([...messages, msg])
-            // recipientMsg = { recipient: msg }
-             updatedValue = { userName: msg }
-            setMessages(messages => ({
-                ...messages, ...updatedValue 
 
+            updatedValue = { [chatPartner]: msg }
+            setMessages(messages => ({
+                ...messages, ...updatedValue
             }))
             //  alert(msg)
             //  setnewMessage("");
+
 
             console.log(messages, "messages")
             console.log(msg, "msg from private")
@@ -60,9 +69,10 @@ console.log(chatBtwTwo,"chatBtwTwo")
 
         // socket = io.connect()
         // socket.connect("http://localhost:5000")//connect to backend
-        // socket.on("connect", () => {
-        //     console.log(socket.id, "socket id to be defined"); // ojIckSD2jqNzOqIrAGzL
-        // });
+       private_socket.on('response',function(active){
+        console.log("reaching here")
+        console.log(active,"active")
+       })
 
 
 
@@ -73,13 +83,7 @@ console.log(chatBtwTwo,"chatBtwTwo")
         //     setMessages([...messages, msg]);
         // });
 
-        // socket.on("connection", socket => {
-        //      socket.on("private message", (anotherSocketId, msg) => {
-        //        socket.to(anotherSocketId).emit("private message", socket.id, msg);
-        //      });
-        //    }); 
-        dispatch(allMessages())
-        dispatch(getUserList())
+        
         // return (() => {
         //     socket.disconnect()
         // })
@@ -116,11 +120,13 @@ console.log(chatBtwTwo,"chatBtwTwo")
                 // socketId: socket.id
             }
             const newlyCreated = dispatch(createNewMessage(msgdata))
-            // updatedValue = { username: newmessage }
-            recipientMsg = { recipient: newmessage }
+            const userName = user.username;
+
+            recipientMsg = { [userName]: newmessage }
             setMessages(messages => ({
                 ...messages, ...recipientMsg
             }))
+            setnewMessage("");
         }
 
         else {
@@ -159,43 +165,69 @@ console.log(chatBtwTwo,"chatBtwTwo")
     // }
     return (
         <div>
-            {/* <form> */}
-            {/* {messages.length > 0 && messages.map(msg => (
-
+            <h1 className="messenger">Messenger</h1>
+            <div className="leftside">
+                <h2> FriendList</h2>
                 <div>
-
-                    <span>{user.username}<p>{msg}</p>
-                    </span>
+                    <h3>Owner of Account</h3>
+                    {user.username}
                 </div>
-            ))} */}
-            {
-                // chatBtwTwo
-            }{
-                // chatMessage() &&
-                Object.keys(messages).map(function (keyName, keyIndex) {
-                    return(
-<div>
-                        <p>{keyName} :</p>
-                        <p>{messages[keyName]}</p>
-                    </div>
+                <div>
+                    <h3>Connected users</h3>
+                {friendsList.map((ele) => {
+                    console.log(ele, "ele")
+                    return (
+                        <div>{ele.username}</div>
                     )
-                    
+                })}
+                </div>
 
-                })
-            }
-            <input
-                value={newmessage}
-                name="message"
-                onChange={updateMessage}
-            />
-            <button onClick={() => handleSubmitMessage()}> Send Message</button>
-            {/* </form> */}
+            </div>
+            <div className="rightside">
+                <h2>Chat</h2>
+                {
+
+                    chatBtwTwo.map((e) => {
+                        console.log(e, "e from chat")
+                        // console.log(e.users.username,"username")
+                        return (
+                            <div className="message">
+                                {e.users.id != +friendId && <div className="leftmsg">{e.users.username}: {e.message} </div>}
+                                {e.users.id == +friendId && <div className="rightmsg">{e.users.username}: {e.message}</div>}
+                            </div>
+
+                        )
+
+
+                    })
+
+                }{
+
+                    Object.keys(messages).map(function (keyName, keyIndex) {
+                        return (
+                            <div>
+                                <p>{keyName} :</p>
+                                <p>{messages[keyName]}</p>
+                            </div>
+                        )
+
+
+                    })
+                }
+                <input className="textbox"
+                    value={newmessage}
+                    name="message"
+                    onChange={updateMessage}
+
+                />
+
+                {/* <i onClick={() => { setShowEmoji(true) }} class="fa-regular fa-face-smile"></i>
+            {showEmoji && <EmojiReaction userId={user.id} friendId={+friendId} />} */}
+                <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </div>
     )
 }
-const chatMessage = (receiverId,senderId,userId,friendId) =>{
-    if(((senderId === userId) ||(senderId === friendId)) && ((receiverId === userId) ||(receiverId === friendId)))
-    return true
-    }
+
 
 export default ChatForm;
