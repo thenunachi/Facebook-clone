@@ -22,10 +22,10 @@ function ChatForm() {
     const [newmessage, setnewMessage] = useState("")//single message
     const [currentSocket, setCurrentSocket] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false);
-
-
+    const [activeSocket, setActiveSocket] = useState(null)
+const [uniqueChars,setUniquechars] = useState([])
     console.log(currentSocket, "currentsocket details")
- 
+
     console.log(messages.length, "messages is array")
     console.log(messages, "messages obj")
     const updateMessage = (e) => { setnewMessage(e.target.value) }
@@ -40,16 +40,18 @@ function ChatForm() {
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
-//    console.log(io.sockets.clients(),"active")
-
-
+    
+    let activeUserCount
+    let arrayOfOnlineUsers
+    // let uniqueChars
     useEffect(async () => {
         await dispatch(allMessages())
         const userResponse = await dispatch(getUserList())
         const chatPartner = userResponse.users.find(user => user.id == friendId).username
         let private_socket = io("http://localhost:5000/private");
- 
+        let activeUsers = io("http://localhost:5000/")
         setCurrentSocket(private_socket);
+        setActiveSocket(activeUsers)
 
         private_socket.emit('username', user.username)
         private_socket.on('new_private_msg', function (msg) {
@@ -62,31 +64,31 @@ function ChatForm() {
             //  alert(msg)
             //  setnewMessage("");
 
-
+            dispatch(allMessages())
             console.log(messages, "messages")
             console.log(msg, "msg from private")
         })
 
-        // socket = io.connect()
-        // socket.connect("http://localhost:5000")//connect to backend
-       private_socket.on('response',function(active){
-        console.log("reaching here")
-        console.log(active,"active")
-       })
+        activeUsers.on('users', function (countOfUsersOnline) {
+            console.log("active")
+            activeUserCount = countOfUsersOnline.user_count;
+            console.log(activeUserCount, "activeusercount")
+        })
+
+        activeUsers.emit('active', { username: user.username })
+        // activeUsers.emit('offline', { username: user.username })
+        activeUsers.on('activeUsers', function (activeUsers) {
+            console.log(activeUsers, "activeUsers")
+    
+           setUniquechars([...new Set( activeUsers)])
+        })
+  activeUsers.on('offlineusers',function (offline){
+    console.log(offline,"offline")
+  })
 
 
+  activeUsers.emit('login',{userId: user.id});
 
-
-        // socket.on("message", msg => {
-        //     console.log("receiving message", msg)
-        //     console.log(socket.sid, "what is socket.sid")
-        //     setMessages([...messages, msg]);
-        // });
-
-        
-        // return (() => {
-        //     socket.disconnect()
-        // })
 
 
     }, [messages]) //this will auto call when messaege length changes
@@ -127,42 +129,14 @@ function ChatForm() {
                 ...messages, ...recipientMsg
             }))
             setnewMessage("");
+            dispatch(allMessages())
         }
 
         else {
             alert("Please add a message")
         }
     }
-    // const handleSubmitMessage = () => {
-    //     // setSocketId(socket.id)
-    //     if (newmessage !== "") {
-    // const msgdata = {
-    //     sender_Id: user.id,
-    //     receiver_Id: +friendId,
-    //     message:newmessage,
-    //     socketId: socket.id
-    // }
-
-    // console.log(friendId.socket,"what is receiver'ids socket id ????")
-    // console.log(msgdata.socketId, "Msgdata")
-    // socket.emit("sendmessage",(message,socket.id))
-    // io.local.emit('message',newmessage)
-    // socket.emit('join', { "sender_Id": user.id, "room": socket.id ,"message":newmessage});
-    // socket.emit('message', newmessage);
-
-    // console.log(socket.id,"socket id")
-    // console.log(socket,"SOCKET")
-    //         const newlyCreated = dispatch(createNewMessage(msgdata))
-    //         // console.log(newlyCreated)
-
-    //         setnewMessage("");
-
-    //     }
-    //     else {
-    //         alert("Please add a message")
-    //     }
-
-    // }
+ 
     return (
         <div>
             <h1 className="messenger">Messenger</h1>
@@ -173,14 +147,26 @@ function ChatForm() {
                     {user.username}
                 </div>
                 <div>
-                    <h3>Connected users</h3>
-                {friendsList.map((ele) => {
+                    {/* <h3>Connected users</h3>
+                    <div>
+                       {
+                       uniqueChars.map((e) => {
+                            console.log(e,"e from uniq")
+                            return(
+                            <div>{e}</div>
+                            )
+                        }) //if uniqueChars present take that or take a empty obj
+                       }
+                    </div> */}
+                    {/* {friendsList.map((ele) => {
                     console.log(ele, "ele")
                     return (
                         <div>{ele.username}</div>
                     )
-                })}
+                         })} */}
+
                 </div>
+
 
             </div>
             <div className="rightside">
@@ -188,20 +174,23 @@ function ChatForm() {
                 {
 
                     chatBtwTwo.map((e) => {
-                        console.log(e, "e from chat")
-                        // console.log(e.users.username,"username")
+                      
                         return (
+                            
                             <div className="message">
-                                {e.users.id != +friendId && <div className="leftmsg">{e.users.username}: {e.message} </div>}
-                                {e.users.id == +friendId && <div className="rightmsg">{e.users.username}: {e.message}</div>}
+                                {e && e.users && e.users.id != +friendId && <div className="leftmsg">{e.users.username}: {e.message} </div>}
+                                {e && e.users && e.users.id == +friendId && <div className="rightmsg">{e.users.username}: {e.message}</div>}
+                                {/* history.push(`/chat/${friendId}`) */}
+                                {/* dispatch(allMessages()) */}
                             </div>
-
+                       
                         )
-
+                  
 
                     })
 
-                }{
+                 }
+                  {/* { 
 
                     Object.keys(messages).map(function (keyName, keyIndex) {
                         return (
@@ -213,7 +202,7 @@ function ChatForm() {
 
 
                     })
-                }
+               } */}
                 <input className="textbox"
                     value={newmessage}
                     name="message"
