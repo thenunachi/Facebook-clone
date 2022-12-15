@@ -285,6 +285,7 @@ const likeButton = (likeArr, userId, postId, dispatch,history) => {
       <div>
       {idOfLike &&
       <button className="like" onClick={async (event) => {
+        console.log(idOfLike,"idofLike")
         event.preventDefault()
         await dispatch(removeThunk(idOfLike.id))
         await dispatch(likesThunk(idOfLike.post_Id))

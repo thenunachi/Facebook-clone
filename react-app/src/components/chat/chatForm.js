@@ -23,7 +23,7 @@ function ChatForm() {
     const [currentSocket, setCurrentSocket] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
-const [uniqueChars,setUniquechars] = useState([])
+    const [uniqueChars, setUniquechars] = useState([])
     console.log(currentSocket, "currentsocket details")
 
     console.log(messages.length, "messages is array")
@@ -40,7 +40,7 @@ const [uniqueChars,setUniquechars] = useState([])
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
-    
+
     let activeUserCount
     let arrayOfOnlineUsers
     // let uniqueChars
@@ -76,18 +76,18 @@ const [uniqueChars,setUniquechars] = useState([])
         })
 
         activeUsers.emit('active', { username: user.username })
-        // activeUsers.emit('offline', { username: user.username })
+        activeUsers.emit('offline', { username: user.username })
         activeUsers.on('activeUsers', function (activeUsers) {
             console.log(activeUsers, "activeUsers")
-    
-           setUniquechars([...new Set( activeUsers)])
+
+            setUniquechars([...new Set(activeUsers)])
         })
-  activeUsers.on('offlineusers',function (offline){
-    console.log(offline,"offline")
-  })
+        activeUsers.on('offlineusers', function (offline) {
+            console.log(offline, "offline")
+        })
 
 
-  activeUsers.emit('login',{userId: user.id});
+        activeUsers.emit('login', { userId: user.id });
 
 
 
@@ -136,7 +136,7 @@ const [uniqueChars,setUniquechars] = useState([])
             alert("Please add a message")
         }
     }
- 
+
     return (
         <div>
             <h1 className="messenger">Messenger</h1>
@@ -147,18 +147,18 @@ const [uniqueChars,setUniquechars] = useState([])
                     {user.username}
                 </div>
                 <div>
-                    {/* <h3>Connected users</h3>
+                    <h3>Connected users</h3>
                     <div>
-                       {
-                       uniqueChars.map((e) => {
-                            console.log(e,"e from uniq")
-                            return(
-                            <div>{e}</div>
-                            )
-                        }) //if uniqueChars present take that or take a empty obj
-                       }
-                    </div> */}
-                    {/* {friendsList.map((ele) => {
+                        {
+                            uniqueChars.map((e) => {
+                                console.log(e, "e from uniq")
+                                return (
+                                    <div>{e}</div>
+                                )
+                            }) //if uniqueChars present take that or take a empty obj
+                        }
+                    </div>
+                    {/* { {friendsList.map((ele) => {
                     console.log(ele, "ele")
                     return (
                         <div>{ele.username}</div>
@@ -174,23 +174,23 @@ const [uniqueChars,setUniquechars] = useState([])
                 {
 
                     chatBtwTwo.map((e) => {
-                      
+
                         return (
-                            
+
                             <div className="message">
                                 {e && e.users && e.users.id != +friendId && <div className="leftmsg">{e.users.username}: {e.message} </div>}
                                 {e && e.users && e.users.id == +friendId && <div className="rightmsg">{e.users.username}: {e.message}</div>}
                                 {/* history.push(`/chat/${friendId}`) */}
                                 {/* dispatch(allMessages()) */}
                             </div>
-                       
+
                         )
-                  
+
 
                     })
 
-                 }
-                  {/* { 
+                }
+                {/* { 
 
                     Object.keys(messages).map(function (keyName, keyIndex) {
                         return (
