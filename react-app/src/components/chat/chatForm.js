@@ -3,19 +3,21 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Redirect } from "react-router-dom";
 import io from "socket.io-client";
+// import * as io from 'socket.io-client' 
 import { createNewMessage, allMessages } from "../../store/chatReducer"
 import { getUserList } from '../../store/friendReducer'
 import EmojiReaction from '../emoji'
 import './chat.css'
+import { Socket } from "socket.io";
 
 let endpoint = "http://localhost:5000";
-let socket; //connect with server using socket.io
+// let socket; //connect with server using socket.io
 
 function ChatForm() {
     // console.log(receiver_Id,"receiver_ID")
     const dispatch = useDispatch();
     const history = useHistory();
-
+// console.log(Socket.client(),"socket from io")
 
     // const [messages, setMessages] = useState([]); //array of messages
     const [messages, setMessages] = useState({});
@@ -23,33 +25,36 @@ function ChatForm() {
     const [currentSocket, setCurrentSocket] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
-const [uniqueChars,setUniquechars] = useState([])
-    console.log(currentSocket, "currentsocket details")
+    const [uniqueChars, setUniquechars] = useState([])
+   
+// console.log(activeSocket,"activesocket value")
 
-    console.log(messages.length, "messages is array")
-    console.log(messages, "messages obj")
+// console.log(currentSocket,"currentsockert")
+
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
-    console.log(chatBtwTwo, "chatBtwTwo")
+    // console.log(chatBtwTwo, "chatBtwTwo")
     const user = useSelector(state => state.session.user)
     let updatedValue = {}
 
     const friendsList = useSelector(state => Object.values(state.friendState))
-    console.log(friendsList, "friendlist arra")
+    // console.log(friendsList, "friendlist arra")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
-    
+
     let activeUserCount
-    let arrayOfOnlineUsers
+    let countOfUsersOnline
     // let uniqueChars
     useEffect(async () => {
         await dispatch(allMessages())
         const userResponse = await dispatch(getUserList())
         const chatPartner = userResponse.users.find(user => user.id == friendId).username
+
         let private_socket = io("http://localhost:5000/private");
-        let activeUsers = io("http://localhost:5000/")
+        let activeUsers = io("http://localhost:5000/online")
+
         setCurrentSocket(private_socket);
         setActiveSocket(activeUsers)
 
@@ -76,21 +81,29 @@ const [uniqueChars,setUniquechars] = useState([])
         })
 
         activeUsers.emit('active', { username: user.username })
-        // activeUsers.emit('offline', { username: user.username })
+        activeUsers.emit('offline', user.username )
         activeUsers.on('activeUsers', function (activeUsers) {
             console.log(activeUsers, "activeUsers")
-    
-           setUniquechars([...new Set( activeUsers)])
+
+            setUniquechars([...new Set(activeUsers)])
+            console.log(uniqueChars,"uno")
         })
-  activeUsers.on('offlineusers',function (offline){
-    console.log(offline,"offline")
-  })
+        activeUsers.on('offline', function (offline) {
+            console.log(offline, "offline")
+        })
 
 
-  activeUsers.emit('login',{userId: user.id});
+         activeUsers.emit('login', { userId: user.id });
 
-
-
+// *******************************************************************//
+// console.log(io.sockets.sockets,"sockets list")
+// activeSocket.set('nickname', 'Guest');   
+// for (let socketId in activeSocket.sockets) {
+//     io.sockets.sockets[socketId].get('nickname', function(err, nickname) {
+//         console.log(nickname);
+//     });
+// }
+ 
     }, [messages]) //this will auto call when messaege length changes
 
     // const getMessages =()=>{ //this method when first time app render and every time the message.length chnages
@@ -136,7 +149,7 @@ const [uniqueChars,setUniquechars] = useState([])
             alert("Please add a message")
         }
     }
- 
+
     return (
         <div>
             <h1 className="messenger">Messenger</h1>
@@ -147,17 +160,25 @@ const [uniqueChars,setUniquechars] = useState([])
                     {user.username}
                 </div>
                 <div>
-                    {/* <h3>Connected users</h3>
+                    <h3>Connected users</h3>
                     <div>
-                       {
+                       {/* {
                        uniqueChars.map((e) => {
                             console.log(e,"e from uniq")
                             return(
                             <div>{e}</div>
                             )
                         }) //if uniqueChars present take that or take a empty obj
+                       } */}
+                       {
+ uniqueChars.filter((e)=> 
+ 
+    e != user.username
+)
                        }
-                    </div> */}
+                      
+                      
+                    </div>
                     {/* {friendsList.map((ele) => {
                     console.log(ele, "ele")
                     return (
@@ -174,23 +195,23 @@ const [uniqueChars,setUniquechars] = useState([])
                 {
 
                     chatBtwTwo.map((e) => {
-                      
+
                         return (
-                            
+
                             <div className="message">
                                 {e && e.users && e.users.id != +friendId && <div className="leftmsg">{e.users.username}: {e.message} </div>}
                                 {e && e.users && e.users.id == +friendId && <div className="rightmsg">{e.users.username}: {e.message}</div>}
                                 {/* history.push(`/chat/${friendId}`) */}
                                 {/* dispatch(allMessages()) */}
                             </div>
-                       
+
                         )
-                  
+
 
                     })
 
-                 }
-                  {/* { 
+                }
+                {/* { 
 
                     Object.keys(messages).map(function (keyName, keyIndex) {
                         return (
