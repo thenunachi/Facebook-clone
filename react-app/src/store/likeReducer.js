@@ -75,19 +75,25 @@ const likeReducer = (state = {}, action) => {
             return { ...state, ...groupedLikes }
         }
         case SET_LIKE: {
-            const newState = {}
-            newState[action.like.id] = action.like;
-            console.log(newState, "newState inside created action type")
-            const newLike = { ...state, ...newState }
-            console.log(newLike, "inside create like  reducer")
-            return newLike
+            // const newState = {}
+            // newState[action.like.id] = action.like;
+            // console.log(newState, "newState inside created action type")
+            // const newLike = { ...state, ...newState }
+            // console.log(newLike, "inside create like  reducer")
+            // return newLike
+            return state;
         }
         case REMOVE_LIKE: {
+            console.log(state, "state")
             const newState = { ...state }
+            const postIds = Object.keys(newState)
+            postIds.forEach(postId => {
+                const notDeletedLikes = newState[postId].filter(like => like.id !== action.id) //newState[postId] gives arr of likes
+                newState[postId] = notDeletedLikes;
+            });
             console.log(newState, "NewState of delete reduer")
-            delete newState[action.id]
-            return newState
 
+            return newState
         }
         default:
             return state;

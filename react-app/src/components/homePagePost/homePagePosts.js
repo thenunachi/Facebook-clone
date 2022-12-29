@@ -12,7 +12,7 @@ import UpdatecommentModal from "../userPostdetails/updateCommentModal";
 import UpdatePostModal from "../userPostdetails/updatePostModal";
 import '../userPostdetails/createpostmodal.css'
 import '../userPostdetails/updatepostmodal.css'
-import { likesThunk, createThunk, removeThunk } from '../../store/likeReducer'
+import { likesThunk, createThunk, removeThunk as removeLikeThunk } from '../../store/likeReducer'
 import { getUserList } from '../../store/friendReducer'
 import ChatForm from "../chat/chatForm";
 import { allMessages, createNewMessage } from '../../store/chatReducer'
@@ -25,7 +25,8 @@ function AllPosts() {
 
   const postArr = useSelector(state => Object.values(state.postState))
   const commentArr = useSelector(state => Object.values(state.commentState))
-  const likesPerPost = useSelector(state => state.likeState)
+  const likesPerPost = useSelector(state => (state.likeState))
+  console.log(likesPerPost, "likesperpost")
   //  console.log(postArr, "postArr")
 
   const user = useSelector(state => state.session.user)
@@ -83,6 +84,7 @@ function AllPosts() {
           {
             postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
               const likesForPost = likesPerPost[post.id] || [];
+              console.log(likesPerPost[post.id], "likesPerPost[post.id]")
               console.log(likesForPost, "likesforPost")
               console.log(post, "post details to know username")
               // console.log(post.likes + count, 'post likes count')
@@ -92,7 +94,7 @@ function AllPosts() {
                     {postperuser(post, dispatch, history, user, likesForPost.length)}
 
                     {
-                      likeButton(likesForPost, user.id, post.id, dispatch,history)
+                      likeButton(likesForPost, user.id, post.id, dispatch, history)
 
                     }
                   </div>
@@ -242,7 +244,7 @@ const postperuser = (post, dispatch, history, user, likesCount) => {
           return (
             (e.post_Id == post.id) && <button onClick={async (event) => {
               event.preventDefault()
-              await dispatch(removeThunk(e.id))
+              await dispatch(removeLikeThunk(e.id))
             }} ><i class="fa-solid fa-thumbs-down"></i></button>
 
           )
@@ -255,9 +257,9 @@ const postperuser = (post, dispatch, history, user, likesCount) => {
   )
 }
 
-const likeButton = (likeArr, userId, postId, dispatch,history) => {
-  let idOfLike = likeArr.find(e=>e.user_Id == userId)
-  console.log(idOfLike,"idOfLike")
+const likeButton = (likeArr, userId, postId, dispatch, history) => {
+  let idOfLike = likeArr.find(e => e.user_Id == userId)
+  console.log(idOfLike, "idOfLike")
   console.log(likeArr, "likeArr from like button func")
   if (!idOfLike) {
     // console.log(like,"likeArr from likes func")
@@ -283,15 +285,15 @@ const likeButton = (likeArr, userId, postId, dispatch,history) => {
   else {
     return (
       <div>
-      {idOfLike &&
-      <button className="like" onClick={async (event) => {
-        event.preventDefault()
-        await dispatch(removeThunk(idOfLike.id))
-        await dispatch(likesThunk(idOfLike.post_Id))
-      //  return history.push(`/`)
-      }} ><i class="fa-solid fa-thumbs-down"></i></button>
-    }
-</div>
+        {idOfLike &&
+          <button className="like" onClick={async (event) => {
+            event.preventDefault()
+            await dispatch(removeLikeThunk(idOfLike.id))
+            await dispatch(likesThunk(idOfLike.post_Id))
+            history.push(`/`)
+          }} ><i class="fa-solid fa-thumbs-down"></i></button>
+        }
+      </div>
     )
   }
 }

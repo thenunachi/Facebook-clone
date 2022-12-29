@@ -17,7 +17,7 @@ function ChatForm() {
     // console.log(receiver_Id,"receiver_ID")
     const dispatch = useDispatch();
     const history = useHistory();
-// console.log(Socket.client(),"socket from io")
+    // console.log(Socket.client(),"socket from io")
 
     // const [messages, setMessages] = useState([]); //array of messages
     const [messages, setMessages] = useState({});
@@ -26,10 +26,10 @@ function ChatForm() {
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
-   
-// console.log(activeSocket,"activesocket value")
 
-// console.log(currentSocket,"currentsockert")
+    // console.log(activeSocket,"activesocket value")
+
+    // console.log(currentSocket,"currentsockert")
 
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
@@ -39,7 +39,12 @@ function ChatForm() {
     let updatedValue = {}
 
     const friendsList = useSelector(state => Object.values(state.friendState))
-    // console.log(friendsList, "friendlist arra")
+    console.log(friendsList, "friendlist arra")
+    let friendArr=[]
+    friendsList.forEach((e)=>{
+friendArr.push(e.username)
+    })
+    console.log(friendArr,"fri")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
@@ -81,29 +86,31 @@ function ChatForm() {
         })
 
         activeUsers.emit('active', { username: user.username })
-        activeUsers.emit('offline', user.username )
+
         activeUsers.on('activeUsers', function (activeUsers) {
             console.log(activeUsers, "activeUsers")
 
             setUniquechars([...new Set(activeUsers)])
-            console.log(uniqueChars,"uno")
+            console.log(uniqueChars, "uno")
         })
+
+        activeUsers.emit('offline', user.username)
         activeUsers.on('offline', function (offline) {
             console.log(offline, "offline")
         })
 
 
-         activeUsers.emit('login', { userId: user.id });
+        activeUsers.emit('login', { userId: user.id });
 
-// *******************************************************************//
-// console.log(io.sockets.sockets,"sockets list")
-// activeSocket.set('nickname', 'Guest');   
-// for (let socketId in activeSocket.sockets) {
-//     io.sockets.sockets[socketId].get('nickname', function(err, nickname) {
-//         console.log(nickname);
-//     });
-// }
- 
+        // *******************************************************************//
+        // console.log(io.sockets.sockets,"sockets list")
+        // activeSocket.set('nickname', 'Guest');   
+        // for (let socketId in activeSocket.sockets) {
+        //     io.sockets.sockets[socketId].get('nickname', function(err, nickname) {
+        //         console.log(nickname);
+        //     });
+        // }
+
     }, [messages]) //this will auto call when messaege length changes
 
     // const getMessages =()=>{ //this method when first time app render and every time the message.length chnages
@@ -160,9 +167,9 @@ function ChatForm() {
                     {user.username}
                 </div>
                 <div>
-                    <h3>Connected users</h3>
-                    <div>
-                       {/* {
+                <h4  >Online Users</h4>
+                    <div >
+                        {/* {
                        uniqueChars.map((e) => {
                             console.log(e,"e from uniq")
                             return(
@@ -170,21 +177,37 @@ function ChatForm() {
                             )
                         }) //if uniqueChars present take that or take a empty obj
                        } */}
+                      
+                       {/* <ul >
+                       <li> */}
+                       <div className="onlineusers">
                        {
- uniqueChars.filter((e)=> 
- 
-    e != user.username
-)
-                       }
-                      
-                      
+                            uniqueChars.filter((e) =>
+
+                                e != user.username
+                            )
+                        }
+                       </div>
+                       
+                       {/* </li>
+                       </ul> */}
+                       
                     </div>
-                    {/* {friendsList.map((ele) => {
-                    console.log(ele, "ele")
-                    return (
-                        <div>{ele.username}</div>
-                    )
-                         })} */}
+                    
+                    <h4>Offline Users</h4>
+                  
+                    {/* <ul  >
+                       <li> */}
+                        <div className="offlineusers">
+                        {
+                        friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
+                                            }
+                        </div>
+                    
+                  
+                  {/* </li>
+                       </ul> */}
+                       
 
                 </div>
 
