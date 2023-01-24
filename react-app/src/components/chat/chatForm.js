@@ -26,7 +26,7 @@ function ChatForm() {
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
-
+    console.log(uniqueChars, "uniquechars")
     // console.log(activeSocket,"activesocket value")
 
     // console.log(currentSocket,"currentsockert")
@@ -40,11 +40,11 @@ function ChatForm() {
 
     const friendsList = useSelector(state => Object.values(state.friendState))
     console.log(friendsList, "friendlist arra")
-    let friendArr=[]
-    friendsList.forEach((e)=>{
-friendArr.push(e.username)
+    let friendArr = []
+    friendsList.forEach((e) => {
+        friendArr.push(e.username)
     })
-    console.log(friendArr,"fri")
+    console.log(friendArr, "fri")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
@@ -167,7 +167,7 @@ friendArr.push(e.username)
                     {user.username}
                 </div>
                 <div>
-                <h4  >Online Users</h4>
+                    <h4  >Online Users</h4>
                     <div >
                         {/* {
                        uniqueChars.map((e) => {
@@ -177,37 +177,46 @@ friendArr.push(e.username)
                             )
                         }) //if uniqueChars present take that or take a empty obj
                        } */}
-                      
-                       {/* <ul >
-                       <li> */}
-                       <div className="onlineusers">
-                       {
-                            uniqueChars.filter((e) =>
 
-                                e != user.username
-                            )
-                        }
-                       </div>
-                       
-                       {/* </li>
+                        {/* <ul >
+                       <li> */}
+                        <div className="onlineusers">
+                            <ul>
+                                <li>
+                                {
+                                uniqueChars.filter((e) =>
+
+                                    e != user.username
+                                )
+                            }
+                                </li>
+                            </ul>
+                           
+                        </div>
+
+                        {/* </li>
                        </ul> */}
-                       
+
                     </div>
-                    
+
                     <h4>Offline Users</h4>
-                  
+
                     {/* <ul  >
                        <li> */}
-                        <div className="offlineusers">
+                    <div className="offlineusers">
+                    <ul>
+                                <li>
                         {
-                        friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
-                                            }
-                        </div>
-                    
-                  
-                  {/* </li>
+                            friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
+                        }
+                        </li>
+                            </ul>
+                    </div>
+
+
+                    {/* </li>
                        </ul> */}
-                       
+
 
                 </div>
 
