@@ -20,7 +20,7 @@ from .seeds import seed_commands
 
 from .config import Config
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../react-app/build', static_url_path='/')
 socketio = SocketIO(app, cors_allowed_origins="*") #SocketIO is being applied to ‘app’ and is later being stored in socketio variable which enables us to use socketio instead of app in running the application. socketio encapsulates startup of the web server, i.e. app.
 # CORS_ALLOWED_ORIGINS is the list of origins authorized to make requests.
 
@@ -211,3 +211,11 @@ def reply(message):
 # Run the App
 if __name__ == '__main__':
     socketio.run(app, debug=True) #debug=True enables to sort out the errors with ease.
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def react_root(path):
+    if path == 'favicon.ico':
+        return app.send_from_directory('public', 'favicon.ico')
+    return app.send_static_file('index.html')
