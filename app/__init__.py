@@ -96,7 +96,7 @@ def chat(receiverId):
     user = current_user.to_dict()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        print(form.data,"FORM DATA TO SEE WHAT IS GETTING PRINTED %%%%%%%%%%%%%%%")
+        # print(form.data,"FORM DATA TO SEE WHAT IS GETTING PRINTED %%%%%%%%%%%%%%%")
         # print(socketio.sid,"what is socket.sid ?????????????????????????????????")
         data = Chat(
             sender_Id = user['id'],
@@ -107,7 +107,7 @@ def chat(receiverId):
         db.session.add(data)
         db.session.commit()
     
-        print({"chat": data.to_dict_chat()})
+        # print({"chat": data.to_dict_chat()})
         return {"chat": data.to_dict_chat()}
     return form.errors
 
@@ -122,57 +122,45 @@ def allmessages():
 #To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
 
  
-# @socketio.on('connect',namespace="/")
-# def test_connect(data):
-#     # print(data,"data from frontend")
-#     global clients #global variable as it needs to be shared
-#     clients += 1
-#     # print('Client connected **************************************')
-#     # print(request.sid,"request.sid is generated???????????????????????????????????")
-#     # print((users),"users from connetct event")
-#     print(onlineUsers,"onlineUsers")
-#     emit('users',{'user_count':clients},broadcast=True)# emits a message with the user count anytime someone connects
-#     name = onlineUsers[data['username']]
+@socketio.on('connect',namespace="/")
+def test_connect():
+    # print(data,"data from frontend")
+    global clients #global variable as it needs to be shared
+    clients += 1
+    # print('Client connected **************************************')
+    # print(request.sid,"request.sid is generated???????????????????????????????????")
+    # print((users),"users from connetct event")
+    # print(onlineUsers,"onlineUsers")
+    emit('users',{'user_count':clients},broadcast=True)# emits a message with the user count anytime someone connects
+#     name = onlineUsers['username']
 #     emit('active',(onlineUsers),broadcast=True)
 
-# @socketio.on('active',namespace="/")
-# def active_users(data):
-#     # print(data , "data from frontend")
-#     # print(onlineUsers[data['username']],"check the onlineusers getting value")
-#     onlineUsers.append(data['username'])
-#     # print(onlineUsers,"onlineUSers")
-#     emit('activeUsers',(onlineUsers),broadcast=True)
+@socketio.on('active',namespace="/online")
+def active_users(data):
+    print(data , "data from frontend")
+    # print(onlineUsers[data['username']],"check the onlineusers getting value")
+    onlineUsers.append(data['username'])
+    print(onlineUsers,"onlineUSers")
+    emit('activeUsers',(onlineUsers),broadcast=True)
 
-# @socketio.on('offline',namespace="/")
-# def offline(data):
-#     print(data,"data from frontend") #{'username': 'Demo'} data from frontend
-#     # del onlineUsers[data['username']]
-#     print(onlineUSers,"deleting the user")
-#     emit('offlineusers',(onlineUsers),broadcast=True)
+@socketio.on('offline',namespace="/online")
+def offline(data):
+    print(data,"data from frontend") #{'username': 'Demo'} data from frontend
+    onlineUsers.remove(data)
+    # del onlineUsers['username']
+    print(onlineUsers,"deleting the user")
+    emit('offlineusers',(onlineUsers),broadcast=True)
 
 # @socketio.on('disconnect',namespace="/")
 # def test_disconnect():
+#     global clients
+#     clients -=1
 #     print('*******', request.sid)
 #     print(users,"users dict ****")
 #     #  {'Demo': 'jXdYmfatQGuh3R5VAAAK'} ******* q99jeFDPwo5Wij4tAAAC
 #     emit('users', {'user_count': clients}, broadcast=True)
 #     print('Client disconnected')
 
-# @socketio.event
-# def connect():
-#     print('connect ', request)
-#     print(users,"users dict ****")
-#     #  {'Demo': 'jXdYmfatQGuh3R5VAAAK'} ******* q99jeFDPwo5Wij4tAAAC
-#     # emit('users', {'user_count': clients}, broadcast=True)
-#     # print('Client disconnected')
-
-# @socketio.event
-# def disconnect():
-#     print('disconnect ', request.sid)
-#     print(users,"users dict ****")
-#     #  {'Demo': 'jXdYmfatQGuh3R5VAAAK'} ******* q99jeFDPwo5Wij4tAAAC
-#     # emit('users', {'user_count': clients}, broadcast=True)
-#     # print('Client disconnected')
 
 # const userList={}
 # @socketio.on('connection')
@@ -187,9 +175,8 @@ def get_users_sid(username):
 
 @socketio.on('privatemsg',namespace='/private')
 def private_msg(payload):
-    print("***********")
-    # print(current_user,"current user ******")
-    print(users,"users obj?????????????????????????????????????????????????????????????????????????????????????")
+    # print("***********")
+    # print(users,"users obj?????????????????????????????????????????????????????????????????????????????????????")
     # print(users[payload['username']] ,"find the recipient getting value ????????????")
     receiver_session_id = users[payload['username']] 
     # print(receiver_session_id,"receiver session id in backend ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
@@ -199,7 +186,7 @@ def private_msg(payload):
 
 @socketio.on('message')
 def reply(message):
-    print("SOMETHING ELSE &&&&&&&&&&&&&&&&&&&&&",message)
+    # print("SOMETHING ELSE &&&&&&&&&&&&&&&&&&&&&",message)
    
     emit('message',message)
 

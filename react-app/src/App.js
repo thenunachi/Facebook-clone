@@ -18,7 +18,7 @@ import NavBar from './components/Navbar/index'
 import EmojiPicker from 'emoji-picker-react';
 import EmojiReaction from './components/emoji';
 import ChatForm from './components/chat/chatForm';
-
+import Giphy from './components/Gify/giphy';
 
 
 function App() {
@@ -83,6 +83,10 @@ function App() {
         <ProtectedRoute path='/chat/:friendId'>
         <ChatForm/>
         </ProtectedRoute>
+
+        {/* <ProtectedRoute path='/chat/giphy'>
+        <Giphy/>
+        </ProtectedRoute> */}
       </Switch>
     </BrowserRouter>
   );

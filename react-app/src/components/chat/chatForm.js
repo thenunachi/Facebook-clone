@@ -3,19 +3,22 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Redirect } from "react-router-dom";
 import io from "socket.io-client";
+// import * as io from 'socket.io-client' 
 import { createNewMessage, allMessages } from "../../store/chatReducer"
 import { getUserList } from '../../store/friendReducer'
 import EmojiReaction from '../emoji'
 import './chat.css'
+import { Socket } from "socket.io";
+import GiphyReactions from '../Gify/giphy';
 
 let endpoint = "http://localhost:5000";
-let socket; //connect with server using socket.io
+// let socket; //connect with server using socket.io
 
 function ChatForm() {
     // console.log(receiver_Id,"receiver_ID")
     const dispatch = useDispatch();
     const history = useHistory();
-
+    // console.log(Socket.client(),"socket from io")
 
     // const [messages, setMessages] = useState([]); //array of messages
     const [messages, setMessages] = useState({});
@@ -24,32 +27,42 @@ function ChatForm() {
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
-    console.log(currentSocket, "currentsocket details")
+    const [gif, setGif] = useState(false)
+    // console.log(setGif,"setGif")
+    console.log(uniqueChars, "uniquechars")
+    // console.log(activeSocket,"activesocket value")
 
-    console.log(messages.length, "messages is array")
-    console.log(messages, "messages obj")
+    // console.log(currentSocket,"currentsockert")
+
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
-    console.log(chatBtwTwo, "chatBtwTwo")
+    // console.log(chatBtwTwo, "chatBtwTwo")
     const user = useSelector(state => state.session.user)
     let updatedValue = {}
 
     const friendsList = useSelector(state => Object.values(state.friendState))
     console.log(friendsList, "friendlist arra")
+    let friendArr = []
+    friendsList.forEach((e) => {
+        friendArr.push(e.username)
+    })
+    console.log(friendArr, "fri")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
 
     let activeUserCount
-    let arrayOfOnlineUsers
+    let countOfUsersOnline
     // let uniqueChars
     useEffect(async () => {
         await dispatch(allMessages())
         const userResponse = await dispatch(getUserList())
         const chatPartner = userResponse.users.find(user => user.id == friendId).username
+
         let private_socket = io("http://localhost:5000/private");
-        let activeUsers = io("http://localhost:5000/")
+        let activeUsers = io("http://localhost:5000/online")
+
         setCurrentSocket(private_socket);
         setActiveSocket(activeUsers)
 
@@ -86,10 +99,23 @@ function ChatForm() {
             console.log(offline, "offline")
         })
 
+        activeUsers.emit('offline', user.username)
+        activeUsers.on('offline', function (offline) {
+            console.log(offline, "offline")
+        })
 
         activeUsers.emit('login', { userId: user.id });
 
+        activeUsers.emit('login', { userId: user.id });
 
+        // *******************************************************************//
+        // console.log(io.sockets.sockets,"sockets list")
+        // activeSocket.set('nickname', 'Guest');   
+        // for (let socketId in activeSocket.sockets) {
+        //     io.sockets.sockets[socketId].get('nickname', function(err, nickname) {
+        //         console.log(nickname);
+        //     });
+        // }
 
     }, [messages]) //this will auto call when messaege length changes
 
@@ -147,23 +173,56 @@ function ChatForm() {
                     {user.username}
                 </div>
                 <div>
-                    <h3>Connected users</h3>
-                    <div>
-                        {
-                            uniqueChars.map((e) => {
-                                console.log(e, "e from uniq")
-                                return (
-                                    <div>{e}</div>
-                                )
-                            }) //if uniqueChars present take that or take a empty obj
-                        }
+                    <h4  >Online Users</h4>
+                    <div >
+                        {/* {
+                       uniqueChars.map((e) => {
+                            console.log(e,"e from uniq")
+                            return(
+                            <div>{e}</div>
+                            )
+                        }) //if uniqueChars present take that or take a empty obj
+                       } */}
+
+                        {/* <ul >
+                       <li> */}
+                        <div className="onlineusers">
+                            <ul>
+                                <li>
+                                    {
+                                        uniqueChars.filter((e) =>
+
+                                            e != user.username
+                                        )
+                                    }
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        {/* </li>
+                       </ul> */}
+
                     </div>
-                    {/* { {friendsList.map((ele) => {
-                    console.log(ele, "ele")
-                    return (
-                        <div>{ele.username}</div>
-                    )
-                         })} */}
+
+                    <h4>Offline Users</h4>
+
+                    {/* <ul  >
+                       <li> */}
+                    <div className="offlineusers">
+                        <ul>
+                            <li>
+                                {
+                                    friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
+                                }
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    {/* </li>
+                       </ul> */}
+
 
                 </div>
 
@@ -207,9 +266,27 @@ function ChatForm() {
                     value={newmessage}
                     name="message"
                     onChange={updateMessage}
-
+                // placeholder={<i class="fa-solid fa-gif"></i>}
                 />
+                <span>
+                    <span className="giffy">
+                        <i onClick={() => { setGif(true) }} class="fa-solid fa-camera-retro"></i>
+                         {/* <GiphyReactions/> */}
+                    </span>
+                </span>
+                
+                    {gif && < GiphyReactions
+                        onGifClick={(gif, e) => {
+                            console.log(gif, "gif")
+                            e.preventDefault()
+                            setGif(gif)
+                        }} />}
 
+
+
+
+
+                {/* for emoji feature */}
                 {/* <i onClick={() => { setShowEmoji(true) }} class="fa-regular fa-face-smile"></i>
             {showEmoji && <EmojiReaction userId={user.id} friendId={+friendId} />} */}
                 <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button>

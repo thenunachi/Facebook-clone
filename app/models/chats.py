@@ -1,10 +1,13 @@
-from .db import db
+# from .db import db
+from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import date
 
 class Chat(db.Model):
     __tablename__ = 'chats'
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
     id = db.Column(db.Integer,nullable=False,primary_key=True)
-    sender_Id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
+    sender_Id = db.Column(db.Integer,db.ForeignKey(add_prefix_for_prod('users.id')),nullable=False)
     receiver_Id = db.Column(db.Integer,nullable=False)
     message = db.Column(db.String(1000),nullable=False)
     # socketId = db.Column(db.String(500),nullable=False)
