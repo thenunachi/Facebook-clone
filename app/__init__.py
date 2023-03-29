@@ -30,7 +30,7 @@ login.login_view = 'auth.unauthorized'
 
 users={}
 clients = 0
-onlineUsers=[]
+onlineUsers={}
 userlist={}
 
 @login.user_loader
@@ -162,7 +162,11 @@ def offline(data):
 #     print('Client disconnected')
 
 
-    
+# const userList={}
+# @socketio.on('connection')
+# def active_users(socket):
+#     print('a user connected')
+
 
 @socketio.on('username',namespace='/private')
 def get_users_sid(username):

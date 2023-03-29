@@ -89,12 +89,14 @@ function ChatForm() {
         })
 
         activeUsers.emit('active', { username: user.username })
-
+        activeUsers.emit('offline', { username: user.username })
         activeUsers.on('activeUsers', function (activeUsers) {
             console.log(activeUsers, "activeUsers")
 
             setUniquechars([...new Set(activeUsers)])
-            console.log(uniqueChars, "uno")
+        })
+        activeUsers.on('offlineusers', function (offline) {
+            console.log(offline, "offline")
         })
 
         activeUsers.emit('offline', user.username)
@@ -102,6 +104,7 @@ function ChatForm() {
             console.log(offline, "offline")
         })
 
+        activeUsers.emit('login', { userId: user.id });
 
         activeUsers.emit('login', { userId: user.id });
 
