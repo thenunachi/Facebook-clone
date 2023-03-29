@@ -116,7 +116,8 @@
     /* width: 561px; */
     border-radius: 7px;
     height: 22px;
-    min-width: 95%;
+    min-width: 40%;
+    /* min-width: 95%; */
     margin-bottom: 12px;
 
 }
@@ -135,6 +136,12 @@ h2{
     display: flex;
     justify-content: center;
 }
+/* .giffy{
+    display: block;
+    border: solid 1px blue;
+    height: 10px;
+    width: 10px;
+} */
 /* .onlineusers{
     height: 15px;
     width: 15px;

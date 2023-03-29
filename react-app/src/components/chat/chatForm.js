@@ -9,6 +9,7 @@ import { getUserList } from '../../store/friendReducer'
 import EmojiReaction from '../emoji'
 import './chat.css'
 import { Socket } from "socket.io";
+import GiphyReactions from '../Gify/giphy';
 
 let endpoint = "http://localhost:5000";
 // let socket; //connect with server using socket.io
@@ -26,6 +27,8 @@ function ChatForm() {
     const [showEmoji, setShowEmoji] = useState(false);
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
+    const [gif, setGif] = useState(false)
+    // console.log(setGif,"setGif")
     console.log(uniqueChars, "uniquechars")
     // console.log(activeSocket,"activesocket value")
 
@@ -183,15 +186,15 @@ function ChatForm() {
                         <div className="onlineusers">
                             <ul>
                                 <li>
-                                {
-                                uniqueChars.filter((e) =>
+                                    {
+                                        uniqueChars.filter((e) =>
 
-                                    e != user.username
-                                )
-                            }
+                                            e != user.username
+                                        )
+                                    }
                                 </li>
                             </ul>
-                           
+
                         </div>
 
                         {/* </li>
@@ -204,13 +207,13 @@ function ChatForm() {
                     {/* <ul  >
                        <li> */}
                     <div className="offlineusers">
-                    <ul>
-                                <li>
-                        {
-                            friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
-                        }
-                        </li>
-                            </ul>
+                        <ul>
+                            <li>
+                                {
+                                    friendArr.filter((o) => uniqueChars.indexOf(o) === -1)
+                                }
+                            </li>
+                        </ul>
                     </div>
 
 
@@ -260,9 +263,27 @@ function ChatForm() {
                     value={newmessage}
                     name="message"
                     onChange={updateMessage}
-
+                // placeholder={<i class="fa-solid fa-gif"></i>}
                 />
+                <span>
+                    <span className="giffy">
+                        <i onClick={() => { setGif(true) }} class="fa-solid fa-camera-retro"></i>
+                         {/* <GiphyReactions/> */}
+                    </span>
+                </span>
+                
+                    {gif && < GiphyReactions
+                        onGifClick={(gif, e) => {
+                            console.log(gif, "gif")
+                            e.preventDefault()
+                            setGif(gif)
+                        }} />}
 
+
+
+
+
+                {/* for emoji feature */}
                 {/* <i onClick={() => { setShowEmoji(true) }} class="fa-regular fa-face-smile"></i>
             {showEmoji && <EmojiReaction userId={user.id} friendId={+friendId} />} */}
                 <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button>
