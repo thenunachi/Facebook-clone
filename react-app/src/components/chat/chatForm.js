@@ -270,7 +270,7 @@ function ChatForm() {
                 />
                 <span>
                     <span className="giffy">
-                        <i onClick={() => { setGif(true) }} class="fa-solid fa-camera-retro"></i>
+                        {/* <i onClick={() => { setGif(true) }} class="fa-solid fa-camera-retro"></i> */}
                          {/* <GiphyReactions/> */}
                     </span>
                 </span>
