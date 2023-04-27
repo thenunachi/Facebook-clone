@@ -206,7 +206,7 @@ const postdeleteUpdate = (post, dispatch, history, userId) => {
 const postperuser = (post, dispatch, history, user, likesCount) => {
   return (
     <div className="perPost">
-
+      
       <span className="user">{post.owner.username}:
         {post.owner_Id == user.id && postdeleteUpdate(post, dispatch, history, post.owner_Id)}
       </span>
