@@ -72,7 +72,7 @@ if(response.ok){
 //CREATE A POST
 
 export const createPostThunk = (data) => async dispatch =>{
-    console.log("DATA**********",data)
+    // console.log("DATA**********",data)
     const response = await fetch(`/api/posts/`,{
         method : 'POST',
         headers : { "Content-Type": "application/json" },

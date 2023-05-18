@@ -13,6 +13,7 @@ import UpdatePostModal from "../userPostdetails/updatePostModal";
 import '../userPostdetails/createpostmodal.css'
 import '../userPostdetails/updatepostmodal.css'
 import { likesThunk, createThunk, removeThunk as removeLikeThunk } from '../../store/likeReducer'
+import { allimagesThunk } from '../../store/imageReducer'
 import { getUserList } from '../../store/friendReducer'
 import ChatForm from "../chat/chatForm";
 import { allMessages, createNewMessage } from '../../store/chatReducer'
@@ -26,24 +27,22 @@ function AllPosts() {
   const postArr = useSelector(state => Object.values(state.postState))
   const commentArr = useSelector(state => Object.values(state.commentState))
   const likesPerPost = useSelector(state => (state.likeState))
-  console.log(likesPerPost, "likesperpost")
-  //  console.log(postArr, "postArr")
+  const imagesPerPost = useSelector(state => (state.imageState))
+  console.log(imagesPerPost, "imagesPerPost 1")
 
   const user = useSelector(state => state.session.user)
 
   const friendsList = useSelector(state => Object.values(state.friendState))
-  console.log(friendsList, "FriendList details")
-
-  // console.log(like,"like")
+  
   useEffect(async () => {
 
     dispatch(getUserList())
     const { posts } = await dispatch(getAllPostsThunk())
-    // console.log(posts, "")
+  
     posts.forEach((e) => {
       dispatch(getAllCommentsThunk(e.id))
       dispatch(likesThunk(e.id))
-
+      dispatch(allimagesThunk(e.id))
     }
     )
 
@@ -57,7 +56,7 @@ function AllPosts() {
         <div className="rightlist">
           <h2> FriendList</h2>
           {friendsList.map((friend) => {
-            console.log("user information", friend.id)
+            // console.log("user information", friend.id)
             return (
               <div className="chatform" onClick={() => {
                 return history.push({
@@ -83,20 +82,24 @@ function AllPosts() {
         <div className="postdiv">
           {
             postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
+            // postArr.sort((a, b) => a.id - b.id).map((post, idx) => {
               const likesForPost = likesPerPost[post.id] || [];
-              console.log(likesPerPost[post.id], "likesPerPost[post.id]")
-              console.log(likesForPost, "likesforPost")
-              console.log(post, "post details to know username")
-              // console.log(post.likes + count, 'post likes count')
+              const imageForPost = imagesPerPost[post.id] || [];
+              //  console.log(imageForPost,"post per image")
+              //  console.log(post.id,"post.id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+              // console.log(postArr,"postArr")
               return (
                 <div className="singlepost">
                   <div>
-                    {postperuser(post, dispatch, history, user, likesForPost.length)}
+                    {postperuser(post, dispatch, history, user, likesForPost.length,imageForPost)}
 
                     {
                       likeButton(likesForPost, user.id, post.id, dispatch, history)
 
                     }
+                    {/* {
+                      images(imageForPost, user.id, post.id, dispatch, history)
+                    } */}
                   </div>
 
 
@@ -148,7 +151,7 @@ function AllPosts() {
 }
 
 const showChat = (id) => {
-  console.log("show chat form")
+  // console.log("show chat form")
   return (
     <ChatForm friendId={id} />
   )
@@ -203,7 +206,7 @@ const postdeleteUpdate = (post, dispatch, history, userId) => {
 
 }
 
-const postperuser = (post, dispatch, history, user, likesCount) => {
+const postperuser = (post, dispatch, history, user, likesCount,imageForPost) => {
   return (
     <div className="perPost">
 
@@ -218,49 +221,39 @@ const postperuser = (post, dispatch, history, user, likesCount) => {
         <span>{post.longText}  </span>
 
       </div>
+      <div>
+      {
+                      images(imageForPost, user.id, post.id, dispatch, history)
+                    }
+      </div>
       <div>count:{likesCount}</div>
 
-      {/* {
-        !likeArr.includes(user.id) &&
-        <button className="like" onClick={async (event) => {
-          console.log(post, "post of like button")
-          event.preventDefault()
-          const payload = { user_Id: user.Id, post_Id: post.id }
-          console.log(payload, "payload for likes thunk")
-          await dispatch(createThunk(payload))
-          await dispatch(likesThunk(post.id))
-          // console.log(dispatch(likesThunk(payload)), "get all likes of post")
-
-        }
-        } >
-          <i class="fa-solid fa-thumbs-up"></i>
-        </button>} */}
-
-
-      {/* {
-        likeArr.map((e) => {
-          console.log(e, "e")
-          console.log(e.id, "e^^^^^^^^")
-          return (
-            (e.post_Id == post.id) && <button onClick={async (event) => {
-              event.preventDefault()
-              await dispatch(removeLikeThunk(e.id))
-            }} ><i class="fa-solid fa-thumbs-down"></i></button>
-
-          )
-
-        }
-        )
-
-      } */}
     </div >
   )
 }
-
+const images = (imagesArr, userId, postId, dispatch, history) => {
+  // console.log(postId, "postId&&&&&&&&&&&&") //4,3,2,1
+  // console.log(imagesArr, "imageArr ###############")
+  let imageOfPost = imagesArr.find((e) =>
+    // console.log(e,"e  ****************")
+    e.post_Id == postId
+  )
+  // console.log(imageOfPost, "imageOfPost*********")
+  return (
+    <div className="images">
+      {imageOfPost &&
+     
+        <div>
+          <img src={imageOfPost.image_url} />
+        </div>
+      }
+    </div>
+  )
+}
 const likeButton = (likeArr, userId, postId, dispatch, history) => {
   let idOfLike = likeArr.find(e => e.user_Id == userId)
-  console.log(idOfLike, "idOfLike")
-  console.log(likeArr, "likeArr from like button func")
+  // console.log(idOfLike, "idOfLike")
+  // console.log(likeArr, "likeArr from like button func")
   if (!idOfLike) {
     // console.log(like,"likeArr from likes func")
     return (
@@ -270,7 +263,7 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
         // console.log(post, "post of like button")
         event.preventDefault()
         const payload = { user_Id: userId, post_Id: postId }
-        console.log(payload, "payload for likes thunk")
+        // console.log(payload, "payload for likes thunk")
         await dispatch(createThunk(payload))
         await dispatch(likesThunk(postId))
         // console.log(dispatch(likesThunk(payload)), "get all likes of post")

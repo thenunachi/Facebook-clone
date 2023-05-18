@@ -4,17 +4,9 @@ import logging
 from logging.config import fileConfig
 
 from flask import current_app
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 
 from alembic import context
 
-
-# add new import and environment variable
-import os
-environment = os.getenv("FLASK_ENV")
-SCHEMA = os.environ.get('SCHEMA')
-# ...
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -79,12 +71,8 @@ def run_migrations_online():
                 directives[:] = []
                 logger.info('No changes in schema detected.')
 
-    # connectable = current_app.extensions['migrate'].db.get_engine()
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix='sqlalchemy.',
-        poolclass=pool.NullPool,
-    )
+    connectable = current_app.extensions['migrate'].db.get_engine()
+
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
@@ -92,23 +80,10 @@ def run_migrations_online():
             process_revision_directives=process_revision_directives,
             **current_app.extensions['migrate'].configure_args
         )
-        # Create a schema (only in production)
-        if environment == "production":
-            connection.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")
 
-        # with context.begin_transaction():
-        #     context.run_migrations()
-        # Set search path to your schema (only in production)
         with context.begin_transaction():
-            if environment == "production":
-                context.execute(f"SET search_path TO {SCHEMA}")
             context.run_migrations()
-def upgrade():
-    # ... logic to create tables
 
-    if environment == "production":
-        op.execute(f"ALTER TABLE <table_name> SET SCHEMA {SCHEMA};")
-        #  add an ALTER TABLE command here for each table created in the file
 
 if context.is_offline_mode():
     run_migrations_offline()

@@ -2,7 +2,7 @@ from flask import Blueprint, request, redirect
 from app.forms.comment_form import CommentForm
 from sqlalchemy import desc ,asc
 from app.forms.post_form import EditPostForm, PostForm
-from ..models import Post,Comment,db,Like
+from ..models import Post,Comment,db,Like,Image
 from flask_login import current_user
 
 post_routes = Blueprint('posts',__name__)
@@ -12,7 +12,7 @@ post_routes = Blueprint('posts',__name__)
 def get_all_posts():
      all_posts = Post.query.all()
      
-     # print("******************************POST", all_posts)
+     print("******************************POST", all_posts)
      return {'posts':[p.to_dict_relationship() for p in all_posts]}
 
 
@@ -102,8 +102,8 @@ def create_comment(postId):
 @post_routes.route('/<int:postId>/likes')
 def get_all_likes_perPost(postId):
      likes = Like.query.filter(Like.post_Id == postId)
-     print(likes,"likes ######")
-     print(likes.count(),"****************************************************")
+     # print(likes,"likes ######")
+     # print(likes.count(),"****************************************************")
      return {"likes": [ l.to_dict() for l in likes]}
      
 
@@ -121,3 +121,20 @@ def setLike(postId):
     return {'likes': data.to_dict()}
 
 
+@post_routes.route('/<int:postId>/images')
+def get_all_images_perPost(postId):
+     images = Image.query.filter(Image.post_Id == postId)
+     print(images,"all images ######")
+     # print(likes.count(),"****************************************************")
+     return {"images": [ l.to_dict_rel() for l in images]}
+
+@post_routes.route('/<int:postId>/images',methods=["POST"])
+def createImage(postId):
+    user = current_user.to_dict()
+    data = Image(
+        user_Id = user['id'],
+        post_Id = postId
+    )
+    db.session.add(data)
+    db.session.commit()
+    return {'images': data.to_dict_rel()}

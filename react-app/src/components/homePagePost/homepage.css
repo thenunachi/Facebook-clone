@@ -108,3 +108,7 @@ Link{
  .like{
    cursor: pointer
  }
+
+ .images{
+   border: solid 5px black;
+ }

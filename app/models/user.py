@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
     comments = db.relationship('Comment', back_populates='users', cascade='all, delete')
     chats = db.relationship('Chat', back_populates ='users',cascade='all,delete')
     likes = db.relationship('Like',back_populates ='user')
-    
+    images = db.relationship('Image',back_populates = 'user')
     @property
     def password(self):
         return self.hashed_password
