@@ -8,7 +8,7 @@ import girl from './girl.png'
 import random1 from './random 1.png'
 import random2 from './random 2.png'
 import random3 from './random 3.png'
-import { deleteCommentThunk,getAllCommentsThunk, loadPostCommentsThunk, updateCommentThunk, createCommentThunk } from '../../store/commentReducer'
+import { deleteCommentThunk, getAllCommentsThunk, loadPostCommentsThunk, updateCommentThunk, createCommentThunk } from '../../store/commentReducer'
 import { getAllPostsThunk, getPostsByUserIdThunk, removePostThunk, updatePostThunk, createPostThunk } from "../../store/postReducer";
 import { allimagesThunk } from '../../store/imageReducer'
 import chat from './chat.png'
@@ -57,15 +57,15 @@ export const UserSpotDetail = () => {
 
   return (
     <div>
-      <div className="divided">
-      <span className="profile">
-      {profile(imageObject, user.username)}</span>
-      <span className="profilePage">
-      <div className="personal">Welcome to {user.username}'s profile page </div>
-      </span>
-      </div>
-      
-      
+
+      {/* <span className="profile">
+      {profile(imageObject, user.username)}</span> */}
+
+      <h1 className="personal">Welcome to {user.username}'s profile page </h1>
+
+
+
+
       {/* <div className="left">
 
         <div className="house">
@@ -76,69 +76,86 @@ export const UserSpotDetail = () => {
       </div> */}
       <div className="right">
         <div className="addPost">
-               <div className="innerDiv">
+          <div className="innerDiv">
 
             {<AddPostModal />}
           </div>
         </div>
         <div className="allposts">{
-          allPosts.sort((a,b)=>b.id - a.id).map((post) => {
+          allPosts.sort((a, b) => b.id - a.id).map((post) => {
             // console.log(post, "post details")
             const likesForPost = likesPerPost[post.id] || [];
-              const imageForPost = imagesPerPost[post.id] || [];
+            const imageForPost = imagesPerPost[post.id] || [];
             // console.log(element, "%%%%%%%%%%%%%%%%%%%ELEMENT OF ALLPOST MAP FUNC")
             return (
-              <div className="eachPost"> 
-              <span className="separateDiv">
-              {checkImage(imageObject, post.owner.username)}{post.owner.username}:
-              {isUserPostOwner(post,user)&&
-                  <button className="deletePostButton" onClick={async (event) => {
-                    event.preventDefault()
-                
-                    await dispatch(removePostThunk(post.id))
-                    await dispatch((getPostsByUserIdThunk(userId)))
-                    return history.push(`/users/${userId}/posts`)
-                  }}>
-                    <i class="fa-solid fa-trash"></i>
+              <div className="eachPost">
+                <div className="postDetails">
+                <span className="separateDiv">
+                  {checkImage(imageObject, post.owner.username)}
+                  <span className="username"> {post.owner.username}:</span>
 
-                  </button>}
 
-                {isUserPostOwner(post,user)&&
-                  <UpdatePostModal post={post} />
+                </span>
+                <div className="postspan">
+                  <span>
+                    {/* <img className="posticon" src={posticon} /> */}
+                  </span>
+                  <span className="text">{post.longText}</span>
+                  {isUserPostOwner(post, user) &&
+                    <button className="deletePostButton" onClick={async (event) => {
+                      event.preventDefault()
 
-                }
-                {
-                      likeButton(likesForPost, user.id, post.id, dispatch, history)
+                      await dispatch(removePostThunk(post.id))
+                      await dispatch((getPostsByUserIdThunk(userId)))
+                      return history.push(`/users/${userId}/posts`)
+                    }}>
+                      <i class="fa-solid fa-trash"></i>
 
-                    }
-              </span>
-              <div className="postspan">
-                <span>
-              {/* <img className="posticon" src={posticon} /> */}
-              </span> 
-              <span>{post.longText}</span>
+                    </button>}
+
+                  {isUserPostOwner(post, user) &&
+                    <UpdatePostModal post={post} />
+
+                  }
+                  {
+                    images(imageForPost, user.id, post.id, dispatch, history)
+                  }
+                  {
+                    likeButton(likesForPost, user.id, post.id, dispatch, history)
+
+                  }
+                   <div>count:{likesForPost.length}</div>
+                  </div>
                 </div>
-              
-   
-                
-                
+
+
+
+
                 <div className="commentsDiv">{
                   //  allComments.sort((a,b)=>b.id - a.id)
-                  allComments.sort((a,b)=>b.id - a.id).map((element) => {
-                    
-                   console.log(element,"details of comments")
-                    return ((element.post_Id == post.id)&&
+                  allComments.sort((a, b) => b.id - a.id).map((element) => {
+
+                    console.log(element, "details of comments")
+                    return ((element.post_Id == post.id) &&
                       <div className="eachcomment">
                         <div className="trashbuttons">
                           <span className="commentUser">
-                          {checkImage(imageObject, element.users.username)}{element.users.username}:
-                        </span>
-                          {(element.user_Id == userId)&&<span className="common-button">
+                            {checkImage(imageObject, element.users.username)}
+                            <span className="username">{element.users.username}:</span>
+                          </span>
+                          
+                        </div>
+                        <div className="tab">
+                          {/* <span><img className="chat" src={chat} /></span> */}
+                          <span>
+                            {/* <i class="fa-brands fa-rocketchat"></i> */}
+                            {element.commentText}</span>
+                            {(element.user_Id == userId) && <span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
                               await dispatch(deleteCommentThunk(element.id))
                               await dispatch((loadPostCommentsThunk(element.post_Id)))
-                               return history.push(`/users/${userId}/posts`)
+                              return history.push(`/users/${userId}/posts`)
                             }}>
                               <i class="fa-solid fa-trash"></i>
 
@@ -146,21 +163,15 @@ export const UserSpotDetail = () => {
                           </span>}
 
                           <div className="editEachcomment">
-                            {(element.user_Id == userId)&&
+                            {(element.user_Id == userId) &&
                               <span>
-                               
+
                                 <UpdatecommentModal comment={element} />
                               </span>
                             }
 
                           </div>
                         </div>
-                        <div className="tab">
-                          {/* <span><img className="chat" src={chat} /></span> */}
-                          <span>
-                            {/* <i class="fa-brands fa-rocketchat"></i> */}
-                            {element.commentText}</span>
-                          </div>
 
                       </div>
 
@@ -168,10 +179,10 @@ export const UserSpotDetail = () => {
                   })
                 }
 
-              
+
                 </div>
                 <div className="createComment">{
-                 
+
                   <div className="createEachcomment">
                     {
                       <div>
@@ -180,7 +191,7 @@ export const UserSpotDetail = () => {
                     }
 
                   </div>
-                  
+
                 }
                 </div>
               </div>
@@ -202,8 +213,8 @@ export const UserSpotDetail = () => {
 
 
 }
-const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
-const isUserCommentOwner = (comment,user) => comment && user && comment.user_Id == user.id
+const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id
+const isUserCommentOwner = (comment, user) => comment && user && comment.user_Id == user.id
 // const commentsPerPost = (comment,post)=> post  && comment.post_Id == post.id
 
 
@@ -218,7 +229,7 @@ const images = (imagesArr, userId, postId, dispatch, history) => {
   return (
     <div >
       {imageOfPost &&
-     
+
         <div>
           <img className="images" src={imageOfPost.image_url} />
         </div>
@@ -280,15 +291,4 @@ const checkImage = (imageObject, username) => {
   }
 }
 
-const profile = (imageObject, username) => {
-  console.log(imageObject, username, "%%%%%%%username")
-  for (const key in imageObject) {
-    if (key == username) {
-      return (
-        <span>
-          <img className="toppic" src={imageObject[key]} />
-        </span>
-      )
-    }
-  }
-}
+
