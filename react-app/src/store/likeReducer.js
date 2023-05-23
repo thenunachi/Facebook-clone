@@ -26,7 +26,7 @@ const removeLike = (id) => {
 
 export const likesThunk = (postId) => async dispatch => {
     const response = await fetch(`/api/posts/${postId}/likes`)
-    console.log(response, "response")
+    // console.log(response, "response")
     if (response.ok) {
         const data = await response.json();
         // console.log(data, "before data")

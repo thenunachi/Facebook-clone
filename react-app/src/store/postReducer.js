@@ -78,7 +78,7 @@ export const createPostThunk = (data) => async dispatch =>{
         headers : { "Content-Type": "application/json" },
         body : JSON.stringify(data)
     })
-    console.log(response,"CREATED POST THUNK RESPONSE")
+    // console.log(response,"CREATED POST THUNK RESPONSE")
     if(response.ok){
         const postResponse = await response.json();
         dispatch(addOnePost(postResponse.post))

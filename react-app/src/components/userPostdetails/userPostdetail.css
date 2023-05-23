@@ -116,7 +116,7 @@
         margin-right: 4px;
 }
 .personal{
-    margin-left: 421px;
+    /* margin-left: 421px; */
     color: #2374E1;   
 }
 .deletePostButton{
@@ -149,4 +149,23 @@
 .postspan{
     display: flex;
     align-items: center;
+ }
+
+ .toppic{
+    width: 519px;
+ }
+ .profile{
+    float: left;
+ }
+ .profilePage{
+    float: right;
+    margin-top: 189px;
+    margin-right: 403px;
+
+
+ }
+ .divided{
+    border: 5px solid black;
+    height: 527px;
+
  }

@@ -4,6 +4,10 @@ from sqlalchemy import desc ,asc
 from app.forms.post_form import EditPostForm, PostForm
 from ..models import Post,Comment,db,Like,Image
 from flask_login import current_user
+from app.forms.image_form import ImageForm
+
+
+
 
 post_routes = Blueprint('posts',__name__)
 
@@ -65,11 +69,24 @@ def update_post(postId):
 @post_routes.route('/<int:postId>',methods=["DELETE"])
 def delete_post(postId):
      selected_post = Post.query.get(postId)
+     noImage = Image.query.get(postId)
      if selected_post:
           db.session.delete(selected_post)
           db.session.commit()
           return{"message": "Post has been removed"}
-     return { 'message': "This post does not exist"}
+     if noImage:
+          db.session.delete(noImage)
+          db.session.commit()
+          return{"message": "Image has been removed"}
+     return { 'message': "This post and image does not exist"}
+     
+    
+
+
+
+
+
+
 
 #Get all comments for posts
 @post_routes.route('/<int:postId>/comments')
@@ -131,10 +148,13 @@ def get_all_images_perPost(postId):
 @post_routes.route('/<int:postId>/images',methods=["POST"])
 def createImage(postId):
     user = current_user.to_dict()
+    form = ImageForm()
     data = Image(
         user_Id = user['id'],
-        post_Id = postId
+        post_Id = postId,
+        image_url = form.data['image_url']
     )
+    print(data,"data from image Def %%%%%%%%%%%%%%%%%%%%%%%%%%")
     db.session.add(data)
     db.session.commit()
     return {'images': data.to_dict_rel()}
