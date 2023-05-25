@@ -23,6 +23,7 @@ import { allimagesThunk, deleteImageThunk } from '../../store/imageReducer'
 import { getUserList } from '../../store/friendReducer'
 import ChatForm from "../chat/chatForm";
 import { allMessages, createNewMessage } from '../../store/chatReducer'
+const random = [random1, random2, random3]
 
 function AllPosts() {
   const dispatch = useDispatch()
@@ -46,6 +47,8 @@ function AllPosts() {
   // console.log(imageObject, "imageObject")
 
 
+
+  console.log(random, "random")
   useEffect(async () => {
 
     dispatch(getUserList())
@@ -75,8 +78,8 @@ function AllPosts() {
                   pathname: `/chat/${friend.id}`,
                   // state:{receiver_Id : friend.id}
                 })
-              }}>{checkImage(imageObject, friend.username)} {        }
-              <span className="Friendname">{friend.username}</span>
+              }}>{checkImage(imageObject, friend.username)}
+                <span className="Friendname">{friend.username}</span>
 
               </div>
             )
@@ -122,10 +125,10 @@ function AllPosts() {
                       return ((comment.post_Id == post.id) &&
                         <div className="perComment">
                           <span className="showButton">
-                            
-                              {checkImage(imageObject, comment.users.username)} 
-                              <span>{comment.users.username}: </span>
-                           
+
+                            {checkImage(imageObject, comment.users.username)}
+                            <span>{comment.users.username}: </span>
+
                             {(comment.user_Id == user.id) && deleteUpdateComment(comment, dispatch, history)}
                           </span>
 
@@ -230,18 +233,18 @@ const postperuser = (post, dispatch, history, user, likesCount, imageForPost, im
     <div className="perPost">
 
       <span className="user">
-     {checkImage(imageObject, post.owner.username)}   
+        {checkImage(imageObject, post.owner.username)}
         <span className="username">   {post.owner.username} :</span>
 
       </span>
-     
+
       <div className="posttext">
         {/* <span>
           <img className="posticon" src={posticon} />
         </span> */}
 
         <span className="leftE">{post.longText}  </span>
-        <span className="rightE">{post.owner_Id == user.id && postdeleteUpdate(post, dispatch, history, post.owner_Id)}</span> 
+        <span className="rightE">{post.owner_Id == user.id && postdeleteUpdate(post, dispatch, history, post.owner_Id)}</span>
 
       </div>
       <div>
@@ -318,7 +321,8 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
 }
 
 const checkImage = (imageObject, username) => {
-  console.log(imageObject, username, "%%%%%%%username")
+  // console.log(imageObject, username, "%%%%%%%username")
+  const isUsernameNotInObjectKeys = Object.keys(imageObject).indexOf(username) === -1;
   for (const key in imageObject) {
     if (key == username) {
       return (
@@ -327,8 +331,30 @@ const checkImage = (imageObject, username) => {
         </span>
       )
     }
+    else {
+      let image = randomImage(random)
+
+      if (isUsernameNotInObjectKeys) {
+        // console.log(username,isUsernameNotInObjectKeys,"isUsernamenotin keys")
+        imageObject[username] = image
+        // console.log(imageObject, "objectImage")
+        return (
+          <span>
+            <img className="logoPic" src={imageObject[username]} />
+          </span>
+        )
+      }
+    }
   }
 }
 
+const randomImage = (obj) => {
+  if (obj === undefined || obj === null) {
+    return null;
+  }
+  let keys = Object.keys(obj)
+
+  return obj[keys[keys.length * Math.random() << 0]];
+}
 
 export default AllPosts

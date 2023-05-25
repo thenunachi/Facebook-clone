@@ -19,6 +19,7 @@ import UpdatePostModal from "./updatePostModal";
 import AddCommentModal from "./createcommentmodal";
 import UpdatecommentModal from './updateCommentModal'
 import { likesThunk, createThunk, removeThunk as removeLikeThunk } from '../../store/likeReducer'
+const random = [random1, random2, random3]
 
 export const UserSpotDetail = () => {
   const history = useHistory();
@@ -279,7 +280,8 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
 }
 
 const checkImage = (imageObject, username) => {
-  console.log(imageObject, username, "%%%%%%%username")
+  // console.log(imageObject, username, "%%%%%%%username")
+  const isUsernameNotInObjectKeys = Object.keys(imageObject).indexOf(username) === -1;
   for (const key in imageObject) {
     if (key == username) {
       return (
@@ -288,7 +290,31 @@ const checkImage = (imageObject, username) => {
         </span>
       )
     }
+    else {
+      let image = randomImage(random)
+
+      if (isUsernameNotInObjectKeys) {
+        // console.log(username,isUsernameNotInObjectKeys,"isUsernamenotin keys")
+        imageObject[username] = image
+        // console.log(imageObject, "objectImage")
+        return (
+          <span>
+            <img className="logoPic" src={imageObject[username]} />
+          </span>
+        )
+      }
+    }
   }
 }
+
+const randomImage = (obj) => {
+  if (obj === undefined || obj === null) {
+    return null;
+  }
+  let keys = Object.keys(obj)
+
+  return obj[keys[keys.length * Math.random() << 0]];
+}
+
 
 
