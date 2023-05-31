@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, Link } from "react-router-dom";
 import "./homepage.css"
@@ -11,6 +11,12 @@ import girl from './girl.png'
 import random1 from './random 1.png'
 import random2 from './random 2.png'
 import random3 from './random 3.png'
+import random4 from './cleaner.png'
+import random5 from './guarani.png'
+import random6 from './nutritionist.png'
+import random7 from './profile.png'
+import random8 from './woman2.png'
+import random9 from './woman3.png'
 import { loadPostCommentsThunk, loadUserComments, getAllCommentsThunk, deleteCommentThunk } from '../../store/commentReducer'
 import AddPostModal from '../userPostdetails/createPostModal.js'
 import AddCommentModal from "../userPostdetails/createcommentmodal";
@@ -23,7 +29,7 @@ import { allimagesThunk, deleteImageThunk } from '../../store/imageReducer'
 import { getUserList } from '../../store/friendReducer'
 import ChatForm from "../chat/chatForm";
 import { allMessages, createNewMessage } from '../../store/chatReducer'
-const random = [random1, random2, random3]
+const random = [random1, random2, random3,random4,random5,random6,random7,random8,random9]
 
 function AllPosts() {
   const dispatch = useDispatch()
@@ -37,13 +43,17 @@ function AllPosts() {
   const imagesPerPost = useSelector(state => (state.imageState))
   const user = useSelector(state => state.session.user)
   const friendsList = useSelector(state => Object.values(state.friendState))
+const [imageObject,setImageObject] = useState( {
+  Demo: `${man}`,
+  marnie: `${woman}`,
+  bobbie: `${girl}`
+})
 
-
-  const imageObject = {
-    Demo: `${man}`,
-    marnie: `${woman}`,
-    bobbie: `${girl}`
-  }
+  // const imageObject = {
+  //   Demo: `${man}`,
+  //   marnie: `${woman}`,
+  //   bobbie: `${girl}`
+  // }
   // console.log(imageObject, "imageObject")
 
 
@@ -63,6 +73,13 @@ function AllPosts() {
 
   }, [dispatch])
 
+  const onClickChat = useCallback((friend)=>{
+    return history.push({
+      pathname: `/chat/${friend.id}`,
+      // state:{receiver_Id : friend.id}
+    });
+  }, [imageObject]
+  )
 
   return (
     <div>
@@ -73,12 +90,15 @@ function AllPosts() {
           {friendsList.map((friend) => {
             console.log("friend", friend)
             return (
-              <div className="chatform" onClick={() => {
-                return history.push({
-                  pathname: `/chat/${friend.id}`,
-                  // state:{receiver_Id : friend.id}
-                })
-              }}>{checkImage(imageObject, friend.username)}
+              <div className="chatform" onClick={ 
+                onClickChat(friend)
+              //   () => {
+              //   return history.push({
+              //     pathname: `/chat/${friend.id}`,
+              //     // state:{receiver_Id : friend.id}
+              //   })
+              // }
+              }>{checkImage(imageObject, friend.username)}
                 <span className="Friendname">{friend.username}</span>
 
               </div>

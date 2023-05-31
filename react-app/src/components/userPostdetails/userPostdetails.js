@@ -8,6 +8,12 @@ import girl from './girl.png'
 import random1 from './random 1.png'
 import random2 from './random 2.png'
 import random3 from './random 3.png'
+import random4 from './cleaner.png'
+import random5 from './guarani.png'
+import random6 from './nutritionist.png'
+import random7 from './profile.png'
+import random8 from './woman2.png'
+import random9 from './woman3.png'
 import { deleteCommentThunk, getAllCommentsThunk, loadPostCommentsThunk, updateCommentThunk, createCommentThunk } from '../../store/commentReducer'
 import { getAllPostsThunk, getPostsByUserIdThunk, removePostThunk, updatePostThunk, createPostThunk } from "../../store/postReducer";
 import { allimagesThunk } from '../../store/imageReducer'
@@ -19,7 +25,7 @@ import UpdatePostModal from "./updatePostModal";
 import AddCommentModal from "./createcommentmodal";
 import UpdatecommentModal from './updateCommentModal'
 import { likesThunk, createThunk, removeThunk as removeLikeThunk } from '../../store/likeReducer'
-const random = [random1, random2, random3]
+const random = [random1, random2, random3,random4,random5,random6,random7,random8,random9]
 
 export const UserSpotDetail = () => {
   const history = useHistory();
