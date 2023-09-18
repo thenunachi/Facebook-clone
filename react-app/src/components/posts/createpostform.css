@@ -38,11 +38,23 @@
     margin-left: 34px;
 }
 .post-textbox{
-    width: 271px;
+    width: 326px;
     margin-left: 31px;
     border-radius: 10px;
     margin-top: 51px;
 }
-.h2{
-    margin-left: 105px;
+.urlInput{
+    width: 326px;
+    margin-left: 27px;
+    border-radius: 4px;
+    margin-top: 24px;
+}
+.error{
+    border: 1px solid #e97a7a;
+    background-color: #f7bad6;
+    width: 326px;
+    margin-left: 27px;
+    border-radius: 4px;
+    margin-top: 24px;
+
 }

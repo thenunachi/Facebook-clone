@@ -108,7 +108,7 @@ export const deleteCommentThunk = (commentId)=>async dispatch=>{
 
 //update a comment
 export const updateCommentThunk = (data)=>async dispatch =>{
-    console.log(data,"data of updatethunk")
+    // console.log(data,"data of updatethunk")
     const {id} = data //3
     // console.log("id inside update thunk",id)
     const response = await fetch(`/api/comments/${id}`,{
@@ -116,7 +116,7 @@ export const updateCommentThunk = (data)=>async dispatch =>{
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     });
-    console.log(response,"response")
+    // console.log(response,"response")
     if(response.ok){
         const updateComment = await response.json();
         // console.log(updateComment,"UPDATECOMMENT")

@@ -12,7 +12,7 @@
 
 }
 .addPostButton{
-    width: 224px;
+    width: 326px;
     /* margin-left: 6px; */
     height: 37px;
     /* margin: 8px; */
@@ -20,8 +20,9 @@
     background-color: #2374E1;
     color: white;
     margin-top: 34px;
-    margin-left: 40px;
+    margin-left: 29px;
     cursor: pointer;
+
 }
 .cancelButton{
     cursor: pointer;
@@ -38,7 +39,7 @@
     margin-left: 6px;
 }
 .post-textbox{
-    width: 271px;
+    width: 326px;
     margin-left: 27px;
     border-radius: 10px;
     margin-top: 51px;

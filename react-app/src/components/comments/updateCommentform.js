@@ -16,12 +16,8 @@ function UpdateCommentForm({setShowModal,comment}) {
   //   const [show, setShow] = useState(false);
 
   const updateComments = (e) => setCommentText(e.target.value);
-
   let allPost = useSelector(state => Object.values(state.postState));
-
   let allComments = useSelector(state => Object.values(state.commentState));
-
-
   let user = useSelector(state => state.session.user);
   const [commentText, setCommentText] = useState(comment.commentText);
   const [validations, setValidations] = useState([])

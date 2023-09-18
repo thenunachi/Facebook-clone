@@ -5,7 +5,7 @@
     padding: 10px;
     /* margin: 10px 0; */
     margin: -10px 0;
-    width: 583px;
+    width: 661px;
     margin-bottom: 33px;
     word-wrap: break-word;
     word-break: break-word;
@@ -116,12 +116,17 @@
         margin-right: 4px;
 }
 .personal{
-    margin-left: 421px;
-    color: #2374E1;   
+    /* margin-left: 421px; */
+    color: #2374E1;  
+    align-items: center;
+    justify-content: center;
+    display: flex;
+ 
 }
 .deletePostButton{
     cursor: pointer;
     margin-left: 10px;
+    float: right;
 }
 
 .deleteCommentButton{
@@ -131,10 +136,11 @@
 .commentUser{
     /* margin-right: 409px; */
     margin-left: 10px;
+    display: flex;
 }
 
 .tab{
-    display: flex;
+    /* display: flex; */
     align-items: center;
    
 }
@@ -147,6 +153,54 @@
     margin-right: 3px;
 }
 .postspan{
-    display: flex;
+    /* display: flex; */
     align-items: center;
+ }
+
+ .toppic{
+    width: 519px;
+ }
+ .profile{
+    float: left;
+ }
+ .profilePage{
+    float: right;
+    margin-top: 189px;
+    margin-right: 403px;
+
+
+ }
+ .divided{
+    border: 5px solid black;
+    height: 527px;
+
+ }
+ .username{
+    padding: 12px;
+
+ }
+ .text{
+    float: left;
+ }
+ .postDetails{
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 3px;
+    margin: 10px 0;
+    /* width: 586px; */
+    /* display: flex; */
+    flex-direction: row;
+    /* height: 79px; */
+    word-wrap: break-word;
+    margin-bottom: 2px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+ }
+ .common-button{
+    float: right;
+ }
+ .editEachcomment{
+    float: right;
  }

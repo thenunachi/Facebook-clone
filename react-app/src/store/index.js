@@ -6,6 +6,7 @@ import commentReducer from './commentReducer'
 import chatReducer from './chatReducer';
 import likeReducer from './likeReducer';
 import friendReducer from './friendReducer';
+import imageReducer from './imageReducer';
 
 const rootReducer = combineReducers({
   session,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
    commentState : commentReducer,
    chatState : chatReducer,
    likeState : likeReducer,
-   friendState : friendReducer
+   friendState : friendReducer,
+   imageState : imageReducer
 });
 
 

@@ -7,8 +7,10 @@ class PostForm(FlaskForm):
     owner_Id = IntegerField("OwnerId")
     longText = TextAreaField('Write a post',validators =[DataRequired()])
     submit = SubmitField('Add a post')
+    image_url = StringField('ImageUrl')
 
 class EditPostForm(FlaskForm):
     owner_Id = IntegerField("OwnerId")
     longText = TextAreaField('Write a post',validators =[DataRequired()])
     submit = SubmitField('Update a post')
+    image_url = StringField('ImageUrl')
