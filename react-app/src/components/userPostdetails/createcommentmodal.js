@@ -2,6 +2,9 @@ import React,{useState} from "react";
 import {Modal} from '../../context/Modal'
 import CommentForm from '../comments/createCommentForm'
 import './createcommentmodal.css'
+
+
+
 function AddCommentModal({postId}){
     const [showModal,setShowModal] = useState(false);
     return(

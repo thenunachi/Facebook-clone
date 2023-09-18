@@ -132,24 +132,37 @@ def test_connect():
     # print((users),"users from connetct event")
     # print(onlineUsers,"onlineUsers")
     emit('users',{'user_count':clients},broadcast=True)# emits a message with the user count anytime someone connects
-#     name = onlineUsers['username']
-#     emit('active',(onlineUsers),broadcast=True)
+    # name = onlineUsers['username']
+    # emit('active',(onlineUsers),broadcast=True)
 
-@socketio.on('active',namespace="/online")
+# @socketio.on('active',namespace="/online")
+# def active_users(data):
+#     # print(data , "data from frontend")
+#     # print(onlineUsers[data['username']],"check the onlineusers getting value")
+#     # comment below lines if not working
+#     onlineUsers.append(data['username'])
+#     print(onlineUsers,"onlineUSers")
+#     emit('activeUsers',(onlineUsers),broadcast=True)
+
+@socketio.on('active', namespace='/online')
 def active_users(data):
-    print(data , "data from frontend")
-    # print(onlineUsers[data['username']],"check the onlineusers getting value")
-    onlineUsers.append(data['username'])
-    print(onlineUsers,"onlineUSers")
-    emit('activeUsers',(onlineUsers),broadcast=True)
-
-@socketio.on('offline',namespace="/online")
-def offline(data):
-    print(data,"data from frontend") #{'username': 'Demo'} data from frontend
-    onlineUsers.remove(data)
-    # del onlineUsers['username']
-    print(onlineUsers,"deleting the user")
-    emit('offlineusers',(onlineUsers),broadcast=True)
+    username = data['username']
+    print(f'{username} is active.')
+    onlineUsers[username] = True  # You can store additional user data as needed
+    emit('activeUsers', list(onlineUsers.keys()), broadcast=True)   
+    
+@socketio.on('offline', namespace='/online')
+def offline_users(username):  # Receive username directly, as it's not a dictionary
+    print(f'{username} is offline.')
+    onlineUsers.pop(username, None)  # Remove the user from onlineUsers if exists
+    emit('activeUsers', list(onlineUsers.keys()), broadcast=True)
+# @socketio.on('offline',namespace="/online")
+# def offline(data):
+#     # print(data,"data from frontend") #{'username': 'Demo'} data from frontend
+#     onlineUsers.remove(data)
+#     # del onlineUsers['username']
+#     # print(onlineUsers,"deleting the user")
+#     emit('offlineusers',(onlineUsers),broadcast=True)
 
 # @socketio.on('disconnect',namespace="/")
 # def test_disconnect():
@@ -175,19 +188,16 @@ def get_users_sid(username):
 
 @socketio.on('privatemsg',namespace='/private')
 def private_msg(payload):
-    # print("***********")
-    # print(users,"users obj?????????????????????????????????????????????????????????????????????????????????????")
-    # print(users[payload['username']] ,"find the recipient getting value ????????????")
+  
     receiver_session_id = users[payload['username']] 
-    # print(receiver_session_id,"receiver session id in backend ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
     message = payload['message']
     emit('new_private_msg',message,room=receiver_session_id)
     
 
 @socketio.on('message')
 def reply(message):
-    # print("SOMETHING ELSE &&&&&&&&&&&&&&&&&&&&&",message)
-   
+
     emit('message',message)
 
 # @socketio.on('join')

@@ -10,7 +10,7 @@ export const getUserList = ()=>async dispatch =>{
   const response = await fetch('/api/users/all/')
   if(response.ok){
     const data = await response.json();
-    console.log(data,"&&&&&data&&& of user")
+    // console.log(data,"&&&&&data&&& of user")
     dispatch(getAllUser(data.users))
     return {...data}
   }
@@ -22,7 +22,7 @@ export default function friendReducer(state={},action){
     switch(action.type){
         case GET_ALL_USERS:{
         
-                    console.log(action.payload,"payload of user")
+                    // console.log(action.payload,"payload of user")
                     action.payload.forEach(u=>{
             newState[u.id]=u
                     })

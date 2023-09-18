@@ -19,11 +19,7 @@ function CommentForm({setShowModal,postId}) {
 
   const updateComments = (e) => setCommentText(e.target.value);
 
-  //let { postId } = useParams();
-  //console.log(postId, "POST ID FROM PARAMS")
   let allPost = useSelector(state => Object.values(state.postState));
-  // console.log(allPost, "AL POST")
-  // console.log("ALLPRODUCTS" ,allProducts)
   let allComments = useSelector(state => Object.values(state.commentState));
   let user = useSelector(state => state.session.user);
 

@@ -26,34 +26,34 @@ const removeLike = (id) => {
 
 export const likesThunk = (postId) => async dispatch => {
     const response = await fetch(`/api/posts/${postId}/likes`)
-    console.log(response, "response")
+    // console.log(response, "response")
     if (response.ok) {
         const data = await response.json();
-        console.log(data, "before data")
+        // console.log(data, "before data")
         dispatch(getLikes(data))
-        console.log("data from get likes thunk", data)
+        // console.log("data from get likes thunk", data)
         return { ...data }
     }
 }
 
 export const createThunk = (like) => async dispatch => {
-    console.log(like, "like for creation in side thunk")
+    // console.log(like, "like for creation in side thunk")
     const response = await fetch(`/api/posts/${like.post_Id}/likes`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(like)
     })
-    console.log(response, "response of create thunk")
+    // console.log(response, "response of create thunk")
     if (response.ok) {
         const writeLike = await response.json();
-        console.log(writeLike, "wriredr%%%%%%")
+        // console.log(writeLike, "wriredr%%%%%%")
         dispatch(setLikes(writeLike.likes));
         return writeLike;
     }
 }
 
 export const removeThunk = (id) => async dispatch => {
-    console.log(id, "inside delete thunk")
+    // console.log(id, "inside delete thunk")
     const response = await fetch(`/api/likes/${id}`, {
         method: "DELETE",
     })
@@ -66,7 +66,7 @@ const likeReducer = (state = {}, action) => {
     let allLikes = {}
     switch (action.type) {
         case GET_LIKES: {
-            console.log("action .typoe", action.likes)
+            // console.log("action .typoe", action.likes)
             const groupedLikes = action.likes.likes.reduce((acc, e) => {
                 acc[e.post_Id] = acc[e.post_Id] || [];
                 acc[e.post_Id].push(e)
@@ -84,14 +84,14 @@ const likeReducer = (state = {}, action) => {
             return state;
         }
         case REMOVE_LIKE: {
-            console.log(state, "state")
+            // console.log(state, "state")
             const newState = { ...state }
             const postIds = Object.keys(newState)
             postIds.forEach(postId => {
                 const notDeletedLikes = newState[postId].filter(like => like.id !== action.id) //newState[postId] gives arr of likes
                 newState[postId] = notDeletedLikes;
             });
-            console.log(newState, "NewState of delete reduer")
+            // console.log(newState, "NewState of delete reduer")
 
             return newState
         }
