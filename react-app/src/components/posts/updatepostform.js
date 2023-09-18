@@ -3,67 +3,81 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
-import { updatePostThunk,getPostsByUserIdThunk } from '../../store/postReducer'
+import { updatePostThunk, getPostsByUserIdThunk } from '../../store/postReducer'
 import './updatepostform.css'
-
-function UpdatePostForm({ setShowModal,post }) {
+import { updateImageThunk } from '../../store/imageReducer'
+function UpdatePostForm({ setShowModal, post, imagesPerPost }) {
+    console.log(imagesPerPost, "imageVanthuruka?????")
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const{userId}= useParams()
+    const { userId } = useParams()
 
     const ownerObj = useSelector(state => state.session.user)
     const postObj = useSelector(state => Object.values(state.postState))
-    console.log(postObj,"postObj")
+    console.log(postObj, "postObjUpdatForm")
+    // const imageObj = useSelector(state => Object.values(state.imageState))
     const [longText, setLongText] = useState(post.longText);
+    const [image_url, setImage_url] = useState(imagesPerPost.image_url);
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
-
+    const updateUrl = (e) => setImage_url(e.target.value)
     useEffect(() => {
         const errors = []
         if (!longText.length) errors.push("LongText is required")
-        if(longText.length > 2000)errors.push("Maximum 2000 characters")
+        if (longText.length > 2000) errors.push("Maximum 2000 characters")
+        if (!image_url.length) errors.push("Link is required")
         setValidationError(errors)
     }, [longText])
-   
 
 
-    const handleSubmit =  async(e) => {
+
+    const handleSubmit = async (e) => {
         console.log("IN HANDLESUBMIT FUNC")
-         e.preventDefault();
-       
+        e.preventDefault();
+
         // alert("after handlesubmit")
         const payload = {
-            id: post.id, longText
+            id: post.id, longText, image_url
         }
-        console.log(payload, "PAYLOAD of update post")
-        let updatedPost = await dispatch(updatePostThunk(payload))
-        // dispatch(getPostsByUserIdThunk(post.owner_Id))
-         setShowModal(false)   
+        const imageLoad = {
+            id: imagesPerPost.id,
+            user_id: imagesPerPost.user_Id,
+            post_Id: imagesPerPost.post_Id,
+            longText,
+            image_url,
+        }
+      
+        let updatedPost = await dispatch(updatePostThunk(payload));
+        // let updatedImagePost = await dispatch(updateImageThunk(imageLoad))
+        dispatch(getPostsByUserIdThunk(post.owner_Id))
+        setShowModal(false)
         //  return <Redirect to={`/users/${userId}/posts`} />;         
         // console.log("CREATEDPOST ************",createdPost)
-        // if(updatedPost){
-        //     history.push(`/`)
-        // }
+        if (updatedPost) {
+            history.push(`/`)
+        }
 
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
-        
+
         // history.push(`/users/${userId}/posts`)
         console.log("CANCEL CLICK")
         // e.style.display = 'none'
 
     };
-
+    console.log(longText.length, "longText");
     return (
+
         <div className="mainDiv">
             {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             {/* <h1>Update the post</h1> */}
-            <form className="newPost" onSubmit={(e)=>handleSubmit(e)}>
-            <h2 className="h2">Update a Post</h2>
+            <form className="newPost" onSubmit={(e) => handleSubmit(e)}>
+                <h2 className="h2">Update a Post</h2>
                 {!longText.length && <div className="errorHandling">Text is required</div>}
-                {longText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
+                {longText.length && longText.length > 2000 && <div className="errorHandling">Maximum 2000 characters</div>}
+                {/* {!image_url.length && <div className="errorHandling">Image link is required</div>} */}
                 <div>
                     <textarea
                         className='post-textbox'
@@ -74,9 +88,16 @@ function UpdatePostForm({ setShowModal,post }) {
                         value={longText}
                         onChange={updateLongText}>
                     </textarea>
+                    <input className="urlInput"
+                        label="url"
+                        placeholder="image link "
+                        type="url"
+                        value={image_url}
+                        onChange={updateUrl}
+                    />
                 </div>
 
-                <input className="addPostButton" type="submit"/>
+                <input className="addPostButton" type="submit" />
                 {/* <button className="addPostButton" type="submit">Update Spot</button> */}
             </form>
 

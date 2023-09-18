@@ -72,16 +72,17 @@ if(response.ok){
 //CREATE A POST
 
 export const createPostThunk = (data) => async dispatch =>{
-    // console.log("DATA**********",data)
+    console.log("DATA**********",data)
     const response = await fetch(`/api/posts/`,{
         method : 'POST',
         headers : { "Content-Type": "application/json" },
         body : JSON.stringify(data)
     })
-    // console.log(response,"CREATED POST THUNK RESPONSE")
+    console.log(response,"CREATED POST THUNK RESPONSE")
     if(response.ok){
         const postResponse = await response.json();
-        dispatch(addOnePost(postResponse.post))
+        console.log(postResponse,"postResponse")
+        dispatch(addOnePost(postResponse.images))
         return postResponse;
     }
 }
@@ -108,7 +109,7 @@ export const removePostThunk = (id)=> async dispatch =>{
         method: "DELETE",
        // headers:{ "Content-Type": "application/json"},
     })
-    // console.log(response,"RESPONSE OF DELETE")
+    console.log(response,"RESPONSE OF DELETE")
     if(response.ok){
         dispatch(removePost(id))
     }
@@ -149,8 +150,8 @@ export const removePostThunk = (id)=> async dispatch =>{
         /******************************************************************************* */
         case ADD_POST:{
             const newState={};
-            newState[action.payload.id] = action.payload
-            // console.log(newState,"State of createPost")
+            newState[action.payload.post_Id] = action.payload
+            console.log(newState,"State of createPost")
             const newPostForm ={...state,...newState}
             return newPostForm
         }

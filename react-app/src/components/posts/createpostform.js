@@ -3,8 +3,8 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Redirect, useParams } from 'react-router-dom';
-import { createPostThunk, getAllPostsThunk } from '../../store/postReducer'
-import {createImageThunk } from "../../store/imageReducer";
+import { createPostThunk, getAllPostsThunk ,getPostsByUserIdThunk} from '../../store/postReducer'
+import { createImageThunk } from "../../store/imageReducer";
 import './createpostform.css'
 
 function CreatePostForm({ setShowModal }) {
@@ -12,21 +12,23 @@ function CreatePostForm({ setShowModal }) {
     const history = useHistory()
 
     const [longText, setLongText] = useState("");
-    const [image_url,setImage_url]=useState("")
+    const [image_url, setImage_url] = useState("")
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
     const updateUrl = (e) => setImage_url(e.target.value)
-    const{userId}= useParams()
+    const { userId } = useParams()
 
     const ownerObj = useSelector(state => state.session.user)
     // console.log(ownerObj)
+    const postObj = useSelector(state => Object.values(state.postState))
+    console.log(postObj, "postvarutha")
 
     //useEffect
     useEffect(() => {
         const errors = []
         if (!longText.length) errors.push("LongText is required")
-        if(longText.length > 2000)errors.push("Maximum 2000 characters")
-        if(!image_url.length) errors.push("Link is required")
+        if (longText.length && longText.length > 2000) errors.push("Maximum 2000 characters")
+        if (!image_url.length) errors.push("Link is required")
         setValidationError(errors)
     }, [longText])
 
@@ -34,66 +36,51 @@ function CreatePostForm({ setShowModal }) {
     //handleSubmit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(e,"??")
         const payload = {
-            owner_id: ownerObj.id, longText 
+           owner_id: ownerObj.id, longText, image_url
         }
-        const imageLoad ={
-            owner_id: ownerObj.id, longText , image_url
-        }
-        // console.log(url,"url")
-        // console.log(payload, "PAYLOAD")
+     
         let createdPost = await dispatch(createPostThunk(payload))
-        console.log(createdPost,"createdPost %%%%%%%%%%%%%%%%")
-        console.log(imageLoad,"imageLoad $$$$$$$$$$$$$$$$$$")
-        let imageForCreatedPost = await dispatch (createImageThunk(imageLoad,createdPost.post.id))
-        // console.log("CREATEDPOST ************", createdPost)
-        console.log(imageForCreatedPost,"imageForPostCreate $$$$$$$$$$$$$$$")
-        if (createdPost) {
-            // if (imageForCreatedPost) {
-            setShowModal(false)   
-            return <Redirect to={`/users/${userId}/posts`} />;   
+        dispatch(getAllPostsThunk())
+        setShowModal(false)
+        if (createdPost ) {    
+            
+            history.push(`/`)
         }
-        // if(longText.length >0){
-        //     setShowModal(false)
-        // }
+        
     }
-    const handleCancelClick = (e) => {
-        e.preventDefault();
-        // history.push('/')
-        console.log("CANCEL CLICK")
-        // e.style.display = 'none'
-
-    };
+ 
 
     return (
         <div className="mainDiv">
-             <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
-            <form className="newPost" onSubmit={handleSubmit}>
+            {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
+            <form className="newPost" onSubmit={(e)=>handleSubmit(e)}>
                 <h2 className="h2">Create post</h2>
                 <div className="error">
-            {!longText.length && <div className="errorHandling">Text is required</div>}
-            {!image_url.length && <div className="errorHandling">Image link is required</div>}
-            {longText.length > 2000  && <div className="errorHandling">Maximum 2000 characters</div>}
-            </div>
-                <div>
-      <textarea
-                    className='post-textbox'
-                    rows="5"
-                    cols="51"
-                    placeholder="What's on your mind?"
-                     required
-                    value={longText}
-                    onChange={updateLongText}>
-                </textarea>
-               <input className="urlInput"
-               label="url"
-               placeholder="image link "
-               type="url"
-                value={image_url}
-                onChange={updateUrl}
-               />
+                    {!longText.length && <div className="errorHandling">Text is required</div>}
+                    {/* {!image_url.length && <div className="errorHandling">Image link is required</div>} */}
+                    {longText.length > 2000 && <div className="errorHandling">Maximum 2000 characters</div>}
                 </div>
-                <button className="addPostButton" type="submit">Post</button>
+                <div>
+                    <textarea
+                        className='post-textbox'
+                        rows="5"
+                        cols="51"
+                        placeholder="What's on your mind?"
+                        required
+                        value={longText}
+                        onChange={updateLongText}>
+                    </textarea>
+                    <input className="urlInput"
+                        label="url"
+                        placeholder="image link "
+                        type="url"
+                        value={image_url}
+                        onChange={updateUrl}
+                    />
+                </div>
+                <input className="addPostButton" type="submit"/>
                 {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             </form>
 

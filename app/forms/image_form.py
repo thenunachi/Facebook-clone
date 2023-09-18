@@ -12,8 +12,8 @@ class ImageForm(FlaskForm):
     submit = SubmitField('Add a post')
 
 
-# class EditCommentForm(FlaskForm):
-#     user_Id= IntegerField('owner_Id')
-#     post_Id = IntegerField('post_Id')
-#     commentText = TextAreaField('Write a comment',validators =[DataRequired()])
-#     submit = SubmitField('Add a review')
+class EditPostImageForm(FlaskForm):
+    user_Id= IntegerField('owner_Id')
+    post_Id = IntegerField('post_Id')
+    image_url = StringField('image_Url',validators =[DataRequired()])
+    submit = SubmitField('Add a post')

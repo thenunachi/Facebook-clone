@@ -33,16 +33,23 @@
     cursor: pointer;
 }
 .CerrorHandling{
+    border: 1px solid #e97a7a;
+    background-color: #f7bad6;
+    width: 326px;
+    margin-left: 27px;
+    border-radius: 4px;
+    margin-top: 24px;
     color: red;
     margin-top: 10px;
     margin-left: 34px;
 }
 .review-textbox{
-    width: 271px;
-    margin-left: 34px;
+    width: 321px;
+    margin-left: 26px;
     border-radius: 10px;
     margin-top: 51px;
+
 }
-.htag{
+/* .htag{
     margin-left: 105px;
-}
+} */

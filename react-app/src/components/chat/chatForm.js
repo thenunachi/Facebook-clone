@@ -21,20 +21,22 @@ import random5 from './guarani.png'
 import random6 from './nutritionist.png'
 import random7 from './profile.png'
 import random8 from './woman2.png'
-import random9 from './woman3.png'
+import random9 from './woman3.png';
+import { useLocation } from "react-router-dom";
+
 let endpoint = "http://localhost:5000";
 // let socket; //connect with server using socket.io
-const random = [random1, random2, random3, random4, random5, random6, random7, random8, random9]
-function ChatForm({ imageObject }) {
-    // console.log(receiver_Id,"receiver_ID")
+// const random = [random1, random2, random3, random4, random5, random6, random7, random8, random9]
+
+function ChatForm() {
+
+    let location = useLocation();
+    console.log(location.state, "state"); //use tjhis
+    // let imageObject = location.state;
     const dispatch = useDispatch();
     const history = useHistory();
     // console.log(Socket.client(),"socket from io")
-    // const imageObject = {
-    //     Demo: `${man}`,
-    //     marnie: `${woman}`,
-    //     bobbie: `${girl}`
-    //   }
+
     // const [messages, setMessages] = useState([]); //array of messages
     const [messages, setMessages] = useState({});
     const [newmessage, setnewMessage] = useState("")//single message
@@ -46,9 +48,7 @@ function ChatForm({ imageObject }) {
     const [profilePicObj, setProfilePicObj] = useState({})
     // console.log(setGif,"setGif")
     console.log(uniqueChars, "uniquechars")
-    // console.log(activeSocket,"activesocket value")
-
-    // console.log(currentSocket,"currentsockert")
+    console.log(setUniquechars, "set")
 
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
@@ -58,7 +58,7 @@ function ChatForm({ imageObject }) {
     let updatedValue = {}
 
     const friendsList = useSelector(state => Object.values(state.friendState))
-    console.log(friendsList, "friendlist arra")
+    // console.log(friendsList, "friendlist arra")
     let friendArr = []
     friendsList.forEach((e) => {
         friendArr.push(e.username)
@@ -109,24 +109,18 @@ function ChatForm({ imageObject }) {
         })
 
         activeUsers.emit('active', { username: user.username })
-        activeUsers.emit('offline', { username: user.username })
+        // socket.emit('offline', 'user1');
+        activeUsers.emit('offline', user.username)
         activeUsers.on('activeUsers', function (activeUsers) {
-            // console.log(activeUsers, "activeUsers")
+            console.log(activeUsers, "activeUsers")
 
             setUniquechars([...new Set(activeUsers)])
         })
-        activeUsers.on('offlineusers', function (offline) {
-            // console.log(offline, "offline")
-        })
-
-        activeUsers.emit('offline', user.username)
-        activeUsers.on('offline', function (offline) {
-            // console.log(offline, "offline")
-        })
-
+       
+        // activeUsers.emit('offline', user.username)
+        
         activeUsers.emit('login', { userId: user.id });
 
-        activeUsers.emit('login', { userId: user.id });
 
         // *******************************************************************//
         // console.log(io.sockets.sockets,"sockets list")
@@ -178,6 +172,11 @@ function ChatForm({ imageObject }) {
             alert("Please add a message")
         }
     }
+    console.log(uniqueChars, "uniqueChars")
+    const filteredUsers = friendArr.filter((o) => user.username !== o  && uniqueChars.indexOf(o) === -1 );
+
+    const onlineUsersAvailable =  uniqueChars.filter((e) => e != user.username )
+    console.log(onlineUsersAvailable,"onl")
 
     return (
         <div>
@@ -186,14 +185,15 @@ function ChatForm({ imageObject }) {
                 <h2> FriendList</h2>
                 <div>
                     <h3>Owner of Account</h3>
-                    {checkImage(imageObject, user.username)}{user.username}
+                    {checkImage(location.state.imageObject, user.username)}{user.username}
                 </div>
                 <div>
                     <h4  >Online Users</h4>
+
                     <div >
                         {/* {
                        uniqueChars.map((e) => {
-                            console.log(e,"e from uniq")
+                            console.log(e,"e")
                             return(
                             <div>{e}</div>
                             )
@@ -202,17 +202,20 @@ function ChatForm({ imageObject }) {
 
 
                         <div className="onlineusers">
-                            <ul>
-                                <li>
-                                    {
+                        {/* <div>
+                            {filteredUsers.map((name, index) => (
+                                <div >{checkImage(location.state.imageObject,name)} <span>{name}</span> </div>
+                            ))}
+                        </div> */}
+                           
+                                    {/* {
                                         uniqueChars.filter((e) =>
-                                            // console.log(e,"eUnique")
+
                                             e != user.username
                                         )
                                     }
-                                </li>
-                            </ul>
-
+                        */}
+                        
                         </div>
 
 
@@ -222,17 +225,23 @@ function ChatForm({ imageObject }) {
                     <h4>Offline Users</h4>
 
                     <div className="offlineusers">
+                    
+                        <div>
+                            {filteredUsers.map((name, index) => (
+                                <div >{checkImage(location.state.imageObject,name)} <span>{name}</span> </div>
+                            ))}
+                        </div>
 
-                        {
-                            friendArr.filter((o) =>
-                                // console.log(o,"o")
-                                uniqueChars.indexOf(o) === -1 && checkImage(imageObject, o)
-                                // {checkImage(imageObject, o)}
-
-                            )
-                        }
+                        {/* {     
+                         
+                            // friendArr.filter((o) =>
+                            //     // console.log(o,"o")
+                            //     uniqueChars.indexOf(o) === -1 && checkImage(location.state.imageObject, o)
 
 
+                            // )
+                         
+                        } */}
 
                     </div>
 
@@ -249,8 +258,8 @@ function ChatForm({ imageObject }) {
                         return (
 
                             <div className="message">
-                                {e && e.users && e.users.id != +friendId && <div className="leftmsg">{checkImage(imageObject, e.users.username)}{e.users.username}: {e.message} </div>}
-                                {e && e.users && e.users.id == +friendId && <div className="rightmsg">{checkImage(imageObject, e.users.username)}{e.users.username}: {e.message}</div>}
+                                {e && e.users && e.users.id != +friendId && <div className="leftmsg">{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message} </div>}
+                                {e && e.users && e.users.id == +friendId && <div className="rightmsg">{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message}</div>}
                                 {/* history.push(`/chat/${friendId}`) */}
                                 {/* dispatch(allMessages()) */}
                             </div>
@@ -309,64 +318,21 @@ function ChatForm({ imageObject }) {
 
 
 const checkImage = (imageObject, username) => {
-    console.log(imageObject, username, "%%%%%%%username")
-    const isImageObjectDefined = typeof imageObject !== "undefined";
-    if (isImageObjectDefined) {
-        // const isUsernameNotInObjectKeys = Object.keys(imageObject).indexOf(username) === -1;
-        for (const key in imageObject) {
-            // console.log(key,"key")
-            if (key == username) {
-                console.log("inside")
-                return (
-                    <span>
-                        <img className="logoPic" src={imageObject[key]} />
-                    </span>
-                )
-    
-            }
-    
-    
-            else {
-                let image = randomImage(random)
-    
-                // if (isUsernameNotInObjectKeys) {
-                    // console.log(username,isUsernameNotInObjectKeys,"isUsernamenotin keys")
-                    imageObject[username] = image
-                    // console.log(imageObject, "objectImage")
-                    return (
-                        <span>
-                            <img className="logoPic" src={imageObject[username]} />
-                        </span>
-                    )
-                }
-            // }
+    // console.log(imageObject, "the")
+    // console.log(username,"name")
+    for (const key in imageObject) {
+        if (key == username) {
+            return (
+                <span>
+                    <img className="logoPic" src={imageObject[key]} />
+                </span>
+            )
         }
-    } else {
-        // Do something if imageObject is null or undefined
-        return (
-            <div>
-                <h1>Image is not available</h1>
-            </div>
-        )
+
     }
 
-    // const isUsernameNotInObjectKeys = Object.keys(imageObject).indexOf(username) === -1;
-    
+
 }
 
-const randomImage = (obj) => {
-    if (obj === undefined || obj === null) {
-        return null;
-    }
-    let keys = Object.keys(obj)
 
-    return obj[keys[keys.length * Math.random() << 0]];
-}
-
-const objImage = (profilePicArr) => {
-    console.log(profilePicArr, "profile")
-    for (let key in profilePicArr) {
-        console.log(key, "key")
-    }
-}
 export default ChatForm;

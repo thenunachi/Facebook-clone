@@ -9,6 +9,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     owner_Id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     longText = db.Column(db.String(2000),nullable=False)
+
     # likes = db.Column(db.Integer,nullable=False)
     owner = db.relationship('User',back_populates ='posts')
     comments = db.relationship('Comment', back_populates='posts', cascade='all, delete')
@@ -29,7 +30,11 @@ class Post(db.Model):
             "owner_Id": self.owner_Id,
             "longText": self.longText,
             # "likes":self.likes,
+          
             "owner": self.owner.to_dict(),
+          
+            
             # "likes": self.likes.to_dict()
         }
 
+    

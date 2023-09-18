@@ -1,9 +1,9 @@
 from flask import Blueprint, request, redirect
-from app.forms.comment_form import CommentForm
+from flask_login import current_user
 from sqlalchemy import desc ,asc
+from app.forms.comment_form import CommentForm
 from app.forms.post_form import EditPostForm, PostForm
 from ..models import Post,Comment,db,Like,Image
-from flask_login import current_user
 from app.forms.image_form import ImageForm
 
 
@@ -35,31 +35,96 @@ def get_posts_by_ownerId(ownerId):
 #Create a post
 @post_routes.route('/',methods=["POST"])
 def create_post():
-     form = PostForm() #calling form
-     user = current_user.to_dict()
-     form['csrf_token'].data = request.cookies['csrf_token']
-     if form.validate_on_submit():
-          data = Post(
-               owner_Id = user['id'],
-               longText =form.data['longText']
+    form = PostForm()  # Calling form
+    user = current_user.to_dict()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = Post(
+            owner_Id=user['id'],
+            longText=form.data['longText']
+        )
 
-          ) #assigning model
-         # form.populate_obj(data)
-          db.session.add(data)
-          db.session.commit()
-          return {"post": data.to_dict_relationship()}
-     return form.errors
+        db.session.add(data)
+        db.session.commit()
+        print(data, "datala")
+        post = Post.query.get(data.id)
 
-#Edit a post
+        # Call the createImage function to get the inner dictionary
+        image_data = createImage(post.id)
+
+        return image_data  # Return the inner dictionary directly
+
+    return form.errors
+
+def createImage(postId):
+    user = current_user.to_dict()
+    form = ImageForm()
+    data = Image(
+        user_Id=user['id'],
+        post_Id=postId,
+        image_url=form.data['image_url']
+    )
+    db.session.add(data)
+    db.session.commit()
+    return {'images': data.to_dict_rel()}
+
+
+
+
+
+
+# def create_post():
+#      form = PostForm() #calling form
+#      user = current_user.to_dict()
+#      form['csrf_token'].data = request.cookies['csrf_token']
+#      if form.validate_on_submit():
+#           data = Post(
+               
+#                owner_Id = user['id'],
+#                longText =form.data['longText']
+#           ) 
+          
+#           db.session.add(data)
+#           db.session.commit()
+#           print(data,"datala")
+#           post = Post.query.get(data.id) 
+         
+
+#           def createImage(postId):
+#                user = current_user.to_dict()
+#                form = ImageForm()
+#                data = Image(
+#                     user_Id = user['id'],
+#                     post_Id = postId,
+#                     image_url = form.data['image_url']
+#                )
+#                #     print(data,"data from image Def %%%%%%%%%%%%%%%%%%%%%%%%%%")
+#                db.session.add(data)
+#                db.session.commit()
+#                return {'images': data.to_dict_rel()}
+#           return {
+#           'post': data.to_dict_relationship()
+#           # 'image': data.to_dict_rel()
+#            }
+#      return form.errors
+
 @post_routes.route('/<int:postId>',methods=["PUT"])
 def update_post(postId):
+     """Edit a post"""
      form = EditPostForm()
      # post = Post.query.get(postId)
      form['csrf_token'].data = request.cookies['csrf_token']
      if form.validate_on_submit():
+          # print('Update img data' + str(form.data))
           data = Post.query.get(postId)
           #form.populate_obj(data)
           data.longText = form.data['longText']
+          image_data = Image(
+               user_Id = data.owner_Id,
+               post_Id = postId,
+               image_url = form.data['image_url']
+          )
+          db.session.add(image_data)
           db.session.add(data)
           db.session.commit()
           return{"editedPost":data.to_dict_relationship()}
@@ -141,20 +206,10 @@ def setLike(postId):
 @post_routes.route('/<int:postId>/images')
 def get_all_images_perPost(postId):
      images = Image.query.filter(Image.post_Id == postId)
-     print(images,"all images ######")
+     # print(images,"all images ######")
      # print(likes.count(),"****************************************************")
      return {"images": [ l.to_dict_rel() for l in images]}
 
-@post_routes.route('/<int:postId>/images',methods=["POST"])
-def createImage(postId):
-    user = current_user.to_dict()
-    form = ImageForm()
-    data = Image(
-        user_Id = user['id'],
-        post_Id = postId,
-        image_url = form.data['image_url']
-    )
-    print(data,"data from image Def %%%%%%%%%%%%%%%%%%%%%%%%%%")
-    db.session.add(data)
-    db.session.commit()
-    return {'images': data.to_dict_rel()}
+
+
+

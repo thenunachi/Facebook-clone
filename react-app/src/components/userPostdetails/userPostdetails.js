@@ -225,24 +225,39 @@ const isUserCommentOwner = (comment, user) => comment && user && comment.user_Id
 // const commentsPerPost = (comment,post)=> post  && comment.post_Id == post.id
 
 
-const images = (imagesArr, userId, postId, dispatch, history) => {
+const images = (imageObj, userId, postId, dispatch, history) => {
   // console.log(postId, "postId&&&&&&&&&&&&") //4,3,2,1
   // console.log(imagesArr, "imageArr ###############")
-  let imageOfPost = imagesArr.find((e) =>
-    // console.log(e,"e  ****************")
-    e.post_Id == postId
-  )
+  // let imageOfPost = imagesArr.find((e) =>
+  //   // console.log(e,"e  ****************")
+  //   e.post_Id == postId
+  // )
   // console.log(imageOfPost, "imageOfPost*********")
-  return (
-    <div >
-      {imageOfPost &&
+  // return (
+  //   <div >
+  //     {imageOfPost &&
 
-        <div>
-          <img className="images" src={imageOfPost.image_url} />
-        </div>
-      }
-    </div>
+  //       <div>
+  //         <img className="images" src={imageOfPost.image_url} />
+  //       </div>
+  //     }
+  //   </div>
+  // )
+  let imageOfPost = null;
+ 
+  if(imageObj.post_Id == postId){    
+    imageOfPost = imageObj;
+  }
+if(imageOfPost){
+  return(
+    <div>
+           <img className="images" src={imageOfPost.image_url} />
+         </div>
   )
+}
+else{
+  return null;
+}
 }
 const likeButton = (likeArr, userId, postId, dispatch, history) => {
   let idOfLike = likeArr.find(e => e.user_Id == userId)

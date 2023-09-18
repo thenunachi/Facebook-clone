@@ -8,7 +8,7 @@
     padding: 10px;
     /* margin: 10px 0; */
     /* margin: -10px 0; */
-    width: 788px;
+    width: 665px;
     /* height: 149px; */
     margin-left: 375px;
     margin-bottom: 12px;
@@ -76,7 +76,7 @@ Link{
     margin-top: 16px;
  }
  .commenttext{
-    display: flex;
+    /* display: flex; */
     align-items: center;
  }
  .showButton{
@@ -99,7 +99,7 @@ Link{
    float: right;
     margin-bottom: 50px;
     border: 5px solid gainsboro;
-    width: 25%;
+    width: 18%;
     border-radius: 5px;
     margin-top: 8px;
  }
@@ -114,9 +114,9 @@ Link{
  }
 
  .images{
-   border: solid 5px black;
-   width: 766px;
-   height: 723px;
+  border: solid 5px black;
+  width: 642px;
+  height: 537px;
  }
  .logoPic{
    height: 46px;
