@@ -8,7 +8,7 @@ import { createNewMessage, allMessages } from "../../store/chatReducer"
 import { getUserList } from '../../store/friendReducer'
 import EmojiReaction from '../emoji'
 import './chat.css'
-import { Socket } from "socket.io";
+// import { Socket } from "socket.io";
 import GiphyReactions from '../Gify/giphy';
 
 let endpoint = "http://localhost:5000";
