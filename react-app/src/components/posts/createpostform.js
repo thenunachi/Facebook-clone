@@ -10,7 +10,9 @@ import './createpostform.css'
 function CreatePostForm({ setShowModal }) {
     const dispatch = useDispatch()
     const history = useHistory()
-
+    // const defaultImageUrl = 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm8lMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60';
+                            
+    // const [image_url, setImage_url] = useState(imagesPerPost.image_url || defaultImageUrl);
     const [longText, setLongText] = useState("");
     const [image_url, setImage_url] = useState("")
     const [validationError, setValidationError] = useState([])
