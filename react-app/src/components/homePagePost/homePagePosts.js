@@ -253,7 +253,7 @@ console.log(post,"ownername")
 
   return (
     <div className="perPost">
-
+      
       <span className="user">
         {checkImage(imageObject, post.owner.username)}
         <span className="username">   {post.owner.username} :</span>
