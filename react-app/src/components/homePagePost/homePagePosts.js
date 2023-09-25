@@ -65,14 +65,14 @@ function AllPosts() {
   useEffect(async () => {
 
     dispatch(getUserList())
-    const { posts_with_images } = await dispatch(getAllPostsThunk())
-console.log(posts_with_images,"POST");
-posts_with_images.forEach((e) => {
-      dispatch(getAllCommentsThunk(e.id))
-      dispatch(likesThunk(e.id))
-      dispatch(allimagesThunk(e.id))
-    }
-    )
+    const { posts_with_images = [] } = await dispatch(getAllPostsThunk());
+    console.log(posts_with_images, "POST");
+    posts_with_images.forEach((e) => {
+    dispatch(getAllCommentsThunk(e.id));
+    dispatch(likesThunk(e.id));
+    dispatch(allimagesThunk(e.id));
+});
+
 
   }, [dispatch])
 

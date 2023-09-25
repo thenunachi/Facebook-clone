@@ -55,6 +55,7 @@ export const getAllPostsThunk =() => async dispatch =>{
     console.log(response,"eeeeee")
     if(response.ok){
         const data = await response.json()
+        console.log(data,"DATA")
         dispatch(getAllPosts(data.posts_with_images))
         return {...data}
     }
