@@ -13,22 +13,38 @@ post_routes = Blueprint('posts',__name__)
 
 #Get all posts
 @post_routes.route('/')
-def get_all_posts():
-     all_posts = Post.query.all()
-     
-     print("******************************POST", all_posts)
-     return {'posts':[p.to_dict_relationship() for p in all_posts]}
+def get_all_posts_and_images():
+    all_posts = Post.query.all()
+    posts_with_images = []
+
+    for post in all_posts:
+        images = Image.query.filter(Image.post_Id == post.id).all()
+        post_data = post.to_dict_relationship()
+        image_urls = [image.image_url for image in images]
+        if image_urls:
+          post_data['image_url'] = image_urls[0] 
+        posts_with_images.append(post_data)
+        print(posts_with_images,"imagesPPP")
+    return {'posts_with_images': posts_with_images}
+
 
 
 
 # Get post by ownerId
 @post_routes.route('/<int:ownerId>')
 def get_posts_by_ownerId(ownerId):
-     posts = Post.query.filter(ownerId == Post.owner_Id).order_by(desc(Post.id))
-     # print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& one_post",posts)
-     # return {"Reviews": [review.to_dict_reviews() for review in products_reviews]}
-     # print({'posts' : [post.to_dict_post()for post in posts]},"**********************DATA from backend")#{'posts': [{'id': 1, 'owner_Id': 1, 'longText': 'Today was a pleasent day in Texas.Feeling happy'}, {'id': 3, 'owner_Id': 1, 'longText': 'I like icecream from costco.They have huge variety of icecreams'}]}
-     return {'posts' : [post.to_dict_relationship()for post in posts]}
+    posts = Post.query.filter(ownerId == Post.owner_Id).order_by(desc(Post.id))
+    posts_with_images = []
+
+    for post in posts:
+        images = Image.query.filter(Image.post_Id == post.id).all()
+        post_data = post.to_dict_relationship()
+        image_urls = [image.image_url for image in images]
+        post_data['image_urls'] = image_urls  # Store all image URLs in the post_data
+        posts_with_images.append(post_data)
+
+    return {'posts_with_images': posts_with_images}
+
 
 
 
