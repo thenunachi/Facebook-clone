@@ -9,10 +9,12 @@ const DELETE_POST = 'Posts/removePost'
 /************************************************ACTION********************************************************************************** */
 
 const getAllPosts = payload =>{
+    console.log(payload,"rrrrr")
     return{
         type:GET_ALL_POSTS,
         payload
     }
+    
 }
 
 
@@ -50,9 +52,10 @@ const removePost = (id)=>{
 // GET ALL POSTS
 export const getAllPostsThunk =() => async dispatch =>{
     const response = await fetch('/api/posts/')
+    console.log(response,"eeeeee")
     if(response.ok){
         const data = await response.json()
-        dispatch(getAllPosts(data.posts))
+        dispatch(getAllPosts(data.posts_with_images))
         return {...data}
     }
     
@@ -63,7 +66,7 @@ export const getPostsByUserIdThunk =(ownerId) =>async dispatch =>{
 const response = await fetch(`/api/posts/${ownerId}`);
 if(response.ok){ 
     const data = await response.json();
-    dispatch(getPostsById(data.posts))
+    dispatch(getPostsById(data.posts_with_images))
     
      return { ... data};
    }
@@ -123,7 +126,7 @@ export const removePostThunk = (id)=> async dispatch =>{
     let allPosts={}
     switch(action.type){
         case GET_ALL_POSTS:{
-            // const allPosts={}
+            console.log(action.payload,"ACTION")
             action.payload.forEach(post =>{
                 allPosts[post.id] = post //assigning post to post's id
             })

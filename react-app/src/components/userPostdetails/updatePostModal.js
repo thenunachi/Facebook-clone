@@ -6,7 +6,7 @@ import './updatepostmodal.css'
 
 
 function UpdatePostModal(props) {
-    const { post, imagesPerPost } = props;
+    const { post } = props;
     const [showModal, setShowModal] = useState(false);
     return (
         <>
@@ -14,7 +14,7 @@ function UpdatePostModal(props) {
             {
                 showModal && (
                     <Modal onClose={() => setShowModal(false)}>
-                        < UpdatePostForm post={post} imagesPerPost={imagesPerPost} setShowModal={setShowModal} />
+                        < UpdatePostForm post={post} setShowModal={setShowModal} />
                     </Modal>
                 )
             }

@@ -56,6 +56,9 @@ function ProfileButton({ sessionUser }) {
                     <li className="profile-details-li">
                         <div className="profile-page" onClick={routeChange}>My Profile</div>
                     </li>
+                    {/* <li className="profile-details-li">
+                        <div className="profile-page" onClick={routeChange}>Theme</div>
+                    </li> */}
                     <li className="profile-details-li">
                         <div className="signout-div" onClick={loggingOut}>Sign out</div>
                     </li>

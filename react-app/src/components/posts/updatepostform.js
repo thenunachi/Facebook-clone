@@ -6,8 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { updatePostThunk, getPostsByUserIdThunk } from '../../store/postReducer'
 import './updatepostform.css'
 import { updateImageThunk } from '../../store/imageReducer'
-function UpdatePostForm({ setShowModal, post, imagesPerPost }) {
-    console.log(imagesPerPost, "imageVanthuruka?????")
+function UpdatePostForm({ setShowModal, post}) {
+    console.log(post, "imageVanthuruka?????")
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -18,9 +18,9 @@ function UpdatePostForm({ setShowModal, post, imagesPerPost }) {
     console.log(postObj, "postObjUpdatForm")
     // const imageObj = useSelector(state => Object.values(state.imageState))
     const [longText, setLongText] = useState(post.longText);
-    const defaultImageUrl = 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm8lMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60';
+    // const defaultImageUrl = 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm8lMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60';
                             
-    const [image_url, setImage_url] = useState(imagesPerPost.image_url || defaultImageUrl);
+    const [image_url, setImage_url] = useState(post.image_url || "" );
     // const [image_url, setImage_url] = useState(imagesPerPost.image_url);
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
@@ -45,9 +45,9 @@ function UpdatePostForm({ setShowModal, post, imagesPerPost }) {
             id: post.id, longText, image_url
         }
         const imageLoad = {
-            id: imagesPerPost.id,
-            user_id: imagesPerPost.user_Id,
-            post_Id: imagesPerPost.post_Id,
+            id: post.id,
+            user_id: post.user_Id,
+            post_Id: post.post_Id,
             longText,
             image_url,
         }
