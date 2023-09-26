@@ -34,16 +34,9 @@ const random = [random1, random2, random3, random4, random5, random6, random7, r
 function AllPosts() {
   const dispatch = useDispatch()
   const history = useHistory();
-
-
-
   const postArr = useSelector(state => Object.values(state.postState))
-  console.log(postArr,"postArr")
-  const commentArr = useSelector(state => Object.values(state.commentState))
+   const commentArr = useSelector(state => Object.values(state.commentState))
   const likesPerPost = useSelector(state => (state.likeState))
-  // const imagesPerPost = useSelector(state => (state.imageState))
-  // console.log(imagesPerPost,"whatisImage")
-  // console.log(typeof imagesPerPost,"typeIm")
   const user = useSelector(state => state.session.user)
   const friendsList = useSelector(state => Object.values(state.friendState))
   const [imageObject, setImageObject] = useState({
@@ -52,32 +45,18 @@ function AllPosts() {
     bobbie: `${girl}`
   })
 
-  // const imageObject = {
-  //   Demo: `${man}`,
-  //   marnie: `${woman}`,
-  //   bobbie: `${girl}`
-  // }
-  // console.log(imageObject, "imageObject")
-
-
-
-  // console.log(random, "random")
   useEffect(async () => {
-
-    dispatch(getUserList())
+    dispatch(getUserList());
     const { posts_with_images = [] } = await dispatch(getAllPostsThunk());
-    console.log(posts_with_images, "POST");
+
     posts_with_images.forEach((e) => {
-    dispatch(getAllCommentsThunk(e.id));
-    dispatch(likesThunk(e.id));
-    dispatch(allimagesThunk(e.id));
-});
-
-
-  }, [dispatch])
-
+      dispatch(getAllCommentsThunk(e.id));
+      dispatch(likesThunk(e.id));
+      
+    });
+  }, [dispatch]);
+  
   const onClickChat = useCallback((friend) => {
-     console.log(friend, "obj")
     return history.push({
       pathname: `/chat/${friend.id}`,
       state: { imageObject }
@@ -92,8 +71,7 @@ function AllPosts() {
         <div className="rightlist">
           <h2> FriendList</h2>
           {friendsList.map((friend) => {
-            // console.log("friend", friend)
-            return (
+                  return (
               <div className="chatform" onClick={() => onClickChat(friend)
 
               }>{checkImage(imageObject, friend.username)}
@@ -108,23 +86,24 @@ function AllPosts() {
             <div className="innerDivPost">
 
               {<span>
-               
+
                 <AddPostModal />
               </span>}
             </div>
           </div>
         </div>
         <div className="postdiv">
+
           {
-            postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
-              // postArr.sort((a, b) => a.id - b.id).map((post, idx) => {
+              postArr.sort((a, b) => b.id - a.id).map((post, idx) => {
+                console.log(post,"postOOOO")
               const likesForPost = likesPerPost[post.id] || [];
-              const imageForPost = postArr[post.id] || [];
-              
+              const url = post.image_url || "";
+
               return (
                 <div className="singlepost">
                   <div>
-                    {postperuser(post, dispatch, history, user, likesForPost.length, imageForPost, imageObject,post.users && post.users.username)}
+                    {postperuser(post, dispatch, history, user, likesForPost.length, url, imageObject, post.users && post.users.username)}
 
                     {
                       likeButton(likesForPost, user.id, post.id, dispatch, history)
@@ -144,15 +123,15 @@ function AllPosts() {
 
                             {checkImage(imageObject, comment.users.username)}
                             <span>{comment.users.username}: <span className="commenttext">{comment.commentText} </span>
-                         
-                            
+
+
                             </span>
 
                             {(comment.user_Id == user.id) && deleteUpdateComment(comment, dispatch, history)}
                           </span>
 
 
-                          
+
 
                         </div>)
 
@@ -218,7 +197,7 @@ const deleteUpdateComment = (comment, dispatch, history) => {
     </div>);
 };
 // const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
-const postdeleteUpdate = (post, dispatch, history, userId,imagesPerPost) => {
+const postdeleteUpdate = (post, dispatch, history, userId, imagesPerPost) => {
   return (
     <span className="divbuttons">
       <span><button className="deletePostButton" onClick={async (event) => {
@@ -227,7 +206,7 @@ const postdeleteUpdate = (post, dispatch, history, userId,imagesPerPost) => {
         await dispatch(removePostThunk(post.id))
         await dispatch(deleteImageThunk(post.id))
         await dispatch((getPostsByUserIdThunk(userId)))
-        
+
       }}>
         <i class="fa-solid fa-trash"></i>
 
@@ -235,18 +214,18 @@ const postdeleteUpdate = (post, dispatch, history, userId,imagesPerPost) => {
       </span>
       <span>
         {
-        <UpdatePostModal post={post} imagesPerPost={imagesPerPost} />
+          <UpdatePostModal post={post} imagesPerPost={imagesPerPost} />
         }
       </span></span>
   )
 
 }
 
-const postperuser = (post, dispatch, history, user, likesCount, imageForPost, imageObject,name) => {
+const postperuser = (post, dispatch, history, user, likesCount, url, imageObject, name) => {
 
   return (
     <div className="perPost">
-      
+
       <span className="user">
         {checkImage(imageObject, name)}
         <span className="username">   {user.username} :</span>
@@ -254,37 +233,37 @@ const postperuser = (post, dispatch, history, user, likesCount, imageForPost, im
       </span>
 
       <div className="posttext">
-      
 
-        <span className="leftE">{post.longText}  {images(imageForPost, user.id, post.id, dispatch, history)}</span>
-        <span className="rightE">{post.owner_Id == user.id && postdeleteUpdate(post, dispatch, history, post.owner_Id,imageForPost)}</span>
-        
-        
+
+        <span className="leftE">{post.longText}  {images(url)}</span>
+        <span className="rightE">{post.owner_Id == user.id && postdeleteUpdate(post, dispatch, history, post.owner_Id, url)}</span>
+
+
       </div>
-     
+
       <div>count:{likesCount}</div>
 
     </div >
   )
 }
-const images = (imageObj, userId, postId, dispatch, history) => {
-// console.log("inside img func")
+const images = (image_url) => {
+  // console.log("inside img func")
 
-//   let imageOfPost = null;
- 
-//     if(imageObj.postId == postId){   
-//       imageOfPost = imageObj;
-//     }
-//     console.log(imageOfPost,"imgP")
-  if(imageObj){
-    // console.log(imageObj,"imagobj")
-    return(
+  //   let imageOfPost = null;
+
+  //     if(imageObj.postId == postId){   
+  //       imageOfPost = imageObj;
+  //     }
+  console.log(image_url, "imgP")
+  if (image_url) {
+    // console.log(imageObj.image_url,"urlVarutha")
+    return (
       <div>
-             <img className="images" src={imageObj.image_url} />
-           </div>
+        <img className="images" src={image_url} />
+      </div>
     )
   }
-  else{
+  else {
     return null;
   }
 }

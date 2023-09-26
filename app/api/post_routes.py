@@ -40,7 +40,7 @@ def get_posts_by_ownerId(ownerId):
         images = Image.query.filter(Image.post_Id == post.id).all()
         post_data = post.to_dict_relationship()
         image_urls = [image.image_url for image in images]
-        post_data['image_urls'] = image_urls  # Store all image URLs in the post_data
+        post_data['image_urls'] = image_urls[0]  # Store all image URLs in the post_data
         posts_with_images.append(post_data)
 
     return {'posts_with_images': posts_with_images}

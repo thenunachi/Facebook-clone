@@ -48,18 +48,17 @@ export const UserSpotDetail = () => {
   let allComments = useSelector(state => Object.values(state.commentState))
   console.log(allComments, "ALLCOMMENTS")//this works
   const likesPerPost = useSelector(state => (state.likeState))
-  const imagesPerPost = useSelector(state => (state.imageState))
-  let user = useSelector(state => state.session.user)
-  // let ids = postId(allPosts)
+    let user = useSelector(state => state.session.user)
+
   useEffect(async () => {
     const { posts_with_images } = await dispatch(getPostsByUserIdThunk(userId))//destructured because it had post key inside it
     // console.log(posts)
     posts_with_images.forEach((e) => {
       dispatch(getAllCommentsThunk(e.id))
       dispatch(likesThunk(e.id))
-      dispatch(allimagesThunk(e.id))
+
     })
-    // dispatch((allPosts.map((e)=>loadPostCommentsThunk(e.id))))
+   
   }, [dispatch])
 
   return (
@@ -90,10 +89,10 @@ export const UserSpotDetail = () => {
         </div>
         <div className="allposts">{
           allPosts.sort((a, b) => b.id - a.id).map((post) => {
-            // console.log(post, "post details")
+            console.log(post, "post details")
             const likesForPost = likesPerPost[post.id] || [];
-            const imageForPost = allPosts[post.id] || [];
-            console.log(post,"hhhhh")
+            const url = post.image_urls || "";
+           
 
             return (
               <div className="eachPost">
@@ -124,9 +123,12 @@ export const UserSpotDetail = () => {
                       <UpdatePostModal post={post} />
 
                     }
+                    <div>
                     {
-                      images(imageForPost, user.id, post.id, dispatch, history)
+                      images(url, user.id, post.id, dispatch, history)
                     }
+                    </div>
+                    
                     {
                       likeButton(likesForPost, user.id, post.id, dispatch, history)
 
@@ -225,13 +227,13 @@ const isUserCommentOwner = (comment, user) => comment && user && comment.user_Id
 // const commentsPerPost = (comment,post)=> post  && comment.post_Id == post.id
 
 
-const images = (imageObj, userId, postId, dispatch, history) => {
-console.log(imageObj,"kkkk")
-  if (imageObj) {
+const images = (imageUrl) => {
+// console.log(imageObj,"kkkk")
+  if (imageUrl) {
     
     return (
       <div>
-        <img className="images" src={imageObj.image_urls} />
+        <img className="images" src={imageUrl} />
       </div>
     )
   }
