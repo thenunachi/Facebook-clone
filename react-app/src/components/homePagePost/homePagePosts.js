@@ -197,14 +197,15 @@ const deleteUpdateComment = (comment, dispatch, history) => {
     </div>);
 };
 // const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
-const postdeleteUpdate = (post, dispatch, history, userId, imagesPerPost) => {
+const postdeleteUpdate = (post, dispatch, history, userId, url) => {
+  // console.log(post,"OUTSIDE")
   return (
     <span className="divbuttons">
       <span><button className="deletePostButton" onClick={async (event) => {
         event.preventDefault()
 
         await dispatch(removePostThunk(post.id))
-        await dispatch(deleteImageThunk(post.id))
+        await dispatch(getAllPostsThunk())
         await dispatch((getPostsByUserIdThunk(userId)))
 
       }}>
@@ -214,15 +215,17 @@ const postdeleteUpdate = (post, dispatch, history, userId, imagesPerPost) => {
       </span>
       <span>
         {
-          <UpdatePostModal post={post} imagesPerPost={imagesPerPost} />
+          <UpdatePostModal post={post} />
         }
-      </span></span>
+      </span>
+    
+      </span>
   )
 
 }
 
 const postperuser = (post, dispatch, history, user, likesCount, url, imageObject, name) => {
-
+// console.log(post,"INSIDE")
   return (
     <div className="perPost">
 
@@ -247,16 +250,10 @@ const postperuser = (post, dispatch, history, user, likesCount, url, imageObject
   )
 }
 const images = (image_url) => {
-  // console.log("inside img func")
-
-  //   let imageOfPost = null;
-
-  //     if(imageObj.postId == postId){   
-  //       imageOfPost = imageObj;
-  //     }
+ 
   console.log(image_url, "imgP")
   if (image_url) {
-    // console.log(imageObj.image_url,"urlVarutha")
+
     return (
       <div>
         <img className="images" src={image_url} />
@@ -269,8 +266,7 @@ const images = (image_url) => {
 }
 const likeButton = (likeArr, userId, postId, dispatch, history) => {
   let idOfLike = likeArr.find(e => e.user_Id == userId)
-  // console.log(idOfLike, "idOfLike")
-  // console.log(likeArr, "likeArr from like button func")
+
   if (!idOfLike) {
     // console.log(like,"likeArr from likes func")
     return (

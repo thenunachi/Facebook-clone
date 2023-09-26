@@ -93,6 +93,7 @@ export const createPostThunk = (data) => async dispatch => {
 
 //UPDATE A POST 
 export const updatePostThunk = (payload) => async dispatch => {
+    console.log(payload,"payloadfromupdatepost")
     const response = await fetch(`/api/posts/${payload.id}`, {
         method: 'PUT',
         headers: { "Content-Type": "application/json" },

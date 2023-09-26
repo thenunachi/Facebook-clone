@@ -3,11 +3,12 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
-import { updatePostThunk, getPostsByUserIdThunk } from '../../store/postReducer'
+import { updatePostThunk, getPostsByUserIdThunk,getAllPostsThunk } from '../../store/postReducer'
 import './updatepostform.css'
 import { updateImageThunk } from '../../store/imageReducer'
 function UpdatePostForm({ setShowModal, post}) {
-    console.log(post, "imageVanthuruka?????")
+    
+    
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -15,13 +16,9 @@ function UpdatePostForm({ setShowModal, post}) {
 
     const ownerObj = useSelector(state => state.session.user)
     const postObj = useSelector(state => Object.values(state.postState))
-    console.log(postObj, "postObjUpdatForm")
-    // const imageObj = useSelector(state => Object.values(state.imageState))
-    const [longText, setLongText] = useState(post.longText);
-    // const defaultImageUrl = 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm8lMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60';
-                            
-    const [image_url, setImage_url] = useState(post.image_url || "" );
-    // const [image_url, setImage_url] = useState(imagesPerPost.image_url);
+        const [longText, setLongText] = useState(post.longText);
+       const [image_url, setImage_url] = useState(post.image_url || "" );
+
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
     const updateUrl = (e) => setImage_url(e.target.value)
@@ -36,25 +33,20 @@ function UpdatePostForm({ setShowModal, post}) {
 
 
     const handleSubmit = async (e) => {
-        console.log("IN HANDLESUBMIT FUNC")
+        // console.log("IN HANDLESUBMIT FUNC")
         e.preventDefault();
 
         // alert("after handlesubmit")
-        console.log(image_url,"imageDefault")
+        // console.log(image_url,"imageDefault")
         const payload = {
             id: post.id, longText, image_url
         }
-        const imageLoad = {
-            id: post.id,
-            user_id: post.user_Id,
-            post_Id: post.post_Id,
-            longText,
-            image_url,
-        }
+        console.log(payload,"PAYLOADUPDATE")
       
         let updatedPost = await dispatch(updatePostThunk(payload));
         // let updatedImagePost = await dispatch(updateImageThunk(imageLoad))
         dispatch(getPostsByUserIdThunk(post.owner_Id))
+        dispatch(getAllPostsThunk());
         setShowModal(false)
         //  return <Redirect to={`/users/${userId}/posts`} />;         
         // console.log("CREATEDPOST ************",createdPost)
@@ -66,12 +58,8 @@ function UpdatePostForm({ setShowModal, post}) {
     const handleCancelClick = (e) => {
         e.preventDefault();
 
-        // history.push(`/users/${userId}/posts`)
-        console.log("CANCEL CLICK")
-        // e.style.display = 'none'
-
     };
-    console.log(longText.length, "longText");
+ 
     return (
 
         <div className="mainDiv">

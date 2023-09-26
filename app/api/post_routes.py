@@ -84,67 +84,80 @@ def createImage(postId):
     db.session.commit()
     return {'images': data.to_dict_rel()}
 
+@post_routes.route('/<int:postId>', methods=["PUT"])
+def update_post(postId):
+    """Edit a post with an image"""
+    form = EditPostForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    
+    if form.validate_on_submit():
+        data = Post.query.get(postId)
+        data.longText = form.data['longText']
+
+        # Create or update the image associated with the post
+        image_data = create_or_update_image(postId, form.data['image_url'])
+
+        db.session.add(data)
+        db.session.commit()
+
+        # Return the edited post and the image data
+        edited_post_data = data.to_dict_relationship()
+        edited_post_data['image_data'] = image_data
+
+        return {"editedPost": edited_post_data}
+
+    return form.errors
+
+def create_or_update_image(postId, image_url):
+    user = current_user.to_dict()
+    existing_image = Image.query.filter_by(post_Id=postId).first()
+
+    if existing_image:
+        # Update the existing image if it exists
+        existing_image.image_url = image_url
+    else:
+        # Create a new image if it doesn't exist
+        new_image = Image(
+            user_Id=user['id'],
+            post_Id=postId,
+            image_url=image_url
+        )
+        db.session.add(new_image)
+
+    db.session.commit()
+    return {'images': image_url}
 
 
 
 
 
-# def create_post():
-#      form = PostForm() #calling form
-#      user = current_user.to_dict()
+
+
+# @post_routes.route('/<int:postId>',methods=["PUT"])
+# def update_post(postId):
+#      """Edit a post"""
+#      form = EditPostForm()
+#      # post = Post.query.get(postId)
 #      form['csrf_token'].data = request.cookies['csrf_token']
 #      if form.validate_on_submit():
-#           data = Post(
-               
-#                owner_Id = user['id'],
-#                longText =form.data['longText']
-#           ) 
-          
+#           # print('Update img data' + str(form.data))
+#           data = Post.query.get(postId)
+#           #form.populate_obj(data)
+#           data.longText = form.data['longText']
+#           image_data = Image(
+#                user_Id = data.owner_Id,
+#                post_Id = postId,
+#                image_url = form.data['image_url']
+#           )
+#           print(image_data,"imgDATA")
+#           db.session.add(image_data)
 #           db.session.add(data)
 #           db.session.commit()
-#           print(data,"datala")
-#           post = Post.query.get(data.id) 
-         
-
-#           def createImage(postId):
-#                user = current_user.to_dict()
-#                form = ImageForm()
-#                data = Image(
-#                     user_Id = user['id'],
-#                     post_Id = postId,
-#                     image_url = form.data['image_url']
-#                )
-#                #     print(data,"data from image Def %%%%%%%%%%%%%%%%%%%%%%%%%%")
-#                db.session.add(data)
-#                db.session.commit()
-#                return {'images': data.to_dict_rel()}
-#           return {
-#           'post': data.to_dict_relationship()
-#           # 'image': data.to_dict_rel()
-#            }
+#           # Print the contents of "editedPost" before returning it
+#           edited_post_data = data.to_dict_relationship()
+#           print("editedPost:", edited_post_data)
+#           return{"editedPost":data.to_dict_relationship()}
 #      return form.errors
-
-@post_routes.route('/<int:postId>',methods=["PUT"])
-def update_post(postId):
-     """Edit a post"""
-     form = EditPostForm()
-     # post = Post.query.get(postId)
-     form['csrf_token'].data = request.cookies['csrf_token']
-     if form.validate_on_submit():
-          # print('Update img data' + str(form.data))
-          data = Post.query.get(postId)
-          #form.populate_obj(data)
-          data.longText = form.data['longText']
-          image_data = Image(
-               user_Id = data.owner_Id,
-               post_Id = postId,
-               image_url = form.data['image_url']
-          )
-          db.session.add(image_data)
-          db.session.add(data)
-          db.session.commit()
-          return{"editedPost":data.to_dict_relationship()}
-     return form.errors
 
 #Delete a post
 @post_routes.route('/<int:postId>',methods=["DELETE"])
