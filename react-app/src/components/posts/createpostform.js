@@ -6,7 +6,7 @@ import { Redirect, useParams } from 'react-router-dom';
 import { createPostThunk, getAllPostsThunk ,getPostsByUserIdThunk} from '../../store/postReducer'
 import { createImageThunk } from "../../store/imageReducer";
 import './createpostform.css'
-
+import { useTheme } from '../../toggletheme';
 function CreatePostForm({ setShowModal }) {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -23,8 +23,8 @@ function CreatePostForm({ setShowModal }) {
     const ownerObj = useSelector(state => state.session.user)
     // console.log(ownerObj)
     const postObj = useSelector(state => Object.values(state.postState))
-    console.log(postObj, "postvarutha")
-
+    // console.log(postObj, "postvarutha")
+    const { theme, toggleTheme } = useTheme();
     //useEffect
     useEffect(() => {
         const errors = []
@@ -55,7 +55,7 @@ function CreatePostForm({ setShowModal }) {
  
 
     return (
-        <div className="mainDiv">
+        <div  className="mainDiv" style={{ backgroundColor: theme.body, color: theme.text }} >
             {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             <form className="newPost" onSubmit={(e)=>handleSubmit(e)}>
                 <h2 className="h2">Create post</h2>

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams,Redirect } from "react-router-dom";
 import { createCommentThunk, loadUserComments, loadPostCommentsThunk } from "../../store/commentReducer";
-
+import { useTheme } from '../../toggletheme';
 import './createCommentForm.css'
 
 
@@ -25,6 +25,8 @@ function CommentForm({setShowModal,postId}) {
 
   const commentofUser = allComments.find(comment => user && comment.userId === user.id)
   const post = allComments.find(c => c.post_Id === +postId)
+
+  const { theme, toggleTheme } = useTheme();
   // console.log(post, "CHECK POST.ID is same as params")//2
   // console.log("PRODUCT",product)
   /***************************************useEffect******************************************** */
@@ -76,7 +78,7 @@ function CommentForm({setShowModal,postId}) {
 };
   /***************************************render func******************************************** */
   return (
-    <div>
+    <div style={{ backgroundColor: theme.body, color: theme.text }}>
     {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
     <form className="create-review-text" onSubmit={handleSubmit}>
       {/* <div className="errorsReview">

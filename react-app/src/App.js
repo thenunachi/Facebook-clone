@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import LoginForm from './components/auth/LoginForm';
@@ -19,6 +19,7 @@ import EmojiPicker from 'emoji-picker-react';
 import EmojiReaction from './components/emoji';
 import ChatForm from './components/chat/chatForm';
 import Giphy from './components/Gify/giphy';
+import { useTheme } from './toggletheme';
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       await dispatch(authenticate());
       setLoaded(true);
     })();
@@ -38,7 +39,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter  >
       <NavBar loaded={loaded} />
       <Switch>
         <Route path='/login' exact={true}>
@@ -48,41 +49,44 @@ function App() {
           <SignUpForm />
         </Route>
         <ProtectedRoute path='/users' exact={true} >
-          <UsersList/>
+          <UsersList />
         </ProtectedRoute>
         <ProtectedRoute path='/users/:userId' exact={true} >
           <User />
         </ProtectedRoute>
         <ProtectedRoute path='/' exact={true} >
           {/* <h1>My Home Page</h1> */}
-          <AllPosts/>
+          <AllPosts />
         </ProtectedRoute>
         <ProtectedRoute path='/newpost' exact={true} >
           {/* <h1>Create a post Page</h1> */}
-          <CreatePostForm/>
+          <CreatePostForm />
         </ProtectedRoute>
         <ProtectedRoute path='/posts/:postId' exact={true} >
           {/* <h1>Update a post Page</h1> */}
-          <UpdatePostForm/>
+          <UpdatePostForm />
         </ProtectedRoute>
         <ProtectedRoute path='/users/:userId/posts' exact={true} >
           {/* <h1>User POst Page</h1> */}
-          <UserSpotDetail/>
+          <UserSpotDetail />
         </ProtectedRoute>
         <ProtectedRoute path='/comments/:commentId' exact={true} >
           {/* <h1>update comment Page</h1> */}
-          <UpdateCommentForm/>
+          <UpdateCommentForm />
         </ProtectedRoute>
         <ProtectedRoute path='/:postId/comments' exact={true} >
           {/* <h1>create comment Page</h1> */}
-          <CommentForm/>
+          <CommentForm />
         </ProtectedRoute >
         <ProtectedRoute path='/chat/:friendId/emoji'>
-        <EmojiReaction />
+          <EmojiReaction />
         </ProtectedRoute>
         <ProtectedRoute path='/chat/:friendId'>
-        <ChatForm/>
+          <ChatForm />
         </ProtectedRoute>
+        {/* <ProtectedRoute path='/theme'>
+          <ThemeApp />
+        </ProtectedRoute> */}
 
         {/* <ProtectedRoute path='/chat/giphy'>
         <Giphy/>
