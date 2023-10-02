@@ -12,8 +12,9 @@
     overflow-wrap: anywhere;
 }
 .right{
-    float: right;
-    height: 100%;
+    margin-left: 340px;
+    /* float: right;
+    height: 100%; */
     width: 71%;
 }
 .eachcomment{
@@ -184,7 +185,7 @@
  }
  .postDetails{
     border: 2px solid #dedede;
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
     border-radius: 5px;
     padding: 3px;
     margin: 10px 0;

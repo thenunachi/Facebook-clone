@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import configureStore from './store';
 import { ModalProvider } from './context/Modal';
+import { ThemeProvider } from './toggletheme';
 
 const store = configureStore();
 
@@ -12,9 +13,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ModalProvider>
-        <App />
-        </ModalProvider>
-      </Provider>
+        <ThemeProvider >
+          <App />
+        </ThemeProvider>
+      </ModalProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

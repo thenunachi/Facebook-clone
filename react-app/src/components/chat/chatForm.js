@@ -7,6 +7,7 @@ import io from "socket.io-client";
 import { createNewMessage, allMessages } from "../../store/chatReducer"
 import { getUserList } from '../../store/friendReducer'
 import EmojiReaction from '../emoji'
+import { useTheme } from '../../toggletheme';
 import './chat.css'
 // import { Socket } from "socket.io";
 import GiphyReactions from '../Gify/giphy';
@@ -49,7 +50,7 @@ function ChatForm() {
     // console.log(setGif,"setGif")
     console.log(uniqueChars, "uniquechars")
     console.log(setUniquechars, "set")
-
+    const { theme, toggleTheme } = useTheme();
     const updateMessage = (e) => { setnewMessage(e.target.value) }
 
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
@@ -179,9 +180,9 @@ function ChatForm() {
     console.log(onlineUsersAvailable,"onl")
 
     return (
-        <div>
+        <div style={{ backgroundColor: theme.body, color: theme.text }}>
             <h1 className="messenger">Messenger</h1>
-            <div className="leftside">
+            <div className="leftside" style={{ backgroundColor: theme.body, color: theme.text }}>
                 <h2> FriendList</h2>
                 <div>
                     <h3>Owner of Account</h3>
@@ -249,7 +250,7 @@ function ChatForm() {
 
 
             </div>
-            <div className="rightside">
+            <div className="rightside" style={{ backgroundColor: theme.body, color: theme.text }}>
                 <h2>Chat</h2>
                 {
 

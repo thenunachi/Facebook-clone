@@ -20,6 +20,7 @@ import { allimagesThunk } from '../../store/imageReducer'
 import chat from './chat.png'
 import posticon from './posticon.png'
 import './userPostdetail.css'
+import { useTheme } from '../../toggletheme';
 import AddPostModal from "./createPostModal";
 import UpdatePostModal from "./updatePostModal";
 import AddCommentModal from "./createcommentmodal";
@@ -49,7 +50,7 @@ export const UserSpotDetail = () => {
   console.log(allComments, "ALLCOMMENTS")//this works
   const likesPerPost = useSelector(state => (state.likeState))
     let user = useSelector(state => state.session.user)
-
+    const { theme, toggleTheme } = useTheme();
   useEffect(async () => {
     const { posts_with_images } = await dispatch(getPostsByUserIdThunk(userId))//destructured because it had post key inside it
     // console.log(posts)
@@ -62,16 +63,12 @@ export const UserSpotDetail = () => {
   }, [dispatch])
 
   return (
-    <div>
+    <div style={{ backgroundColor: theme.body, color: theme.text }}>
 
       {/* <span className="profile">
       {profile(imageObject, user.username)}</span> */}
 
       <h1 className="personal">Welcome to {user.username}'s profile page </h1>
-
-
-
-
       {/* <div className="left">
 
         <div className="house">
@@ -80,7 +77,7 @@ export const UserSpotDetail = () => {
         <div className="heart"><i class="fa-solid fa-heart"></i> Married</div>
         <div className="clock"> <i class="fa-solid fa-clock"></i> Joined on September 2015</div>
       </div> */}
-      <div className="right">
+      <div className="right" style={{ backgroundColor: theme.body, color: theme.text }}>
         <div className="addPost">
           <div className="innerDiv">
 
@@ -95,7 +92,7 @@ export const UserSpotDetail = () => {
            
 
             return (
-              <div className="eachPost">
+              <div className="eachPost" style={{ backgroundColor: theme.body, color: theme.text }} >
                 <div className="postDetails">
                 <span className="separateDiv">
   {checkImage(imageObject, post.owner && post.owner.username)}
@@ -146,7 +143,7 @@ export const UserSpotDetail = () => {
 
                     console.log(element, "details of comments")
                     return ((element.post_Id == post.id) &&
-                      <div className="eachcomment">
+                      <div className="eachcomment" style={{ backgroundColor: theme.body, color: theme.text }}>
                         <div className="trashbuttons">
                           <span className="commentUser">
                             {checkImage(imageObject, element.users.username)}

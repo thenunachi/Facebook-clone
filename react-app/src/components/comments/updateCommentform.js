@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { loadUserComments, updateCommentThunk, loadPostCommentsThunk,getAllCommentsThunk  } from "../../store/commentReducer";
 import { Redirect } from 'react-router-dom';
-
+import { useTheme } from '../../toggletheme';
 
 /*********************************************************************************** */
 function UpdateCommentForm({setShowModal,comment}) {
@@ -27,7 +27,7 @@ function UpdateCommentForm({setShowModal,comment}) {
 
   // const post = allPost.find(post => post.id === +postId)
 
-  
+  const { theme, toggleTheme } = useTheme();
   /***************************************useEffect******************************************** */
   useEffect(() => {
     // dispatch(loadUserComments(postId))
@@ -73,7 +73,7 @@ function UpdateCommentForm({setShowModal,comment}) {
 
   /***************************************render func******************************************** */
   return (
-    <div>
+    <div style={{ backgroundColor: theme.body, color: theme.text }}>
     {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
     <form className="create-review-text" onSubmit={(e)=>handleSubmit(e)}>
     <h2 className="h2">Update a Comment</h2>

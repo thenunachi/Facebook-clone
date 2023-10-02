@@ -3,16 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import ProfileButton from './profileButton';
-
+import { useTheme } from '../../toggletheme';
 import './navbar.css'
 import logo from './fakebook-high-resolution-color-logo-cropped.png'
 import home from './home.png'
 
 function NavBar({ loaded }) {
+    const { theme, toggleTheme } = useTheme();
     const sessionUser = useSelector(state => state.session.user);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
     return (
-        <div className='navbar'>
+        <div className='navbar' style={{ backgroundColor: theme.body, color: theme.text }}>
             <div className='nav-left'>
                 <NavLink exact to="/" className='home-link'>
                     <div className='logo-div'>

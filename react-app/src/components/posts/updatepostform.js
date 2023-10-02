@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { updatePostThunk, getPostsByUserIdThunk,getAllPostsThunk } from '../../store/postReducer'
 import './updatepostform.css'
 import { updateImageThunk } from '../../store/imageReducer'
+import { useTheme } from '../../toggletheme';
 function UpdatePostForm({ setShowModal, post}) {
     
     
@@ -22,6 +23,7 @@ function UpdatePostForm({ setShowModal, post}) {
     const [validationError, setValidationError] = useState([])
     const updateLongText = (e) => setLongText(e.target.value);
     const updateUrl = (e) => setImage_url(e.target.value)
+    const { theme, toggleTheme } = useTheme();
     useEffect(() => {
         const errors = []
         if (!longText.length) errors.push("LongText is required")
@@ -62,7 +64,7 @@ function UpdatePostForm({ setShowModal, post}) {
  
     return (
 
-        <div className="mainDiv">
+        <div className="mainDiv" style={{ backgroundColor: theme.body, color: theme.text }}>
             {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
             {/* <h1>Update the post</h1> */}
             <form className="newPost" onSubmit={(e) => handleSubmit(e)}>
