@@ -1,3 +1,5 @@
+import giphy from 'giphy-api';
+import Sticker from './sticker';
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +26,7 @@ import random7 from './profile.png'
 import random8 from './woman2.png'
 import random9 from './woman3.png';
 import { useLocation } from "react-router-dom";
+import EmojiPicker from 'emoji-picker-react';
 
 let endpoint = "http://localhost:5000";
 // let socket; //connect with server using socket.io
@@ -32,7 +35,7 @@ let endpoint = "http://localhost:5000";
 function ChatForm() {
 
     let location = useLocation();
-    console.log(location.state, "state"); //use tjhis
+    // console.log(location.state, "state"); //use tjhis
     // let imageObject = location.state;
     const dispatch = useDispatch();
     const history = useHistory();
@@ -42,40 +45,43 @@ function ChatForm() {
     const [messages, setMessages] = useState({});
     const [newmessage, setnewMessage] = useState("")//single message
     const [currentSocket, setCurrentSocket] = useState(null)
-    const [showEmoji, setShowEmoji] = useState(false);
+
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
     const [gif, setGif] = useState(false)
     const [profilePicObj, setProfilePicObj] = useState({})
-    // console.log(setGif,"setGif")
-    console.log(uniqueChars, "uniquechars")
-    console.log(setUniquechars, "set")
     const { theme, toggleTheme } = useTheme();
-    const updateMessage = (e) => { setnewMessage(e.target.value) }
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    // const [showGiphyPicker, setShowGiphyPicker] = useState(false);
+    // const [selectedGiphy, setSelectedGiphy] = useState(null);
+    // const Giphy = giphy({ apiKey: '2qo2Fm1rH0oWXOMxeyZonYDePjeroAwN' });
 
+
+
+    const updateMessage = (e) => { setnewMessage(e.target.value) }
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
-    // console.log(chatBtwTwo, "chatBtwTwo")
     const user = useSelector(state => state.session.user)
     let updatedValue = {}
-
     const friendsList = useSelector(state => Object.values(state.friendState))
-    // console.log(friendsList, "friendlist arra")
+
     let friendArr = []
     friendsList.forEach((e) => {
         friendArr.push(e.username)
     })
-
-    // console.log(friendArr, "fri")
     const { friendId } = useParams()
     let recipient
     let recipientMsg = {}
-
     let activeUserCount
     let countOfUsersOnline
-    // let uniqueChars
 
-
-    //   console.log(profilePicArr,"1")
+    // const toggleGiphyPicker = () => {
+    //     setShowGiphyPicker(!showGiphyPicker);
+    //   };
+    
+    //   const handleGiphySelect = (giphyUrl) => {
+    //     setSelectedGiphy(giphyUrl);
+    //     setShowGiphyPicker(false); // Close the Giphy picker after selection
+    //   };
     useEffect(async () => {
         await dispatch(allMessages())
         const userResponse = await dispatch(getUserList())
@@ -117,9 +123,9 @@ function ChatForm() {
 
             setUniquechars([...new Set(activeUsers)])
         })
-       
+
         // activeUsers.emit('offline', user.username)
-        
+
         activeUsers.emit('login', { userId: user.id });
 
 
@@ -134,7 +140,7 @@ function ChatForm() {
 
     }, [messages]) //this will auto call when messaege length changes
 
-
+    
 
 
     const handleSubmitMessage = () => {
@@ -173,11 +179,11 @@ function ChatForm() {
             alert("Please add a message")
         }
     }
-    console.log(uniqueChars, "uniqueChars")
-    const filteredUsers = friendArr.filter((o) => user.username !== o  && uniqueChars.indexOf(o) === -1 );
+    // console.log(uniqueChars, "uniqueChars")
+    const filteredUsers = friendArr.filter((o) => user.username !== o && uniqueChars.indexOf(o) === -1);
 
-    const onlineUsersAvailable =  uniqueChars.filter((e) => e != user.username )
-    console.log(onlineUsersAvailable,"onl")
+    const onlineUsersAvailable = uniqueChars.filter((e) => e != user.username)
+    // console.log(onlineUsersAvailable,"onl")
 
     return (
         <div style={{ backgroundColor: theme.body, color: theme.text }}>
@@ -203,20 +209,20 @@ function ChatForm() {
 
 
                         <div className="onlineusers">
-                        {/* <div>
+                            {/* <div>
                             {filteredUsers.map((name, index) => (
                                 <div >{checkImage(location.state.imageObject,name)} <span>{name}</span> </div>
                             ))}
                         </div> */}
-                           
-                                    {/* {
+
+                            {/* {
                                         uniqueChars.filter((e) =>
 
                                             e != user.username
                                         )
                                     }
                         */}
-                        
+
                         </div>
 
 
@@ -226,10 +232,10 @@ function ChatForm() {
                     <h4>Offline Users</h4>
 
                     <div className="offlineusers">
-                    
+
                         <div>
                             {filteredUsers.map((name, index) => (
-                                <div >{checkImage(location.state.imageObject,name)} <span>{name}</span> </div>
+                                <div >{checkImage(location.state.imageObject, name)} <span>{name}</span> </div>
                             ))}
                         </div>
 
@@ -259,8 +265,8 @@ function ChatForm() {
                         return (
 
                             <div className="message">
-                                {e && e.users && e.users.id != +friendId && <div className="leftmsg">{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message} </div>}
-                                {e && e.users && e.users.id == +friendId && <div className="rightmsg">{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message}</div>}
+                                {e && e.users && e.users.id != +friendId && <div className="leftmsg" style={{ backgroundColor: theme.body, color: theme.text }}>{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message} </div>}
+                                {e && e.users && e.users.id == +friendId && <div className="rightmsg" style={{ backgroundColor: theme.body, color: theme.text }}>{checkImage(location.state.imageObject, e.users.username)}{e.users.username}: {e.message}</div>}
                                 {/* history.push(`/chat/${friendId}`) */}
                                 {/* dispatch(allMessages()) */}
                             </div>
@@ -284,34 +290,62 @@ function ChatForm() {
 
                     })
                } */}
-                <input className="textbox"
+                <input className="textbox" style={{ backgroundColor: theme.body, color: theme.text }}
                     value={newmessage}
                     name="message"
                     onChange={updateMessage}
                 // placeholder={<i class="fa-solid fa-gif"></i>}
                 />
-                <span>
-                    <span className="giffy">
-                        {/* <i onClick={() => { setGif(true) }} class="fa-solid fa-camera-retro"></i> */}
-                        {/* <GiphyReactions/> */}
-                    </span>
-                </span>
+                <button style={{ backgroundColor: theme.body, color: theme.text }}
+                    className="emoji-button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                >
+                    <i className="fa-regular fa-face-smile" ></i>
+                   
+                </button>
+                {/* <button style={{ backgroundColor: theme.body, color: theme.text }}
+                    className="gipfySticker-button"
+                    onClick={() => setshowGiphySticker(!showGiphySticker)}
+                >
+                    <i class="fa-solid fa-note-sticky"></i>
+                   
+                </button> */}
+                {showEmojiPicker && (
+                    <EmojiPicker
+                        onEmojiClick={(emoji, event) => {
+                            const emojiUnicode = emoji.emoji;
+                            setnewMessage((prevMessage) => prevMessage + emojiUnicode);
+                            setShowEmojiPicker(false); // Hide the emoji picker
+                        }}
+                    />
+                )}
 
-                {gif && < GiphyReactions
-                    onGifClick={(gif, e) => {
-                        console.log(gif, "gif")
-                        e.preventDefault()
-                        setGif(gif)
-                    }} />}
+                {/* --------------------------------------------------- */}
+                {/* Button to toggle Giphy picker */}
+      {/* <button onClick={toggleGiphyPicker}>Giphy</button>
+
+{/* Render the Giphy picker if showGiphyPicker is true */}
+{/* {showGiphyPicker && (
+  <Sticker onGiphySelect={handleGiphySelect} />
+)} */}
+
+{/* Display the selected Giphy if available */}
+{/* {selectedGiphy && (
+  <div>
+    <img src={selectedGiphy} alt="Selected Giphy" />
+  </div>
+)} 
+                 {/* _________________________________________________ */}
+                <button className="penbutton" style={{ backgroundColor: theme.body, color: theme.text }} onClick={() => handleSubmitMessage()}>
+                    <i className="fa-solid fa-paper-plane"></i>
+                </button>
+                {/* <div><Sticker /></div> */}
 
 
 
 
 
-                {/* for emoji feature */}
-                {/* <i onClick={() => { setShowEmoji(true) }} class="fa-regular fa-face-smile"></i>
-            {showEmoji && <EmojiReaction userId={user.id} friendId={+friendId} />} */}
-                <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button>
+                {/* <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button> */}
             </div>
         </div>
     )

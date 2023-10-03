@@ -1,0 +1,10 @@
+.sticker{display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust the minmax size as needed */
+  gap: 10px;}
+  .sticker__image-container{
+    cursor: pointer;
+  }
+  .sticker__image{
+    max-width: 100%;
+  height: 39px;
+  }
