@@ -11,14 +11,13 @@ const EmojiReaction = ({userId,friendId}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [chosenEmoji, setChosenEmoji] = useState("");
-  console.log(chosenEmoji,"chosenEmoji")
-  console.log(setChosenEmoji,"chosenEmoji")
+ 
   const [inputStr, setInputStr] = useState('')
 
   const onEmojiClick = (emojiObject,event ) => {
     setChosenEmoji(emojiObject.unified);
     // console.log(chosenEmoji,"chosenEmoji")
-    console.log(emojiObject,"emojiObject")
+    // console.log(emojiObject,"emojiObject")
     const msgdata = {
       sender_Id: userId,
       receiver_Id: friendId,
