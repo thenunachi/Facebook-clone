@@ -187,7 +187,7 @@ function ChatForm() {
 
     return (
         <div style={{ backgroundColor: theme.body, color: theme.text }}>
-            <h1 className="messenger">Messenger</h1>
+            <div className="messenger">Messenger</div>
             <div className="leftside" style={{ backgroundColor: theme.body, color: theme.text }}>
                 <h2> FriendList</h2>
                 <div>

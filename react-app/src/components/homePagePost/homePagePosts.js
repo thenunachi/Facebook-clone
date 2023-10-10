@@ -70,7 +70,7 @@ function AllPosts(props) {
 
   return (
     <div style={{ backgroundColor: theme.body, color: theme.text }}>
-      <h1 className="title">Welcome to {user.username}'s Home Page</h1>
+      <div className="title">Welcome to {user.username}'s Home Page</div>
       <div className="createpostDiv">
         <div className="rightlist">
           <h2> FriendList</h2>

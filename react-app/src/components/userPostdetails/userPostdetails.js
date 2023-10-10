@@ -68,7 +68,7 @@ export const UserSpotDetail = () => {
       {/* <span className="profile">
       {profile(imageObject, user.username)}</span> */}
 
-      <h1 className="personal">Welcome to {user.username}'s profile page </h1>
+      <div className="personal">Welcome to {user.username}'s profile page </div>
       {/* <div className="left">
 
         <div className="house">
