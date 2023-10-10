@@ -126,9 +126,10 @@
     background-color: white;
 }
 .messenger{
+    font-size: 36px;
     display: flex;
 justify-content: center;
-    border-bottom: 5px solid gainsboro;
+    /* border-bottom: 5px solid gainsboro; */
     align-items: center;
     padding-bottom: 5px;
 }
