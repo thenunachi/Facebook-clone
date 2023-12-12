@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, Link } from "react-router-dom";
