@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, Link } from "react-router-dom";
@@ -37,9 +38,11 @@ function AllPosts(props) {
   const history = useHistory();
   const postArr = useSelector(state => Object.values(state.postState))
   const commentArr = useSelector(state => Object.values(state.commentState))
+  // console.log(commentArr.length, "COMMENTS")
   const likesPerPost = useSelector(state => (state.likeState))
   const user = useSelector(state => state.session.user)
   const friendsList = useSelector(state => Object.values(state.friendState))
+  
   const [imageObject, setImageObject] = useState({
     Demo: `${man}`,
     marnie: `${woman}`,
@@ -67,6 +70,13 @@ function AllPosts(props) {
     });
   }, [imageObject]
   )
+  // const AddCommentModal = (postId) =>{
+  //   return (
+  //     <div>
+  //      <AddCommentModal postId={postId} />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div style={{ backgroundColor: theme.body, color: theme.text }}>
@@ -74,6 +84,7 @@ function AllPosts(props) {
       <div className="createpostDiv">
         <div className="rightlist">
           <h2> FriendList</h2>
+          
           {friendsList.map((friend) => {
             return (
               <div className="chatform" onClick={() => onClickChat(friend)
@@ -107,16 +118,27 @@ function AllPosts(props) {
               return (
                 <div className="singlepost">
                   <div style={{ backgroundColor: theme.body, color: theme.text }}>
-                    {postperuser(post, dispatch, history, user, likesForPost.length, url, imageObject, post.users && post.users.username,theme)}
-
+                    <span>
+                    {postperuser(post, dispatch, history, user, likesForPost.length, url, imageObject, post.users && post.users.username,theme,commentArr)}
+                    
+                    </span>
+                    <span className="likeChat"> 
                     {
                       likeButton(likesForPost, user.id, post.id, dispatch, history)
 
                     }
+                    {
+                    //  <img src={chat} onClick={() => AddCommentModal(post.id)} />
+                    <button className="buttonChat" 
+                    // onClick={() => AddCommentModal(post.id)}
+                    >
+                    <img  className="chatbutton" src={chat}/>
+                    </button>
+                    }
+                 
+                   </span>
 
                   </div>
-
-
 
                   <div className="singleComment"> {
                     commentArr.sort((a, b) => b.id - a.id).map((comment) => {
@@ -134,9 +156,6 @@ function AllPosts(props) {
                             {(comment.user_Id == user.id) && deleteUpdateComment(comment, dispatch, history)}
                           </span>
 
-
-
-
                         </div>)
 
 
@@ -144,7 +163,8 @@ function AllPosts(props) {
                   }</div>
 
                   <div className="comment">
-                    {
+                    { 
+                    // AddCommentModal(post.id)
                       <div>
                         <AddCommentModal postId={post.id} />
                       </div>
@@ -166,6 +186,16 @@ function AllPosts(props) {
 
 
 
+}
+const commentsCount = (postId,comments)=>{
+  let count = 0;
+  comments.forEach((comment)=>{
+    if(comment.post_Id == postId){
+      count++;
+    }
+  })
+  return count
+  
 }
 
 const showChat = (id) => {
@@ -228,14 +258,14 @@ const postdeleteUpdate = (post, dispatch, history, userId, url) => {
 
 }
 
-const postperuser = (post, dispatch, history, user, likesCount, url, imageObject, name,theme) => {
-  // console.log(post,"INSIDE")
+const postperuser = (post, dispatch, history, user, likesCount, url, imageObject, name,theme,commentArr) => {
+  console.log(user,post,"what is name")
   return (
     <div className="perPost" style={{ backgroundColor: theme.body, color: theme.text }}>
 
       <span className="user">
-        {checkImage(imageObject, name)}
-        <span className="username">   {user.username} :</span>
+        {checkImage(imageObject, post.owner.username)}
+        <span className="username">   {post.owner.firstname} :</span>
 
       </span>
 
@@ -247,9 +277,11 @@ const postperuser = (post, dispatch, history, user, likesCount, url, imageObject
 
 
       </div>
-
-      <div>count:{likesCount}</div>
-
+<div className="likecomment">
+      <span>
+      LikesCount:{likesCount}   </span>
+      <span>Comments:{commentsCount(post.id,commentArr)}</span>
+      </div>
     </div >
   )
 }
@@ -309,7 +341,7 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
 }
 
 const checkImage = (imageObject, username) => {
-  // console.log(imageObject, username, "%%%%%%%username")
+  console.log(imageObject, username, "%%%%%%%username")
   const isUsernameNotInObjectKeys = Object.keys(imageObject).indexOf(username) === -1;
   for (const key in imageObject) {
     if (key == username) {
@@ -323,9 +355,10 @@ const checkImage = (imageObject, username) => {
       let image = randomImage(random)
 
       if (isUsernameNotInObjectKeys) {
-        // console.log(username,isUsernameNotInObjectKeys,"isUsernamenotin keys")
+        
         imageObject[username] = image
-        // console.log(imageObject, "objectImage")
+    
+      
         return (
           <span>
             <img className="logoPic" src={imageObject[username]} />
