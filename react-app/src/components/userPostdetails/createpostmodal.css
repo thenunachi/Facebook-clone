@@ -1,10 +1,45 @@
 .Add-Post{
-    border: 2px solid #dedede;
+    border: 5px solid #dedede;
     background-color: #f1f1f1;
     border-radius: 5px;
-    padding: 10px;
+    /* box-shadow: 0 1rem 3rem 0.5rem rgba(173, 216, 230, 0.8); */
+      padding: 10px;
     margin: 12px 0;
       width: 682px;
     height: 106px;
     cursor:pointer;
+}
+.iconsOfPostModal{
+  font-size: 23px;
+}
+/* span {
+  display: flex; /* Use flexbox to make children align horizontally */
+  /* align-items: center; /* Align items vertically in the center */
+/* }  */
+.icon {
+  width: 20px; /* Adjust the width of the icons */
+  height: 20px; /* Adjust the height of the icons */
+}
+.iconsOfPost{
+  display: flex;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: space-around;
+    border-top: solid gainsboro;
+    margin-top: 12px;
+}
+.sign{
+  background-color: lightblue;
+    border-radius: 14px;
+    padding: 1px;
+    font-size: 20px;
+    margin-top: 4px;
+}
+.img{
+  background-color: lightsalmon;
+    border-radius: 14px;
+    padding: 1px;
+    font-size: 20px;
+    margin-top: 4px;
+
 }
