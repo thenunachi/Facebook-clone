@@ -31,6 +31,40 @@ import EmojiPicker from 'emoji-picker-react';
 let endpoint = "http://localhost:5000";
 // let socket; //connect with server using socket.io
 // const random = [random1, random2, random3, random4, random5, random6, random7, random8, random9]
+const commonId = (friendsList, userOnlineActiveId, checkImage, imgObj) => {
+    // console.log(friendsList, "friendsList", userOnlineActiveId, "userOnlineActiveId");
+    // console.log(imgObj, "imgObj");
+    const filteredFriends = friendsList.filter((friend) =>
+        userOnlineActiveId.includes(friend.id)
+    );
+
+    // console.log("Filtered Friends:", filteredFriends);
+
+    return (
+        <div>
+            {filteredFriends.map((friend) => (
+                <div key={friend.id}>
+                    <p>{checkImage(imgObj, friend.username)}{friend.username}</p>
+                </div>
+            ))}
+        </div>
+    );
+};
+const loggedOutOffline =(logoutEvents,friendsList,checkImage,imgObj)=>{
+    // console.log(logoutEvents,"logoutEvents")
+    const loggedOut = friendsList.filter(frie => !logoutEvents.includes(frie.id));
+
+//    console.log(loggedOut,"loggedOut")
+return(
+    <div>
+        {loggedOut.map((friend) => (
+            <div key={friend.id}>
+                <p>{checkImage(imgObj, friend.username)}{friend.username}</p>
+            </div>
+        ))}
+    </div>
+)
+}
 
 function ChatForm() {
 
@@ -48,22 +82,22 @@ function ChatForm() {
 
     const [activeSocket, setActiveSocket] = useState(null)
     const [uniqueChars, setUniquechars] = useState([])
-    const [gif, setGif] = useState(false)
-    const [profilePicObj, setProfilePicObj] = useState({})
+    // const [gif, setGif] = useState(false)
+    // const [profilePicObj, setProfilePicObj] = useState({})
     const { theme, toggleTheme } = useTheme();
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     // const [showGiphyPicker, setShowGiphyPicker] = useState(false);
     // const [selectedGiphy, setSelectedGiphy] = useState(null);
     // const Giphy = giphy({ apiKey: '2qo2Fm1rH0oWXOMxeyZonYDePjeroAwN' });
 
-
-
+    const [usersOnline, setUsersOnline] = useState([])
+    const [logoutEvents, setLogoutEvents] = useState([]);
     const updateMessage = (e) => { setnewMessage(e.target.value) }
     const chatBtwTwo = useSelector(state => Object.values(state.chatState))
     const user = useSelector(state => state.session.user)
     let updatedValue = {}
     const friendsList = useSelector(state => Object.values(state.friendState))
-
+    // console.log(friendsList, "FRIENDS LIST")
     let friendArr = []
     friendsList.forEach((e) => {
         friendArr.push(e.username)
@@ -74,14 +108,7 @@ function ChatForm() {
     let activeUserCount
     let countOfUsersOnline
 
-    // const toggleGiphyPicker = () => {
-    //     setShowGiphyPicker(!showGiphyPicker);
-    //   };
-    
-    //   const handleGiphySelect = (giphyUrl) => {
-    //     setSelectedGiphy(giphyUrl);
-    //     setShowGiphyPicker(false); // Close the Giphy picker after selection
-    //   };
+
     useEffect(async () => {
         await dispatch(allMessages())
         const userResponse = await dispatch(getUserList())
@@ -140,7 +167,36 @@ function ChatForm() {
 
     }, [messages]) //this will auto call when messaege length changes
 
-    
+    useEffect(() => {
+        // Establish a WebSocket connection when the component mounts
+        const socket = io('http://localhost:5000');
+        // console.log(socket,"socket")
+        // Emit login event when the user logs in
+        socket.emit('login', { userId: user.id });
+
+
+        // Listen for updates on the number of active users
+        socket.on('users', ({ user_count }) => {
+            console.log(`Number of active users: ${user_count}`, "chat online");
+            // console.log()
+        });
+        // Listen for 'usersNames' event
+        socket.on('usersNames', ({ users }) => {
+            console.log('List of user names:', users);
+            setUsersOnline(users);
+        });
+        //   console.log(usersOnline, "usersOnline")
+        // Cleanup: Emit logout event when the component is unmounted
+        return () => {
+            // Emit the array of logout events to the server
+            socket.emit('logout', { userId: user.id });
+//             setLogoutEvents(prevLogoutEvents => [...prevLogoutEvents, user.id]);
+// console.log("LOGOUT",logoutEvents)
+        };
+
+        // Dependencies: The effect runs when the component mounts and when user changes
+    }, [user]);
+
 
 
     const handleSubmitMessage = () => {
@@ -196,48 +252,20 @@ function ChatForm() {
                 </div>
                 <div>
                     <h4  >Online Users</h4>
-
-                    <div >
-                        {/* {
-                       uniqueChars.map((e) => {
-                            console.log(e,"e")
-                            return(
-                            <div>{e}</div>
-                            )
-                        }) //if uniqueChars present take that or take a empty obj
-                       } */}
-
-
-                        <div className="onlineusers">
-                            {/* <div>
-                            {filteredUsers.map((name, index) => (
-                                <div >{checkImage(location.state.imageObject,name)} <span>{name}</span> </div>
-                            ))}
-                        </div> */}
-
-                            {/* {
-                                        uniqueChars.filter((e) =>
-
-                                            e != user.username
-                                        )
-                                    }
-                        */}
-
-                        </div>
-
-
-
+                    <div className='onlineusers'>
+                        {commonId(friendsList, usersOnline, checkImage, location.state.imageObject)}
                     </div>
+
 
                     <h4>Offline Users</h4>
 
                     <div className="offlineusers">
-
-                        <div>
+                          {loggedOutOffline(usersOnline, friendsList, checkImage, location.state.imageObject)}
+                        {/* <div>
                             {filteredUsers.map((name, index) => (
                                 <div >{checkImage(location.state.imageObject, name)} <span>{name}</span> </div>
                             ))}
-                        </div>
+                        </div> */}
 
                         {/* {     
                          
@@ -301,7 +329,7 @@ function ChatForm() {
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 >
                     <i className="fa-regular fa-face-smile" ></i>
-                   
+
                 </button>
                 {/* <button style={{ backgroundColor: theme.body, color: theme.text }}
                     className="gipfySticker-button"
@@ -322,15 +350,15 @@ function ChatForm() {
 
                 {/* --------------------------------------------------- */}
                 {/* Button to toggle Giphy picker */}
-      {/* <button onClick={toggleGiphyPicker}>Giphy</button>
+                {/* <button onClick={toggleGiphyPicker}>Giphy</button>
 
 {/* Render the Giphy picker if showGiphyPicker is true */}
-{/* {showGiphyPicker && (
+                {/* {showGiphyPicker && (
   <Sticker onGiphySelect={handleGiphySelect} />
 )} */}
 
-{/* Display the selected Giphy if available */}
-{/* {selectedGiphy && (
+                {/* Display the selected Giphy if available */}
+                {/* {selectedGiphy && (
   <div>
     <img src={selectedGiphy} alt="Selected Giphy" />
   </div>

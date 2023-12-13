@@ -32,7 +32,7 @@ users={}
 clients = 0
 onlineUsers={}
 userlist={}
-
+usersListOfNames = set()
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -121,20 +121,34 @@ def allmessages():
 
 #To receive WebSocket messages from the client, the application defines event handlers using the socketio.on decorator and it can send reply messages to the connected client using the send() and emit() functions.
 
- 
-@socketio.on('connect',namespace="/")
-def test_connect():
-    # print(data,"data from frontend")
-    global clients #global variable as it needs to be shared
-    clients += 1
-    # print('Client connected **************************************')
-    # print(request.sid,"request.sid is generated???????????????????????????????????")
-    # print((users),"users from connetct event")
-    # print(onlineUsers,"onlineUsers")
-    emit('users',{'user_count':clients},broadcast=True)# emits a message with the user count anytime someone connects
-    # name = onlineUsers['username']
-    # emit('active',(onlineUsers),broadcast=True)
 
+@socketio.on('connect',namespace="/")
+def handle_connect():
+    print(f'User connected: {request.sid}')
+    emit('users', {'user_count': len(usersListOfNames)}, broadcast=True)
+   
+@socketio.on('login')
+def handle_login(data):
+    user_id = data['userId']
+    usersListOfNames.add(user_id)
+    emit('users', {'user_count': len(usersListOfNames)}, broadcast=True)
+    emit('usersNames', {'users': list(usersListOfNames)}, broadcast=True)
+    # print(data , "data from frontend")
+    # print(f'User {user_id} connected')
+    # print(usersListOfNames,"usersListOfNames")
+    # print(list(usersListOfNames),"usersListOfNames")
+
+@socketio.on('logout')
+def handle_logout(data):
+    user_id = data['userId']
+    print(f'User {user_id} disconnected')
+    print(data , "data from frontend")
+    usersListOfNames.discard(user_id)  
+    print(usersListOfNames,"usersListOfNames") 
+    emit('users', {'user_count': len(usersListOfNames)}, broadcast=True)
+    emit('usersNames', {'users': list(usersListOfNames)}, broadcast=True)   
+    print(list(usersListOfNames),"usersListOfNames")
+    print(f'User {user_id} logged out')
 # @socketio.on('active',namespace="/online")
 # def active_users(data):
 #     # print(data , "data from frontend")
