@@ -90,14 +90,14 @@ def inject_csrf_token(response):
 #         return app.send_static_file('favicon.ico')
 #     return app.send_static_file('index.html')
 
+
 @app.route('/chat/<int:receiverId>',methods=["POST"])
 def chat(receiverId):
     form = ChatForm()
     user = current_user.to_dict()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        # print(form.data,"FORM DATA TO SEE WHAT IS GETTING PRINTED %%%%%%%%%%%%%%%")
-        # print(socketio.sid,"what is socket.sid ?????????????????????????????????")
+        
         data = Chat(
             sender_Id = user['id'],
             receiver_Id = receiverId,
@@ -111,10 +111,24 @@ def chat(receiverId):
         return {"chat": data.to_dict_chat()}
     return form.errors
 
-@app.route('/chat',methods=['GET'])
+@app.route('/chat', methods=['GET'])
 def allmessages():
+    sender_id = request.args.get('sender_id')
+    receiver_id = request.args.get('receiver_id')
+
+    if sender_id is not None and receiver_id is not None:
+        # Filter messages based on sender_id and receiver_id
+        filtered_messages = Chat.query.filter(
+            ((Chat.sender_Id == sender_id) & (Chat.receiver_Id == receiver_id)) |
+            ((Chat.sender_Id == receiver_id) & (Chat.receiver_Id == sender_id))
+        ).all()
+
+        return {'chat': [c.to_dict_chat() for c in filtered_messages]}
+
+    # If sender_id and receiver_id are not provided, return all messages
     all_msg = Chat.query.all()
     return {'chat': [c.to_dict_chat() for c in all_msg]}
+
 
 
 # When some client emit event using message name this funtion will call and send that message to every client listens on our server
@@ -133,10 +147,7 @@ def handle_login(data):
     usersListOfNames.add(user_id)
     emit('users', {'user_count': len(usersListOfNames)}, broadcast=True)
     emit('usersNames', {'users': list(usersListOfNames)}, broadcast=True)
-    # print(data , "data from frontend")
-    # print(f'User {user_id} connected')
-    # print(usersListOfNames,"usersListOfNames")
-    # print(list(usersListOfNames),"usersListOfNames")
+    
 
 @socketio.on('logout')
 def handle_logout(data):
@@ -149,88 +160,26 @@ def handle_logout(data):
     emit('usersNames', {'users': list(usersListOfNames)}, broadcast=True)   
     print(list(usersListOfNames),"usersListOfNames")
     print(f'User {user_id} logged out')
-# @socketio.on('active',namespace="/online")
-# def active_users(data):
-#     # print(data , "data from frontend")
-#     # print(onlineUsers[data['username']],"check the onlineusers getting value")
-#     # comment below lines if not working
-#     onlineUsers.append(data['username'])
-#     print(onlineUsers,"onlineUSers")
-#     emit('activeUsers',(onlineUsers),broadcast=True)
-
-@socketio.on('active', namespace='/online')
-def active_users(data):
-    username = data['username']
-    print(f'{username} is active.')
-    onlineUsers[username] = True  # You can store additional user data as needed
-    emit('activeUsers', list(onlineUsers.keys()), broadcast=True)   
-    
-@socketio.on('offline', namespace='/online')
-def offline_users(username):  # Receive username directly, as it's not a dictionary
-    print(f'{username} is offline.')
-    onlineUsers.pop(username, None)  # Remove the user from onlineUsers if exists
-    emit('activeUsers', list(onlineUsers.keys()), broadcast=True)
-# @socketio.on('offline',namespace="/online")
-# def offline(data):
-#     # print(data,"data from frontend") #{'username': 'Demo'} data from frontend
-#     onlineUsers.remove(data)
-#     # del onlineUsers['username']
-#     # print(onlineUsers,"deleting the user")
-#     emit('offlineusers',(onlineUsers),broadcast=True)
-
-# @socketio.on('disconnect',namespace="/")
-# def test_disconnect():
-#     global clients
-#     clients -=1
-#     print('*******', request.sid)
-#     print(users,"users dict ****")
-#     #  {'Demo': 'jXdYmfatQGuh3R5VAAAK'} ******* q99jeFDPwo5Wij4tAAAC
-#     emit('users', {'user_count': clients}, broadcast=True)
-#     print('Client disconnected')
 
 
-# const userList={}
-# @socketio.on('connection')
-# def active_users(socket):
-#     print('a user connected')
 
 
 @socketio.on('username',namespace='/private')
 def get_users_sid(username):
     users[username] = request.sid
-    # print(users, 'users?????????????????????????????????????????????????????????????????')
-
-@socketio.on('privatemsg',namespace='/private')
-def private_msg(payload):
-  
-    receiver_session_id = users[payload['username']] 
-
-    message = payload['message']
-    emit('new_private_msg',message,room=receiver_session_id)
     
 
-@socketio.on('message')
-def reply(message):
+    
+@socketio.on('privatemsg',namespace='/private')
+def private_msg(payload):  
+    receiver_session_id = payload['receiver_Id']
+    sender_session_id = payload['sender_Id']
+    
+    if receiver_session_id and sender_session_id:
+        
+        emit('new_private_msg', payload['message'], room=receiver_session_id)
+        emit('new_private_msg', payload['message'], room=sender_session_id)
 
-    emit('message',message)
-
-# @socketio.on('join')
-# def on_join(data):
-#     print(data,"DATA inside join function ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-#     sender_Id = data['sender_Id']
-#     print(sender_Id,"senderId fron join room")
-#     room = data["room"]
-#     print(room,"room from join room")
-#     message = data["message"]
-#     join_room(room)
-#     # send(sender_Id +'has joined the room', to=room)
-
-# @socketio.on('leave')
-# def on_leave(data):
-#     username = data['username']
-#     room = data['room']
-#     leave_room(room)
-#     send(username + ' has left the room.', to=room)
 
 # Run the App
 if __name__ == '__main__':
