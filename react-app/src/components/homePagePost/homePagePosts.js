@@ -41,6 +41,7 @@ function AllPosts(props) {
   // console.log(commentArr.length, "COMMENTS")
   const likesPerPost = useSelector(state => (state.likeState))
   const user = useSelector(state => state.session.user)
+  console.log(user,"loggedin user")
   const friendsList = useSelector(state => Object.values(state.friendState))
   
   const [imageObject, setImageObject] = useState({
@@ -51,15 +52,7 @@ function AllPosts(props) {
 
   const { theme, toggleTheme } = useTheme();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+ 
   useEffect(async () => {
     dispatch(getUserList());
     const { posts_with_images = [] } = await dispatch(getAllPostsThunk());
@@ -74,10 +67,16 @@ function AllPosts(props) {
   }, [dispatch]);
 
   const onClickChat = useCallback((friend) => {
-    return history.push({
-      pathname: `/chat/${friend.id}`,
-      state: { imageObject }
-    });
+    if(friend){
+      return history.push({
+        pathname: `/chat/${friend.id}`,
+        state: { imageObject }
+      });
+    }
+    else{
+      alert("you can't chat with yourself")
+    }
+   
   }, [imageObject]
   )
   // const AddCommentModal = (postId) =>{
@@ -96,8 +95,11 @@ function AllPosts(props) {
           <h2> FriendList</h2>
           
           {friendsList.map((friend) => {
+            console.log(friend,"friendList")
             return (
-              <div className="chatform" onClick={() => onClickChat(friend)
+              // <div className="chatform" onClick={() => onClickChat(friend)
+<div className="chatform" onClick={() => onClickChat(friend.username !== user.username ? friend : null)
+ 
 
               }>{checkImage(imageObject, friend.username)}
                 <span className="Friendname">{friend.username}</span>
@@ -244,7 +246,7 @@ const deleteUpdateComment = (comment, dispatch, history) => {
 };
 // const isUserPostOwner = (post, user) => post && user && post.owner_Id == user.id 
 const postdeleteUpdate = (post, dispatch, history, userId, url) => {
-  // console.log(post,"OUTSIDE")
+ console.log(post,"OUTSIDE")
   return (
     <span className="divbuttons">
       <span><button className="deletePostButton" onClick={async (event) => {
