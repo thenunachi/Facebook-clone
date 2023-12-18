@@ -126,11 +126,15 @@ export const UserSpotDetail = () => {
                     }
                     </div>
                     
+                    
+                    <div className="likecomment">
+                    <span>Likescount:{likesForPost.length}</span>
+                    <span>Comments:{commentsCount(post.id,allComments)}</span>
+                    </div>
                     {
                       likeButton(likesForPost, user.id, post.id, dispatch, history)
 
                     }
-                    <div>count:{likesForPost.length}</div>
                   </div>
                 </div>
 
@@ -147,15 +151,15 @@ export const UserSpotDetail = () => {
                         <div className="trashbuttons">
                           <span className="commentUser">
                             {checkImage(imageObject, element.users.username)}
-                            <span className="username">{element.users.username}:</span>
+                            <span className="username">{element.users.username}:                         
+                            {element.commentText}
+                            </span>
                           </span>
 
                         </div>
                         <div className="tab">
                           {/* <span><img className="chat" src={chat} /></span> */}
-                          <span>
-                            {/* <i class="fa-brands fa-rocketchat"></i> */}
-                            {element.commentText}</span>
+                        
                           {(element.user_Id == userId) && <span className="common-button">
                             <button className="deleteCommentButton" onClick={async (event) => {
                               event.preventDefault()
@@ -229,7 +233,7 @@ const images = (imageUrl) => {
   if (imageUrl) {
     
     return (
-      <div>
+      <div className="border-image">
         <img className="images" src={imageUrl} />
       </div>
     )
@@ -246,7 +250,7 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
     // console.log(like,"likeArr from likes func")
     return (
 
-
+<div className="likebutton">
       <button className="like" onClick={async (event) => {
         // console.log(post, "post of like button")
         event.preventDefault()
@@ -260,12 +264,12 @@ const likeButton = (likeArr, userId, postId, dispatch, history) => {
       } >
         <i class="fa-solid fa-thumbs-up"></i>
       </button>
-
+      </div>
     )
   }
   else {
     return (
-      <div>
+      <div className="likebutton">
         {idOfLike &&
           <button className="like" onClick={async (event) => {
             event.preventDefault()
@@ -318,3 +322,13 @@ const randomImage = (obj) => {
 
 
 
+const commentsCount = (postId,comments)=>{
+  let count = 0;
+  comments.forEach((comment)=>{
+    if(comment.post_Id == postId){
+      count++;
+    }
+  })
+  return count
+  
+}

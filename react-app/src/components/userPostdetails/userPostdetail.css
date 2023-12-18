@@ -34,7 +34,7 @@
     padding: 0px;
     margin: 10px 0;
     /* width: 586px; */
-    /* display: flex; */
+    display: flex;
     flex-direction: row;
     /* height: 79px; */
     word-wrap: break-word;
@@ -98,16 +98,16 @@
     /* margin-top: 3px;
     margin-right: 3px; */ 
    
-    flex-direction: row;
+    /* flex-direction: row; */
     /* margin: 2px; */
     /* justify-content: space-between; */
-    display: flex;
+    /* display: flex; */
     /* flex-direction: row-reverse; */
     /* align-items: flex-end; */
     /* justify-content: flex-end; */
-    margin-top: 3px;
-    margin-right: 3px;
-
+    /* margin-top: 3px; */
+    /* margin-right: 3px; */
+float: left;
 }
 
 .chat{
@@ -206,3 +206,25 @@
  .editEachcomment{
     float: right;
  }
+ .likecomment{
+    
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+    align-items: baseline;
+    
+   }
+   .border-image{
+border-bottom: solid gainsboro;
+   }
+   .likebutton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border: solid gainsboro;
+    border-radius: 8px;
+}
+ 
