@@ -76,8 +76,12 @@ Link{
  }
  .title{
   font-size: 29px;
-  margin-left: 575px;
+  /* margin-left: 575px; */
   color: #2374E1;
+  display: flex;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    justify-content: space-around;
  }
  .user{
        /* height: 300px; */

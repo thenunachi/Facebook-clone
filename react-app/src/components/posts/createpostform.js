@@ -52,6 +52,10 @@ function CreatePostForm({ setShowModal }) {
         }
         
     }
+    const handleCancelClick = (e) => {
+        e.preventDefault();
+        setShowModal(false);
+    }
  
 
     return (
@@ -83,7 +87,7 @@ function CreatePostForm({ setShowModal }) {
                     />
                 </div>
                 <input className="addPostButton" type="submit"/>
-                {/* <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button> */}
+                <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
             </form>
 
 
