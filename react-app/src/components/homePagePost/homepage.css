@@ -22,7 +22,7 @@
     margin-top: 24px; */ 
     border: 5px solid #dedede;
     box-shadow: 0 1rem 3rem 0.5rem rgba(173, 216, 230, 0.8);
-
+    width: 665px;
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 15px;
@@ -200,6 +200,8 @@ Link{
  }
  .chatbutton{
   width: 26px;
+  cursor: pointer;
+
  }
  .buttonChat{
   border: none;
