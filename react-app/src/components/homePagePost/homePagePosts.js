@@ -51,16 +51,26 @@ function AllPosts(props) {
 
   const { theme, toggleTheme } = useTheme();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   useEffect(async () => {
     dispatch(getUserList());
     const { posts_with_images = [] } = await dispatch(getAllPostsThunk());
-
+    
     posts_with_images.forEach((e) => {
+      console.log(e, "POSTSImages")
       dispatch(getAllCommentsThunk(e.id));
       dispatch(likesThunk(e.id));
 
     });
+    dispatch(getAllPostsThunk())
   }, [dispatch]);
 
   const onClickChat = useCallback((friend) => {
@@ -129,11 +139,13 @@ function AllPosts(props) {
                     }
                     {
                     //  <img src={chat} onClick={() => AddCommentModal(post.id)} />
-                    <button className="buttonChat" 
-                    // onClick={() => AddCommentModal(post.id)}
-                    >
-                    <img  className="chatbutton" src={chat}/>
-                    </button>
+                    // <button className="buttonChat" onClick={openModal}>
+                    // <button className="buttonChat" >
+                    // {/* // onClick={() => AddCommentModal(post.id)} */}
+                    // {/* {isModalOpen && <AddCommentModal postId={post.id} onClose={closeModal} />} */}
+                    // { <AddCommentModal postId={post.id} />}
+                    // <img  className="chatbutton" src={chat}/>
+                    // </button>
                     }
                  
                    </span>
@@ -259,13 +271,14 @@ const postdeleteUpdate = (post, dispatch, history, userId, url) => {
 }
 
 const postperuser = (post, dispatch, history, user, likesCount, url, imageObject, name,theme,commentArr) => {
-  console.log(user,post,"what is name")
+  // console.log(user,post,"what is name")
+  console.log(post,"what is useername", user)
   return (
     <div className="perPost" style={{ backgroundColor: theme.body, color: theme.text }}>
 
       <span className="user">
-        {checkImage(imageObject, post.owner.username)}
-        <span className="username">   {post.owner.firstname} :</span>
+        { post.owner && post.owner.username && checkImage(imageObject, post.owner.username)}
+        <span className="username">   { post.owner && post.owner.firstname} :</span>
 
       </span>
 
@@ -287,7 +300,7 @@ const postperuser = (post, dispatch, history, user, likesCount, url, imageObject
 }
 const images = (image_url) => {
 
-  console.log(image_url, "imgP")
+  // console.log(image_url, "imgP")
   if (image_url) {
 
     return (
@@ -301,6 +314,7 @@ const images = (image_url) => {
   }
 }
 const likeButton = (likeArr, userId, postId, dispatch, history) => {
+  console.log(likeArr, "likeArr from like button func")
   let idOfLike = likeArr.find(e => e.user_Id == userId)
 
   if (!idOfLike) {

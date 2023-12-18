@@ -259,6 +259,7 @@ function ChatForm() {
     return (
         <div style={{ backgroundColor: theme.body, color: theme.text }}>
             <div className="messenger">Messenger</div>
+            <div className='container'>
             <div className="leftside" style={{ backgroundColor: theme.body, color: theme.text }}>
                 <h2> FriendList</h2>
                 <div>
@@ -336,6 +337,7 @@ function ChatForm() {
                 </button>
                 
                 {/* <button className="penbutton" onClick={() => handleSubmitMessage()}> <i class="fa-solid fa-paper-plane"></i></button> */}
+            </div>
             </div>
         </div>
     )
