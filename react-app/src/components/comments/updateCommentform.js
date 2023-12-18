@@ -64,10 +64,8 @@ function UpdateCommentForm({setShowModal,comment}) {
   }
   const handleCancelClick = (e) => {
     e.preventDefault();
-  
-    history.push('/')
-    console.log("CANCEL CLICK")
-    // e.style.display = 'none'
+    setShowModal(false);
+    
 
 };
 
@@ -106,7 +104,7 @@ function UpdateCommentForm({setShowModal,comment}) {
                 </div>
 
       <button className="editButton" type="submit">Submit comment</button>
-      {/* <button className="cancelEdit" type="button" onClick={onCancel}>Cancel</button> */}
+      <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
 
     </form>
     </div>

@@ -59,8 +59,9 @@ function UpdatePostForm({ setShowModal, post}) {
     }
     const handleCancelClick = (e) => {
         e.preventDefault();
-
-    };
+        setShowModal(false);
+    }
+ 
  
     return (
 
@@ -92,7 +93,7 @@ function UpdatePostForm({ setShowModal, post}) {
                 </div>
 
                 <input className="addPostButton" type="submit" />
-                {/* <button className="addPostButton" type="submit">Update Spot</button> */}
+                <button className="cancelButton" type="button" onClick={handleCancelClick}><i class="fa-solid fa-xmark"></i></button>
             </form>
 
 
