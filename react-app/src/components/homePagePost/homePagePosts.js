@@ -254,7 +254,8 @@ const postdeleteUpdate = (post, dispatch, history, userId, url) => {
 
         await dispatch(removePostThunk(post.id))
         await dispatch(getAllPostsThunk())
-        await dispatch((getPostsByUserIdThunk(userId)))
+        // await dispatch((getPostsByUserIdThunk(userId)))
+        return history.push(`/`)
 
       }}>
         <i class="fa-solid fa-trash"></i>
