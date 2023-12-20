@@ -119,26 +119,36 @@
 
 .textbox{
   
-    border-radius: 7px;
+    /* border-radius: 7px;
     height: 22px;
     min-width: 52%;
     position: absolute;
-    bottom: 57px;
+    bottom: 57px; */
+    border-radius: 7px;
+    height: 22px;
+    min-width: 52%;
 
 }
 
   
 .emoji-button{
-    border-radius: 7px;
+    /* border-radius: 7px; */
     /* height: 22px; */
     /* min-width: 52%; */
-    position: absolute;
+    /* position: absolute;
     bottom: 57px;
     margin-left: 50%;
     border: none;
     margin-bottom: 4px;
     cursor: pointer;
     background-color: rgb(200 185 185);
+    color: #000; */
+    border-radius: 7px;
+    /* margin-left: 50%; */
+    border: none;
+    /* margin-bottom: 4px; */
+    cursor: pointer;
+    background-color: #c8b9b9;
     color: #000;
 }
 .emoji-button:hover {
@@ -146,13 +156,20 @@
     color: rgb(184, 102, 102);
   }
 .penbutton{
-    border: none;
+    /* border: none;
     border-radius: 7px;
     /* height: 22px; */
     /* min-width: 52%; */
-    position: absolute;
+    /* position: absolute;
     bottom: 57px;
     margin-left: 53%;
+    border: none;
+    margin-bottom: 4px; */
+    /* cursor: pointer; */ 
+    border-radius: 7px;
+    /* position: absolute; */
+    bottom: 57px;
+    /* margin-left: 53%; */
     border: none;
     margin-bottom: 4px;
     cursor: pointer;
